@@ -1,0 +1,213 @@
+@model HomeownersSubdivision.Models.Bill
+@{
+    ViewData["Title"] = "Edit Bill";
+}
+
+<div class="container py-5">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1 class="fw-bold text-primary">Edit Bill</h1>
+            <p class="text-muted">Update bill information for Bill #@Model.Id</p>
+        </div>
+        <div class="col-md-4 d-flex justify-content-end align-items-center">
+            <a href="@Url.Action("Details", new { id = Model.Id })" class="btn btn-outline-secondary me-2">
+                <i class="bi bi-eye me-2"></i> View Details
+            </a>
+            <a href="@Url.Action("Index")" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-2"></i> Back to Bills
+            </a>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body p-4">
+            <form asp-action="Edit" method="post">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-4" role="alert"></div>
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="IssueDate" />
+
+                <!-- Homeowner Information -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h4 class="fw-bold mb-3">
+                            <i class="bi bi-person-circle text-primary me-2"></i> Homeowner Information
+                        </h4>
+                        <div class="form-group">
+                            <label for="UserId" class="form-label">Homeowner</label>
+                            <select asp-for="UserId" asp-items="ViewBag.Homeowners" class="form-select" required>
+                                <option value="">-- Select Homeowner --</option>
+                            </select>
+                            <span asp-validation-for="UserId" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bill Details -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h4 class="fw-bold mb-3">
+                            <i class="bi bi-file-earmark-text text-primary me-2"></i> Bill Details
+                        </h4>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="Type" class="form-label">Bill Type</label>
+                                    <select asp-for="Type" class="form-select" required>
+                                        <option value="">-- Select Type --</option>
+                                        @foreach(var type in ViewBag.BillTypes)
+                                        {
+                                            <option value="@type" selected="@(Model.Type == type)">@type</option>
+                                        }
+                                    </select>
+                                    <span asp-validation-for="Type" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="Amount" class="form-label">Amount ($)</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">$</span>
+                                        <input asp-for="Amount" type="number" step="0.01" min="0.01" class="form-control" required />
+                                    </div>
+                                    <span asp-validation-for="Amount" class="text-danger"></span>
+                                    @if (Model.PaidAmount > 0)
+                                    {
+                                        <div class="alert alert-warning mt-2 p-2 small">
+                                            <i class="bi bi-exclamation-triangle me-1"></i>
+                                            This bill has already been partially paid ($@Model.PaidAmount.ToString("N2")).
+                                            Changing the amount may affect payment calculations.
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Description" class="form-label">Description</label>
+                            <input asp-for="Description" class="form-control" required />
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="DueDate" class="form-label">Due Date</label>
+                                    <input asp-for="DueDate" type="date" class="form-control" required />
+                                    <span asp-validation-for="DueDate" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="Status" class="form-label">Status</label>
+                                    <select asp-for="Status" class="form-select" required>
+                                        @foreach(var status in ViewBag.StatusOptions)
+                                        {
+                                            <option value="@status" selected="@(Model.Status == status)">@status</option>
+                                        }
+                                    </select>
+                                    <span asp-validation-for="Status" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Notes" class="form-label">Additional Notes</label>
+                            <textarea asp-for="Notes" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="Notes" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bill Information -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h4 class="fw-bold mb-3">
+                            <i class="bi bi-info-circle text-primary me-2"></i> Additional Information
+                        </h4>
+                        <div class="form-group">
+                            <label class="form-label">Issue Date</label>
+                            <input type="text" class="form-control" value="@Model.IssueDate.ToString("MMM dd, yyyy")" disabled />
+                            <div class="form-text">Original issue date (cannot be changed)</div>
+                        </div>
+                        
+                        @if (Model.Payments != null && Model.Payments.Any())
+                        {
+                            <div class="mt-3">
+                                <div class="form-label fw-bold">Payment History</div>
+                                <div class="table-responsive">
+                                    <table class="table table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Amount</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var payment in Model.Payments.OrderByDescending(p => p.PaymentDate))
+                                            {
+                                                <tr>
+                                                    <td>@payment.PaymentDate.ToString("MM/dd/yyyy")</td>
+                                                    <td>$@payment.Amount.ToString("N2")</td>
+                                                    <td>
+                                                        <span class="badge @(payment.Status == "Completed" ? "bg-success" : payment.Status == "Failed" ? "bg-danger" : "bg-warning text-dark")">
+                                                            @payment.Status
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th>Total Paid:</th>
+                                                <th colspan="2">$@Model.PaidAmount.ToString("N2")</th>
+                                            </tr>
+                                            <tr>
+                                                <th>Remaining:</th>
+                                                <th colspan="2">$@Model.RemainingAmount.ToString("N2")</th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- Notification Options -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h4 class="fw-bold mb-3">
+                            <i class="bi bi-bell text-primary me-2"></i> Notification Options
+                        </h4>
+                        <div class="form-check form-switch mb-2">
+                            <input class="form-check-input" type="checkbox" id="sendNotification" name="sendNotification" checked>
+                            <label class="form-check-label" for="sendNotification">Notify homeowner of changes</label>
+                        </div>
+                        <div class="form-text mb-3">The homeowner will receive a notification about these updates</div>
+                    </div>
+                </div>
+
+                <!-- Submit Buttons -->
+                <div class="d-flex justify-content-between gap-2 mt-4">
+                    <div>
+                        <a href="@Url.Action("Delete", new { id = Model.Id })" class="btn btn-outline-danger">
+                            <i class="bi bi-trash me-2"></i> Delete Bill
+                        </a>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <a href="@Url.Action("Index")" class="btn btn-outline-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle me-2"></i> Save Changes
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 

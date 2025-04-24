@@ -1,0 +1,186 @@
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="container mx-auto px-4 py-8">
+    <div class="jumbotron admin-gradient mb-6">
+        <div class="container mx-auto">
+            <h1 class="text-3xl font-bold font-heading mb-2">Administrator Dashboard</h1>
+            <p class="text-white text-opacity-90">
+                Welcome to the administrative control panel. Manage users, view reports, and oversee community operations.
+            </p>
+        </div>
+    </div>
+    
+    <!-- Quick Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+        <div class="stat-card animate-fade-in-up card-delay-1">
+            <div class="flex justify-between">
+                <div>
+                    <div class="stat-value text-primary">86</div>
+                    <div class="stat-label">Total Homeowners</div>
+                </div>
+                <div class="text-primary text-opacity-25">
+                    <i class="bi bi-people-fill text-4xl"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="stat-card animate-fade-in-up card-delay-2">
+            <div class="flex justify-between">
+                <div>
+                    <div class="stat-value text-info">12</div>
+                    <div class="stat-label">Staff Members</div>
+                </div>
+                <div class="text-info text-opacity-25">
+                    <i class="bi bi-person-badge text-4xl"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="stat-card animate-fade-in-up card-delay-3">
+            <div class="flex justify-between">
+                <div>
+                    <div class="stat-value text-success">$24.5k</div>
+                    <div class="stat-label">Monthly Revenue</div>
+                </div>
+                <div class="text-success text-opacity-25">
+                    <i class="bi bi-cash-stack text-4xl"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="stat-card animate-fade-in-up card-delay-4">
+            <div class="flex justify-between">
+                <div>
+                    <div class="stat-value text-warning">8</div>
+                    <div class="stat-label">Pending Requests</div>
+                </div>
+                <div class="text-warning text-opacity-25">
+                    <i class="bi bi-clock-history text-4xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Dashboard Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- User Management Card -->
+        <div class="bg-white rounded-lg shadow-sm overflow-hidden animate-fade-in-up card-delay-1 card-hover">
+            <div class="p-6">
+                <div class="flex flex-col items-center mb-4">
+                    <i class="bi bi-people-fill dashboard-icon text-primary"></i>
+                    <h3 class="text-xl font-semibold mb-2">User Management</h3>
+                    <p class="text-gray-600 text-center">Manage user accounts, permissions, and roles.</p>
+                </div>
+                <div class="mt-4 space-y-2">
+                    <a href="#" class="btn-primary block text-center">
+                        <i class="bi bi-person-plus-fill mr-1"></i> Add New User
+                    </a>
+                    <a href="#" class="btn-outline-primary block text-center">
+                        <i class="bi bi-list-check mr-1"></i> View All Users
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Homeowners Management Card -->
+        <div class="bg-white rounded-lg shadow-sm overflow-hidden animate-fade-in-up card-delay-2 card-hover">
+            <div class="p-6">
+                <div class="flex flex-col items-center mb-4">
+                    <i class="bi bi-houses-fill dashboard-icon text-success"></i>
+                    <h3 class="text-xl font-semibold mb-2">Homeowners Management</h3>
+                    <p class="text-gray-600 text-center">Manage homeowner records, properties, and dues.</p>
+                </div>
+                <div class="mt-4 space-y-2">
+                    <a href="#" class="btn-success block text-center">
+                        <i class="bi bi-plus-square-fill mr-1"></i> Add Homeowner
+                    </a>
+                    <a href="#" class="btn-outline-success block text-center">
+                        <i class="bi bi-clipboard-check mr-1"></i> View All Homeowners
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Reports Card -->
+        <div class="bg-white rounded-lg shadow-sm overflow-hidden animate-fade-in-up card-delay-3 card-hover">
+            <div class="p-6">
+                <div class="flex flex-col items-center mb-4">
+                    <i class="bi bi-bar-chart-line-fill dashboard-icon text-info"></i>
+                    <h3 class="text-xl font-semibold mb-2">Reports & Analytics</h3>
+                    <p class="text-gray-600 text-center">Generate reports and view subdivision analytics.</p>
+                </div>
+                <div class="mt-4 space-y-2">
+                    <a href="#" class="btn-info block text-center">
+                        <i class="bi bi-file-earmark-bar-graph mr-1"></i> Financial Reports
+                    </a>
+                    <a href="#" class="btn-outline-info block text-center">
+                        <i class="bi bi-graph-up mr-1"></i> Community Analytics
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Settings Card -->
+        <div class="bg-white rounded-lg shadow-sm overflow-hidden animate-fade-in-up card-delay-4 card-hover">
+            <div class="p-6">
+                <div class="flex flex-col items-center mb-4">
+                    <i class="bi bi-gear-fill dashboard-icon text-dark"></i>
+                    <h3 class="text-xl font-semibold mb-2">System Settings</h3>
+                    <p class="text-gray-600 text-center">Configure system parameters and global settings.</p>
+                </div>
+                <div class="mt-4 space-y-2">
+                    <a href="#" class="btn-dark block text-center">
+                        <i class="bi bi-sliders mr-1"></i> General Settings
+                    </a>
+                    <a href="#" class="btn-outline-dark block text-center">
+                        <i class="bi bi-shield-lock mr-1"></i> Security Settings
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Communications Card -->
+        <div class="bg-white rounded-lg shadow-sm overflow-hidden animate-fade-in-up card-delay-5 card-hover">
+            <div class="p-6">
+                <div class="flex flex-col items-center mb-4">
+                    <i class="bi bi-broadcast dashboard-icon text-primary"></i>
+                    <h3 class="text-xl font-semibold mb-2">Communications</h3>
+                    <p class="text-gray-600 text-center">Send announcements and manage communications.</p>
+                </div>
+                <div class="mt-4 space-y-2">
+                    <a href="#" class="btn-primary block text-center">
+                        <i class="bi bi-megaphone mr-1"></i> Send Announcement
+                    </a>
+                    <a href="#" class="btn-outline-primary block text-center">
+                        <i class="bi bi-envelope mr-1"></i> Message Center
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Maintenance Card -->
+        <div class="bg-white rounded-lg shadow-sm overflow-hidden animate-fade-in-up card-delay-6 card-hover">
+            <div class="p-6">
+                <div class="flex flex-col items-center mb-4">
+                    <i class="bi bi-tools dashboard-icon text-warning"></i>
+                    <h3 class="text-xl font-semibold mb-2">Maintenance Requests</h3>
+                    <p class="text-gray-600 text-center">Manage and track community maintenance requests.</p>
+                </div>
+                <div class="mt-4 space-y-2">
+                    <a href="#" class="btn-warning block text-center">
+                        <i class="bi bi-clipboard-data mr-1"></i> View Requests
+                    </a>
+                    <a href="#" class="btn-outline-warning block text-center">
+                        <i class="bi bi-calendar-check mr-1"></i> Maintenance Schedule
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+} 

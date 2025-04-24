@@ -1,0 +1,145 @@
+@model HomeownersSubdivision.Models.Bill
+@{
+    ViewData["Title"] = "Create New Bill";
+}
+
+<div class="container py-5">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1 class="fw-bold text-primary">Create New Bill</h1>
+            <p class="text-muted">Create a new bill for a homeowner</p>
+        </div>
+        <div class="col-md-4 d-flex justify-content-end align-items-center">
+            <a href="@Url.Action("Index")" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-2"></i> Back to Bills
+            </a>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body p-4">
+            <form asp-action="Create" method="post">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-4" role="alert"></div>
+
+                <!-- Homeowner Selection -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h4 class="fw-bold mb-3">
+                            <i class="bi bi-person-circle text-primary me-2"></i> Homeowner Information
+                        </h4>
+                        <div class="form-group">
+                            <label for="UserId" class="form-label">Select Homeowner</label>
+                            <select asp-for="UserId" asp-items="ViewBag.Homeowners" class="form-select" required>
+                                <option value="">-- Select Homeowner --</option>
+                            </select>
+                            <span asp-validation-for="UserId" class="text-danger"></span>
+                            <div class="form-text">The homeowner who will receive this bill</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bill Details -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h4 class="fw-bold mb-3">
+                            <i class="bi bi-file-earmark-text text-primary me-2"></i> Bill Details
+                        </h4>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="Type" class="form-label">Bill Type</label>
+                                    <select asp-for="Type" class="form-select" required>
+                                        <option value="">-- Select Type --</option>
+                                        @foreach(var type in ViewBag.BillTypes)
+                                        {
+                                            <option value="@type">@type</option>
+                                        }
+                                    </select>
+                                    <span asp-validation-for="Type" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="Amount" class="form-label">Amount ($)</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">$</span>
+                                        <input asp-for="Amount" type="number" step="0.01" min="0.01" class="form-control" required />
+                                    </div>
+                                    <span asp-validation-for="Amount" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Description" class="form-label">Description</label>
+                            <input asp-for="Description" class="form-control" required />
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                            <div class="form-text">A clear description of what this bill is for</div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="DueDate" class="form-label">Due Date</label>
+                                    <input asp-for="DueDate" type="date" class="form-control" required 
+                                           min="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                                    <span asp-validation-for="DueDate" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Notes" class="form-label">Additional Notes</label>
+                            <textarea asp-for="Notes" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="Notes" class="text-danger"></span>
+                            <div class="form-text">Optional notes visible to the homeowner</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notification Options -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h4 class="fw-bold mb-3">
+                            <i class="bi bi-bell text-primary me-2"></i> Notification Options
+                        </h4>
+                        <div class="form-check form-switch mb-2">
+                            <input class="form-check-input" type="checkbox" id="sendNotification" name="sendNotification" checked>
+                            <label class="form-check-label" for="sendNotification">Send notification to homeowner</label>
+                        </div>
+                        <div class="form-text mb-3">The homeowner will receive a notification about this new bill</div>
+                    </div>
+                </div>
+
+                <!-- Submit Buttons -->
+                <div class="d-flex justify-content-end gap-2 mt-4">
+                    <a href="@Url.Action("Index")" class="btn btn-outline-secondary">
+                        Cancel
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-circle me-2"></i> Create Bill
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(function() {
+            // Initialize date picker with better UX
+            const today = new Date();
+            const thirtyDaysFromNow = new Date(today);
+            thirtyDaysFromNow.setDate(today.getDate() + 30);
+            
+            // Set default due date to 30 days from now
+            const dueDateInput = document.getElementById('DueDate');
+            if (dueDateInput && !dueDateInput.value) {
+                dueDateInput.valueAsDate = thirtyDaysFromNow;
+            }
+        });
+    </script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 

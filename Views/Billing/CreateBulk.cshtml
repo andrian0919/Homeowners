@@ -1,0 +1,236 @@
+@{
+    ViewData["Title"] = "Bulk Create Bills";
+}
+
+<div class="container py-5">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1 class="fw-bold text-primary">Bulk Create Bills</h1>
+            <p class="text-muted">Create the same bill for multiple homeowners at once</p>
+        </div>
+        <div class="col-md-4 d-flex justify-content-end align-items-center">
+            <a href="@Url.Action("Index")" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-2"></i> Back to Bills
+            </a>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body p-4">
+            <form asp-action="CreateBulk" method="post">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-4" role="alert"></div>
+
+                <!-- Bill Information Section -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h4 class="fw-bold mb-3">
+                            <i class="bi bi-file-earmark-text text-primary me-2"></i> Bill Information
+                        </h4>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="type" class="form-label">Bill Type</label>
+                                    <select name="type" id="type" class="form-select" required>
+                                        <option value="">-- Select Type --</option>
+                                        @foreach(var type in ViewBag.BillTypes)
+                                        {
+                                            <option value="@type">@type</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="amount" class="form-label">Amount ($)</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">$</span>
+                                        <input id="amount" name="amount" type="number" step="0.01" min="0.01" class="form-control" required />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            <input id="description" name="description" class="form-control" required />
+                            <div class="form-text">A clear description of what this bill is for</div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="dueDate" class="form-label">Due Date</label>
+                                    <input id="dueDate" name="dueDate" type="date" class="form-control" required 
+                                           min="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="notes" class="form-label">Additional Notes</label>
+                            <textarea id="notes" name="notes" class="form-control" rows="3"></textarea>
+                            <div class="form-text">Optional notes visible to the homeowners</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Homeowner Selection Section -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h4 class="fw-bold mb-3">
+                            <i class="bi bi-people-fill text-primary me-2"></i> Select Homeowners
+                        </h4>
+                        
+                        <div class="mb-3">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="selectAll">
+                                <label class="form-check-label fw-bold" for="selectAll">
+                                    Select All Homeowners
+                                </label>
+                            </div>
+                            <div class="form-text mb-3">Choose which homeowners will receive this bill</div>
+                        </div>
+                        
+                        <div class="input-group mb-3">
+                            <span class="input-group-text"><i class="bi bi-search"></i></span>
+                            <input type="text" class="form-control" id="searchHomeowners" placeholder="Search homeowners...">
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-body p-0" style="max-height: 400px; overflow-y: auto;">
+                                <div class="list-group list-group-flush" id="homeownersList">
+                                    @if (ViewBag.Homeowners != null && ViewBag.Homeowners.Count > 0)
+                                    {
+                                        foreach (var homeowner in ViewBag.Homeowners)
+                                        {
+                                            <div class="list-group-item homeowner-item">
+                                                <div class="form-check">
+                                                    <input class="form-check-input homeowner-checkbox" type="checkbox" 
+                                                           name="selectedUsers" value="@homeowner.Id" id="homeowner-@homeowner.Id">
+                                                    <label class="form-check-label d-flex justify-content-between align-items-center w-100" 
+                                                           for="homeowner-@homeowner.Id">
+                                                        <div>
+                                                            <span class="fw-medium">@homeowner.LastName, @homeowner.FirstName</span>
+                                                            <small class="d-block text-muted">@homeowner.Address</small>
+                                                        </div>
+                                                        @if (!string.IsNullOrEmpty(homeowner.Phone))
+                                                        {
+                                                            <small class="text-muted">@homeowner.Phone</small>
+                                                        }
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <div class="list-group-item text-center p-4 text-muted">
+                                            No homeowners found in the system.
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div id="selectedCount" class="mt-2 text-muted"></div>
+                    </div>
+                </div>
+
+                <!-- Notification Options -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h4 class="fw-bold mb-3">
+                            <i class="bi bi-bell text-primary me-2"></i> Notification Options
+                        </h4>
+                        <div class="form-check form-switch mb-2">
+                            <input class="form-check-input" type="checkbox" id="sendNotification" name="sendNotification" checked>
+                            <label class="form-check-label" for="sendNotification">Send notifications to homeowners</label>
+                        </div>
+                        <div class="form-text mb-3">Each homeowner will receive a notification about this new bill</div>
+                    </div>
+                </div>
+
+                <!-- Submit Buttons -->
+                <div class="d-flex justify-content-end gap-2 mt-4">
+                    <a href="@Url.Action("Index")" class="btn btn-outline-secondary">
+                        Cancel
+                    </a>
+                    <button type="submit" class="btn btn-primary" id="createBulkBtn" disabled>
+                        <i class="bi bi-check-circle me-2"></i> Create Bills
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(function() {
+            const selectAllCheckbox = $('#selectAll');
+            const homeownerCheckboxes = $('.homeowner-checkbox');
+            const createBulkBtn = $('#createBulkBtn');
+            const selectedCountElement = $('#selectedCount');
+            
+            // Initialize date picker with better UX
+            const today = new Date();
+            const thirtyDaysFromNow = new Date(today);
+            thirtyDaysFromNow.setDate(today.getDate() + 30);
+            
+            // Set default due date to 30 days from now
+            const dueDateInput = document.getElementById('dueDate');
+            if (dueDateInput && !dueDateInput.value) {
+                dueDateInput.valueAsDate = thirtyDaysFromNow;
+            }
+            
+            // Update selected count and button state
+            function updateSelectedCount() {
+                const selectedCount = $('.homeowner-checkbox:checked').length;
+                selectedCountElement.text(`${selectedCount} homeowner(s) selected`);
+                
+                // Enable/disable create button based on selection
+                if (selectedCount > 0) {
+                    createBulkBtn.prop('disabled', false);
+                } else {
+                    createBulkBtn.prop('disabled', true);
+                }
+            }
+            
+            // Select/deselect all homeowners
+            selectAllCheckbox.on('change', function() {
+                homeownerCheckboxes.prop('checked', this.checked);
+                updateSelectedCount();
+            });
+            
+            // Individual homeowner selection
+            homeownerCheckboxes.on('change', function() {
+                // Update "Select All" checkbox
+                if (homeownerCheckboxes.length === $('.homeowner-checkbox:checked').length) {
+                    selectAllCheckbox.prop('checked', true);
+                } else {
+                    selectAllCheckbox.prop('checked', false);
+                }
+                
+                updateSelectedCount();
+            });
+            
+            // Search functionality
+            $('#searchHomeowners').on('input', function() {
+                const searchTerm = $(this).val().toLowerCase();
+                
+                $('.homeowner-item').each(function() {
+                    const text = $(this).text().toLowerCase();
+                    if (text.indexOf(searchTerm) > -1) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            });
+            
+            // Initial count update
+            updateSelectedCount();
+        });
+    </script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 

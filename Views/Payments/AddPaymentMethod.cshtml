@@ -1,0 +1,470 @@
+@model HomeownersSubdivision.Models.PaymentMethod
+@using HomeownersSubdivision.Models
+
+@{
+    ViewData["Title"] = "Add Payment Method";
+}
+
+<div class="container mx-auto px-4 py-6">
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <h1 class="text-2xl font-bold text-gray-800 mb-4">Add Payment Method</h1>
+        <p class="text-gray-600 mb-6">Add a new payment method to your account for easier payments.</p>
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4" role="alert">
+                <p>@TempData["ErrorMessage"]</p>
+            </div>
+        }
+
+        <form method="post" id="paymentMethodForm">
+            <div asp-validation-summary="ModelOnly" class="text-red-500 mb-4"></div>
+
+            <!-- Payment Method Type -->
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-gray-700 mb-3">Payment Method Type</label>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+                    <div class="relative">
+                        <input type="radio" id="CreditCard" name="Type" value="CreditCard" class="hidden peer" checked>
+                        <label for="CreditCard" class="flex flex-col items-center justify-center p-4 border-2 rounded-lg cursor-pointer peer-checked:border-blue-500 peer-checked:bg-blue-50 border-gray-200 hover:border-blue-300">
+                            <i class="bi bi-credit-card text-blue-600 text-2xl mb-2"></i>
+                            <span class="font-medium">Credit Card</span>
+                        </label>
+                    </div>
+                    <div class="relative">
+                        <input type="radio" id="DebitCard" name="Type" value="DebitCard" class="hidden peer">
+                        <label for="DebitCard" class="flex flex-col items-center justify-center p-4 border-2 rounded-lg cursor-pointer peer-checked:border-blue-500 peer-checked:bg-blue-50 border-gray-200 hover:border-blue-300">
+                            <i class="bi bi-credit-card-2-front text-green-600 text-2xl mb-2"></i>
+                            <span class="font-medium">Debit Card</span>
+                        </label>
+                    </div>
+                    <div class="relative">
+                        <input type="radio" id="BankAccount" name="Type" value="BankAccount" class="hidden peer">
+                        <label for="BankAccount" class="flex flex-col items-center justify-center p-4 border-2 rounded-lg cursor-pointer peer-checked:border-blue-500 peer-checked:bg-blue-50 border-gray-200 hover:border-blue-300">
+                            <i class="bi bi-bank text-indigo-600 text-2xl mb-2"></i>
+                            <span class="font-medium">Bank Account</span>
+                        </label>
+                    </div>
+                    <div class="relative">
+                        <input type="radio" id="GCash" name="Type" value="GCash" class="hidden peer">
+                        <label for="GCash" class="flex flex-col items-center justify-center p-4 border-2 rounded-lg cursor-pointer peer-checked:border-blue-500 peer-checked:bg-blue-50 border-gray-200 hover:border-blue-300">
+                            <i class="bi bi-wallet2 text-purple-600 text-2xl mb-2"></i>
+                            <span class="font-medium">GCash</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Credit/Debit Card Fields -->
+            <div id="cardFields">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <!-- Card Number -->
+                    <div>
+                        <label asp-for="CardNumber" class="block text-sm font-medium text-gray-700">Card Number</label>
+                        <input asp-for="CardNumber" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" placeholder="•••• •••• •••• ••••" />
+                        <span asp-validation-for="CardNumber" class="text-red-500 text-sm"></span>
+                    </div>
+                    
+                    <!-- Card Holder Name -->
+                    <div>
+                        <label asp-for="CardHolderName" class="block text-sm font-medium text-gray-700">Cardholder Name</label>
+                        <input asp-for="CardHolderName" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" placeholder="Name on card" />
+                        <span asp-validation-for="CardHolderName" class="text-red-500 text-sm"></span>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <!-- Expiration Month -->
+                    <div>
+                        <label asp-for="ExpirationMonth" class="block text-sm font-medium text-gray-700">Expiration Month</label>
+                        <select asp-for="ExpirationMonth" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                            <option value="">Select Month</option>
+                            @for (int i = 1; i <= 12; i++)
+                            {
+                                <option value="@i.ToString("D2")">@i.ToString("D2") - @System.Globalization.DateTimeFormatInfo.CurrentInfo.GetMonthName(i)</option>
+                            }
+                        </select>
+                        <span asp-validation-for="ExpirationMonth" class="text-red-500 text-sm"></span>
+                    </div>
+                    
+                    <!-- Expiration Year -->
+                    <div>
+                        <label asp-for="ExpirationYear" class="block text-sm font-medium text-gray-700">Expiration Year</label>
+                        <select asp-for="ExpirationYear" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                            <option value="">Select Year</option>
+                            @for (int i = DateTime.Now.Year; i <= DateTime.Now.Year + 15; i++)
+                            {
+                                <option value="@i">@i</option>
+                            }
+                        </select>
+                        <span asp-validation-for="ExpirationYear" class="text-red-500 text-sm"></span>
+                    </div>
+                    
+                    <!-- CVV -->
+                    <div>
+                        <label asp-for="Cvv" class="block text-sm font-medium text-gray-700">Security Code (CVV)</label>
+                        <input asp-for="Cvv" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" placeholder="•••" />
+                        <span asp-validation-for="Cvv" class="text-red-500 text-sm"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bank Account Fields -->
+            <div id="bankFields" class="hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <!-- Bank Name -->
+                    <div>
+                        <label asp-for="BankName" class="block text-sm font-medium text-gray-700">Bank Name</label>
+                        <input asp-for="BankName" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" />
+                        <span asp-validation-for="BankName" class="text-red-500 text-sm"></span>
+                    </div>
+                    
+                    <!-- Account Holder Name -->
+                    <div>
+                        <label asp-for="AccountHolderName" class="block text-sm font-medium text-gray-700">Account Holder Name</label>
+                        <input asp-for="AccountHolderName" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" />
+                        <span asp-validation-for="AccountHolderName" class="text-red-500 text-sm"></span>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <!-- Routing Number -->
+                    <div>
+                        <label asp-for="RoutingNumber" class="block text-sm font-medium text-gray-700">Routing Number</label>
+                        <input asp-for="RoutingNumber" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" />
+                        <span asp-validation-for="RoutingNumber" class="text-red-500 text-sm"></span>
+                    </div>
+                    
+                    <!-- Account Number -->
+                    <div>
+                        <label asp-for="AccountNumber" class="block text-sm font-medium text-gray-700">Account Number</label>
+                        <input asp-for="AccountNumber" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" />
+                        <span asp-validation-for="AccountNumber" class="text-red-500 text-sm"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GCash Fields -->
+            <div id="gcashFields" class="hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <!-- GCash Mobile Number -->
+                    <div>
+                        <label for="AccountNumber" class="block text-sm font-medium text-gray-700">GCash Mobile Number</label>
+                        <div class="mt-1 flex rounded-md shadow-sm">
+                            <span class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
+                                +63
+                            </span>
+                            <input asp-for="AccountNumber" class="focus:ring-blue-500 focus:border-blue-500 flex-1 block w-full rounded-none rounded-r-md border-gray-300" placeholder="9XX XXX XXXX" />
+                        </div>
+                        <span asp-validation-for="AccountNumber" class="text-red-500 text-sm"></span>
+                    </div>
+                    
+                    <!-- Account Holder Name -->
+                    <div>
+                        <label asp-for="AccountHolderName" class="block text-sm font-medium text-gray-700">Account Name</label>
+                        <input asp-for="AccountHolderName" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" placeholder="Full name registered with GCash" />
+                        <span asp-validation-for="AccountHolderName" class="text-red-500 text-sm"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Name & Billing Address (Common fields) -->
+            <div class="mb-4">
+                <label asp-for="NickName" class="block text-sm font-medium text-gray-700">Nickname (Optional)</label>
+                <input asp-for="NickName" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" placeholder="e.g. My Personal Card" />
+                <span asp-validation-for="NickName" class="text-red-500 text-sm"></span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label asp-for="BillingAddress" class="block text-sm font-medium text-gray-700">Billing Address</label>
+                    <input asp-for="BillingAddress" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" />
+                    <span asp-validation-for="BillingAddress" class="text-red-500 text-sm"></span>
+                </div>
+                
+                <div>
+                    <label asp-for="BillingCity" class="block text-sm font-medium text-gray-700">City</label>
+                    <input asp-for="BillingCity" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" />
+                    <span asp-validation-for="BillingCity" class="text-red-500 text-sm"></span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div>
+                    <label asp-for="BillingState" class="block text-sm font-medium text-gray-700">State/Province</label>
+                    <select asp-for="BillingState" id="stateProvinceSelect" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        <option value="">Select State/Province</option>
+                        <!-- US States (Default) -->
+                        <option value="AL" class="us-state">Alabama</option>
+                        <option value="AK" class="us-state">Alaska</option>
+                        <option value="AZ" class="us-state">Arizona</option>
+                        <option value="AR" class="us-state">Arkansas</option>
+                        <option value="CA" class="us-state">California</option>
+                        <option value="CO" class="us-state">Colorado</option>
+                        <option value="CT" class="us-state">Connecticut</option>
+                        <option value="DE" class="us-state">Delaware</option>
+                        <option value="FL" class="us-state">Florida</option>
+                        <option value="GA" class="us-state">Georgia</option>
+                        <option value="HI" class="us-state">Hawaii</option>
+                        <option value="ID" class="us-state">Idaho</option>
+                        <option value="IL" class="us-state">Illinois</option>
+                        <option value="IN" class="us-state">Indiana</option>
+                        <option value="IA" class="us-state">Iowa</option>
+                        <option value="KS" class="us-state">Kansas</option>
+                        <option value="KY" class="us-state">Kentucky</option>
+                        <option value="LA" class="us-state">Louisiana</option>
+                        <option value="ME" class="us-state">Maine</option>
+                        <option value="MD" class="us-state">Maryland</option>
+                        <option value="MA" class="us-state">Massachusetts</option>
+                        <option value="MI" class="us-state">Michigan</option>
+                        <option value="MN" class="us-state">Minnesota</option>
+                        <option value="MS" class="us-state">Mississippi</option>
+                        <option value="MO" class="us-state">Missouri</option>
+                        <option value="MT" class="us-state">Montana</option>
+                        <option value="NE" class="us-state">Nebraska</option>
+                        <option value="NV" class="us-state">Nevada</option>
+                        <option value="NH" class="us-state">New Hampshire</option>
+                        <option value="NJ" class="us-state">New Jersey</option>
+                        <option value="NM" class="us-state">New Mexico</option>
+                        <option value="NY" class="us-state">New York</option>
+                        <option value="NC" class="us-state">North Carolina</option>
+                        <option value="ND" class="us-state">North Dakota</option>
+                        <option value="OH" class="us-state">Ohio</option>
+                        <option value="OK" class="us-state">Oklahoma</option>
+                        <option value="OR" class="us-state">Oregon</option>
+                        <option value="PA" class="us-state">Pennsylvania</option>
+                        <option value="RI" class="us-state">Rhode Island</option>
+                        <option value="SC" class="us-state">South Carolina</option>
+                        <option value="SD" class="us-state">South Dakota</option>
+                        <option value="TN" class="us-state">Tennessee</option>
+                        <option value="TX" class="us-state">Texas</option>
+                        <option value="UT" class="us-state">Utah</option>
+                        <option value="VT" class="us-state">Vermont</option>
+                        <option value="VA" class="us-state">Virginia</option>
+                        <option value="WA" class="us-state">Washington</option>
+                        <option value="WV" class="us-state">West Virginia</option>
+                        <option value="WI" class="us-state">Wisconsin</option>
+                        <option value="WY" class="us-state">Wyoming</option>
+                        
+                        <!-- Philippine Provinces -->
+                        <option value="ABR" class="ph-province hidden">Abra</option>
+                        <option value="AGN" class="ph-province hidden">Agusan del Norte</option>
+                        <option value="AGS" class="ph-province hidden">Agusan del Sur</option>
+                        <option value="AKL" class="ph-province hidden">Aklan</option>
+                        <option value="ALB" class="ph-province hidden">Albay</option>
+                        <option value="ANT" class="ph-province hidden">Antique</option>
+                        <option value="APA" class="ph-province hidden">Apayao</option>
+                        <option value="AUR" class="ph-province hidden">Aurora</option>
+                        <option value="BAS" class="ph-province hidden">Basilan</option>
+                        <option value="BAN" class="ph-province hidden">Bataan</option>
+                        <option value="BTN" class="ph-province hidden">Batanes</option>
+                        <option value="BTG" class="ph-province hidden">Batangas</option>
+                        <option value="BEN" class="ph-province hidden">Benguet</option>
+                        <option value="BIL" class="ph-province hidden">Biliran</option>
+                        <option value="BOH" class="ph-province hidden">Bohol</option>
+                        <option value="BUK" class="ph-province hidden">Bukidnon</option>
+                        <option value="BUL" class="ph-province hidden">Bulacan</option>
+                        <option value="CAG" class="ph-province hidden">Cagayan</option>
+                        <option value="CAN" class="ph-province hidden">Camarines Norte</option>
+                        <option value="CAS" class="ph-province hidden">Camarines Sur</option>
+                        <option value="CAM" class="ph-province hidden">Camiguin</option>
+                        <option value="CAP" class="ph-province hidden">Capiz</option>
+                        <option value="CAT" class="ph-province hidden">Catanduanes</option>
+                        <option value="CAV" class="ph-province hidden">Cavite</option>
+                        <option value="CEB" class="ph-province hidden">Cebu</option>
+                        <option value="COM" class="ph-province hidden">Compostela Valley</option>
+                        <option value="NCO" class="ph-province hidden">Cotabato</option>
+                        <option value="DAV" class="ph-province hidden">Davao del Norte</option>
+                        <option value="DAS" class="ph-province hidden">Davao del Sur</option>
+                        <option value="DAO" class="ph-province hidden">Davao Oriental</option>
+                        <option value="DIN" class="ph-province hidden">Dinagat Islands</option>
+                        <option value="EAS" class="ph-province hidden">Eastern Samar</option>
+                        <option value="GUI" class="ph-province hidden">Guimaras</option>
+                        <option value="IFU" class="ph-province hidden">Ifugao</option>
+                        <option value="ILN" class="ph-province hidden">Ilocos Norte</option>
+                        <option value="ILS" class="ph-province hidden">Ilocos Sur</option>
+                        <option value="ILI" class="ph-province hidden">Iloilo</option>
+                        <option value="ISA" class="ph-province hidden">Isabela</option>
+                        <option value="KAL" class="ph-province hidden">Kalinga</option>
+                        <option value="LUN" class="ph-province hidden">La Union</option>
+                        <option value="LAG" class="ph-province hidden">Laguna</option>
+                        <option value="LAN" class="ph-province hidden">Lanao del Norte</option>
+                        <option value="LAS" class="ph-province hidden">Lanao del Sur</option>
+                        <option value="LEY" class="ph-province hidden">Leyte</option>
+                        <option value="MAG" class="ph-province hidden">Maguindanao</option>
+                        <option value="MAD" class="ph-province hidden">Marinduque</option>
+                        <option value="MAS" class="ph-province hidden">Masbate</option>
+                        <option value="MLA" class="ph-province hidden">Metro Manila</option>
+                        <option value="MDC" class="ph-province hidden">Mindoro Occidental</option>
+                        <option value="MDR" class="ph-province hidden">Mindoro Oriental</option>
+                        <option value="MSC" class="ph-province hidden">Misamis Occidental</option>
+                        <option value="MSR" class="ph-province hidden">Misamis Oriental</option>
+                        <option value="MOU" class="ph-province hidden">Mountain Province</option>
+                        <option value="NEC" class="ph-province hidden">Negros Occidental</option>
+                        <option value="NER" class="ph-province hidden">Negros Oriental</option>
+                        <option value="NSA" class="ph-province hidden">Northern Samar</option>
+                        <option value="NUE" class="ph-province hidden">Nueva Ecija</option>
+                        <option value="NUV" class="ph-province hidden">Nueva Vizcaya</option>
+                        <option value="PLW" class="ph-province hidden">Palawan</option>
+                        <option value="PAM" class="ph-province hidden">Pampanga</option>
+                        <option value="PAN" class="ph-province hidden">Pangasinan</option>
+                        <option value="QUE" class="ph-province hidden">Quezon</option>
+                        <option value="QUI" class="ph-province hidden">Quirino</option>
+                        <option value="RIZ" class="ph-province hidden">Rizal</option>
+                        <option value="ROM" class="ph-province hidden">Romblon</option>
+                        <option value="WSA" class="ph-province hidden">Samar</option>
+                        <option value="SAR" class="ph-province hidden">Sarangani</option>
+                        <option value="SIQ" class="ph-province hidden">Siquijor</option>
+                        <option value="SOR" class="ph-province hidden">Sorsogon</option>
+                        <option value="SCO" class="ph-province hidden">South Cotabato</option>
+                        <option value="SLE" class="ph-province hidden">Southern Leyte</option>
+                        <option value="SUK" class="ph-province hidden">Sultan Kudarat</option>
+                        <option value="SLU" class="ph-province hidden">Sulu</option>
+                        <option value="SUN" class="ph-province hidden">Surigao del Norte</option>
+                        <option value="SUR" class="ph-province hidden">Surigao del Sur</option>
+                        <option value="TAR" class="ph-province hidden">Tarlac</option>
+                        <option value="TAW" class="ph-province hidden">Tawi-Tawi</option>
+                        <option value="ZMB" class="ph-province hidden">Zambales</option>
+                        <option value="ZAN" class="ph-province hidden">Zamboanga del Norte</option>
+                        <option value="ZAS" class="ph-province hidden">Zamboanga del Sur</option>
+                        <option value="ZSI" class="ph-province hidden">Zamboanga Sibugay</option>
+                    </select>
+                    <span asp-validation-for="BillingState" class="text-red-500 text-sm"></span>
+                </div>
+                
+                <div>
+                    <label asp-for="BillingZip" class="block text-sm font-medium text-gray-700">ZIP Code</label>
+                    <input asp-for="BillingZip" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" />
+                    <span asp-validation-for="BillingZip" class="text-red-500 text-sm"></span>
+                </div>
+                
+                <div>
+                    <label asp-for="BillingCountry" class="block text-sm font-medium text-gray-700">Country</label>
+                    <select asp-for="BillingCountry" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        <option value="US">United States</option>
+                        <option value="CA">Canada</option>
+                        <option value="PH">Philippines</option>
+                        <!-- Add more countries as needed -->
+                    </select>
+                    <span asp-validation-for="BillingCountry" class="text-red-500 text-sm"></span>
+                </div>
+            </div>
+            
+            <!-- Set as Default Option -->
+            <div class="mb-6">
+                <div class="flex items-center">
+                    <input asp-for="IsDefault" type="checkbox" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
+                    <label asp-for="IsDefault" class="ml-2 block text-sm text-gray-700">Set as default payment method</label>
+                </div>
+            </div>
+            
+            <!-- Return URL (hidden) -->
+            @if (!string.IsNullOrEmpty(ViewBag.ReturnUrl))
+            {
+                <input type="hidden" name="ReturnUrl" value="@ViewBag.ReturnUrl" />
+            }
+
+            <!-- Submit buttons -->
+            <div class="flex flex-col sm:flex-row justify-between gap-4">
+                <a href="@(ViewBag.ReturnUrl ?? Url.Action("Index", "Payments"))" class="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 text-center">
+                    Cancel
+                </a>
+                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                    <i class="bi bi-plus-circle mr-1"></i> Add Payment Method
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const cardFields = document.getElementById('cardFields');
+            const bankFields = document.getElementById('bankFields');
+            const gcashFields = document.getElementById('gcashFields');
+            const paymentTypes = document.querySelectorAll('input[name="Type"]');
+            
+            // Country and State/Province selectors
+            const countrySelect = document.getElementById('BillingCountry');
+            const stateProvinceSelect = document.getElementById('stateProvinceSelect');
+            const usStates = document.querySelectorAll('.us-state');
+            const phProvinces = document.querySelectorAll('.ph-province');
+            
+            // Handle country change
+            if (countrySelect) {
+                countrySelect.addEventListener('change', function() {
+                    // Clear current selection
+                    stateProvinceSelect.value = '';
+                    
+                    // Show/hide appropriate options based on country
+                    if (this.value === 'PH') {
+                        // Show Philippine provinces, hide US states
+                        usStates.forEach(option => option.classList.add('hidden'));
+                        phProvinces.forEach(option => option.classList.remove('hidden'));
+                    } else {
+                        // Show US states, hide Philippine provinces
+                        usStates.forEach(option => option.classList.remove('hidden'));
+                        phProvinces.forEach(option => option.classList.add('hidden'));
+                    }
+                });
+            }
+            
+            function toggleFields() {
+                const selectedType = document.querySelector('input[name="Type"]:checked').value;
+                
+                if (selectedType === 'CreditCard' || selectedType === 'DebitCard') {
+                    cardFields.classList.remove('hidden');
+                    bankFields.classList.add('hidden');
+                    gcashFields.classList.add('hidden');
+                } else if (selectedType === 'BankAccount') {
+                    cardFields.classList.add('hidden');
+                    bankFields.classList.remove('hidden');
+                    gcashFields.classList.add('hidden');
+                } else if (selectedType === 'GCash') {
+                    cardFields.classList.add('hidden');
+                    bankFields.classList.add('hidden');
+                    gcashFields.classList.remove('hidden');
+                    
+                    // Automatically set country to Philippines for GCash
+                    if (countrySelect && countrySelect.value !== 'PH') {
+                        countrySelect.value = 'PH';
+                        countrySelect.dispatchEvent(new Event('change'));
+                    }
+                }
+            }
+            
+            // Initial state
+            toggleFields();
+            
+            // Add event listeners
+            paymentTypes.forEach(type => {
+                type.addEventListener('change', toggleFields);
+            });
+            
+            // Format credit card number with spaces
+            const cardNumberInput = document.getElementById('CardNumber');
+            if (cardNumberInput) {
+                cardNumberInput.addEventListener('input', function(e) {
+                    let value = e.target.value.replace(/\D/g, '');
+                    let formattedValue = '';
+                    
+                    for (let i = 0; i < value.length; i++) {
+                        if (i > 0 && i % 4 === 0) {
+                            formattedValue += ' ';
+                        }
+                        formattedValue += value[i];
+                    }
+                    
+                    e.target.value = formattedValue;
+                });
+            }
+            
+            // Initialize country selector to show appropriate states/provinces
+            if (countrySelect) {
+                countrySelect.dispatchEvent(new Event('change'));
+            }
+        });
+    </script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 

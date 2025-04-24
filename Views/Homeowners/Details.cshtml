@@ -1,0 +1,91 @@
+@model HomeownersSubdivision.Models.Homeowner
+
+@{
+    ViewData["Title"] = "Homeowner Details";
+}
+
+<div class="container">
+    <h1>Homeowner Details</h1>
+    <hr />
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Personal Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-2">
+                        <div class="col-sm-3">
+                            <strong>Name:</strong>
+                        </div>
+                        <div class="col-sm-9">
+                            @Model.FirstName @Model.LastName
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-sm-3">
+                            <strong>Email:</strong>
+                        </div>
+                        <div class="col-sm-9">
+                            <a href="mailto:@Model.Email">@Model.Email</a>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-sm-3">
+                            <strong>Phone:</strong>
+                        </div>
+                        <div class="col-sm-9">
+                            <a href="tel:@Model.Phone">@Model.Phone</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Property Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-2">
+                        <div class="col-sm-3">
+                            <strong>Address:</strong>
+                        </div>
+                        <div class="col-sm-9">
+                            @Model.Address
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-sm-3">
+                            <strong>Block Number:</strong>
+                        </div>
+                        <div class="col-sm-9">
+                            @Model.BlockNumber
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-sm-3">
+                            <strong>Lot Number:</strong>
+                        </div>
+                        <div class="col-sm-9">
+                            @Model.LotNumber
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-sm-3">
+                            <strong>Join Date:</strong>
+                        </div>
+                        <div class="col-sm-9">
+                            @Model.JoinDate.ToString("MMMM dd, yyyy")
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            </div>
+        </div>
+    </div>
+</div> 

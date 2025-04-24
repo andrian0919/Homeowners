@@ -1,0 +1,214 @@
+@model HomeownersSubdivision.Models.RefundRequest
+@{
+    ViewData["Title"] = "Request Refund";
+    var payment = ViewBag.Payment as HomeownersSubdivision.Models.Payment;
+}
+
+<div class="container py-5">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1 class="fw-bold text-primary">Request Refund</h1>
+            <p class="text-muted lead">Submit a refund request for your payment</p>
+        </div>
+        <div class="col-md-4 d-flex justify-content-end align-items-center">
+            <a href="@Url.Action("ViewReceipt", "Payments", new { id = payment?.Id })" class="btn btn-outline-secondary me-2">
+                <i class="bi bi-arrow-left me-2"></i> Back to Receipt
+            </a>
+        </div>
+    </div>
+    
+    @if (payment == null)
+    {
+        <div class="alert alert-danger" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i> 
+            Payment information not found. Please return to your payment history and try again.
+        </div>
+        <div class="text-center mt-4">
+            <a href="@Url.Action("PaymentHistory", "Payments")" class="btn btn-primary">
+                <i class="bi bi-arrow-left me-2"></i> Payment History
+            </a>
+        </div>
+    }
+    else if ((DateTime.Now - payment.PaymentDate).TotalDays > 30)
+    {
+        <div class="alert alert-warning" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i> 
+            This payment is more than 30 days old and is no longer eligible for an online refund request.
+            Please contact customer support for assistance.
+        </div>
+        <div class="text-center mt-4">
+            <a href="@Url.Action("ViewReceipt", "Payments", new { id = payment.Id })" class="btn btn-primary">
+                <i class="bi bi-arrow-left me-2"></i> Back to Receipt
+            </a>
+        </div>
+    }
+    else if (payment.Status.ToString() != "Completed")
+    {
+        <div class="alert alert-warning" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i> 
+            Only completed payments can be refunded. This payment has a status of @payment.Status.
+        </div>
+        <div class="text-center mt-4">
+            <a href="@Url.Action("ViewReceipt", "Payments", new { id = payment.Id })" class="btn btn-primary">
+                <i class="bi bi-arrow-left me-2"></i> Back to Receipt
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-lg-8">
+                <!-- Refund Request Form -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-white py-3">
+                        <h5 class="card-title mb-0 fw-bold">
+                            <i class="bi bi-arrow-return-left me-2"></i> Refund Request Form
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <form asp-action="RequestRefund" method="post">
+                            <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+                            
+                            <input type="hidden" asp-for="PaymentId" value="@payment.Id" />
+                            
+                            <!-- Refund Reason -->
+                            <div class="mb-4">
+                                <label asp-for="Reason" class="form-label">Reason for Refund Request</label>
+                                <select asp-for="Reason" class="form-select">
+                                    <option value="">Please select a reason</option>
+                                    <option value="Duplicate Payment">Duplicate Payment</option>
+                                    <option value="Charged Incorrect Amount">Charged Incorrect Amount</option>
+                                    <option value="Service Issue">Service Issue</option>
+                                    <option value="Payment Error">Payment Error</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                                <span asp-validation-for="Reason" class="text-danger"></span>
+                            </div>
+                            
+                            <!-- Details -->
+                            <div class="mb-4">
+                                <label asp-for="Details" class="form-label">Please provide additional details</label>
+                                <textarea asp-for="Details" class="form-control" rows="5" 
+                                          placeholder="Please explain why you are requesting a refund..."></textarea>
+                                <span asp-validation-for="Details" class="text-danger"></span>
+                                <div class="form-text">
+                                    Please provide sufficient information to help us process your request efficiently.
+                                </div>
+                            </div>
+                            
+                            <!-- Contact Preference -->
+                            <div class="mb-4">
+                                <label asp-for="ContactPreference" class="form-label">Preferred Contact Method</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" asp-for="ContactPreference" id="contactEmail" value="Email" checked>
+                                    <label class="form-check-label" for="contactEmail">Email</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" asp-for="ContactPreference" id="contactPhone" value="Phone">
+                                    <label class="form-check-label" for="contactPhone">Phone</label>
+                                </div>
+                                <span asp-validation-for="ContactPreference" class="text-danger"></span>
+                            </div>
+                            
+                            <!-- Contact Information -->
+                            <div class="mb-4" id="phoneContactField" style="display: none;">
+                                <label asp-for="PhoneNumber" class="form-label">Phone Number</label>
+                                <input asp-for="PhoneNumber" class="form-control" placeholder="(123) 456-7890">
+                                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                            </div>
+                            
+                            <!-- Terms -->
+                            <div class="mb-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" asp-for="AcceptTerms" id="acceptTerms">
+                                    <label class="form-check-label" for="acceptTerms">
+                                        I understand that refund processing may take 5-10 business days, depending on my payment method.
+                                    </label>
+                                </div>
+                                <span asp-validation-for="AcceptTerms" class="text-danger"></span>
+                            </div>
+                            
+                            <!-- Submit Button -->
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="bi bi-arrow-return-left me-2"></i> Submit Refund Request
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <!-- Payment Summary -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-white py-3">
+                        <h5 class="card-title mb-0 fw-bold">
+                            <i class="bi bi-receipt me-2"></i> Payment Summary
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <span class="text-muted">Receipt Number</span>
+                            <p class="fw-bold">@payment.ReceiptNumber</p>
+                        </div>
+                        <div class="mb-3">
+                            <span class="text-muted">Payment Date</span>
+                            <p class="fw-bold">@payment.PaymentDate.ToString("MMMM d, yyyy")</p>
+                        </div>
+                        <div class="mb-3">
+                            <span class="text-muted">Transaction ID</span>
+                            <p class="fw-bold">@payment.TransactionId</p>
+                        </div>
+                        @if (payment.Bill != null)
+                        {
+                            <div class="mb-3">
+                                <span class="text-muted">Bill</span>
+                                <p class="fw-bold">@payment.Bill.Description</p>
+                            </div>
+                        }
+                        <div class="mb-3">
+                            <span class="text-muted">Payment Amount</span>
+                            <p class="fs-4 fw-bold text-primary">$@payment.Amount.ToString("N2")</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Refund Policy -->
+                <div class="card shadow-sm">
+                    <div class="card-header bg-white py-3">
+                        <h5 class="card-title mb-0 fw-bold">
+                            <i class="bi bi-info-circle me-2"></i> Refund Policy
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="mb-0 ps-3">
+                            <li class="mb-2">Refund requests can be submitted within 30 days of payment.</li>
+                            <li class="mb-2">All refund requests are reviewed by our team.</li>
+                            <li class="mb-2">Processing time is 5-10 business days from approval.</li>
+                            <li class="mb-2">Refunds will be issued to the original payment method.</li>
+                            <li class="mb-2">For urgent requests, please contact customer support.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        $(function() {
+            // Toggle phone field display based on contact preference
+            $('input[name="ContactPreference"]').change(function() {
+                if ($(this).val() === 'Phone') {
+                    $('#phoneContactField').show();
+                } else {
+                    $('#phoneContactField').hide();
+                }
+            });
+        });
+    </script>
+} 

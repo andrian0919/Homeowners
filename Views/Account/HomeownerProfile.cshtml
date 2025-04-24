@@ -1,0 +1,185 @@
+@model HomeownersSubdivision.Models.HomeownerProfileViewModel
+
+@{
+    ViewData["Title"] = "Edit Profile";
+}
+
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
+        <div class="bg-success-600 text-white p-6">
+            <h2 class="text-2xl font-bold font-heading">
+                <i class="bi bi-person-circle mr-2"></i>Homeowner Profile
+            </h2>
+            <p class="text-white text-opacity-90 mt-1">
+                Update your personal information and account settings
+            </p>
+        </div>
+
+        <div class="p-6">
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4" role="alert">
+                    <p>@TempData["SuccessMessage"]</p>
+                    @if (TempData["DebugInfo"] != null)
+                    {
+                        <p class="mt-2 text-sm">Debug Info: @TempData["DebugInfo"]</p>
+                    }
+                    
+                </div>
+            }
+            
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4" role="alert">
+                    <p>@TempData["ErrorMessage"]</p>
+                    @if (TempData["ErrorDetails"] != null)
+                    {
+                        <p class="mt-2 text-sm">Details: @TempData["ErrorDetails"]</p>
+                    }
+                </div>
+            }
+            
+            <form asp-controller="Account" asp-action="UpdateHomeownerProfile" method="post">
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="JoinDate" />
+                
+                <div asp-validation-summary="ModelOnly" class="text-red-500 mb-4"></div>
+                
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-gray-700 border-b pb-2 mb-4">Account Information</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label asp-for="Username" class="block text-gray-700 font-semibold mb-2"></label>
+                            <input asp-for="Username" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-success focus:border-transparent" />
+                            <span asp-validation-for="Username" class="text-red-500 text-sm"></span>
+                        </div>
+                        
+                        <div>
+                            <label asp-for="Email" class="block text-gray-700 font-semibold mb-2"></label>
+                            <input asp-for="Email" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-success focus:border-transparent" />
+                            <span asp-validation-for="Email" class="text-red-500 text-sm"></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-gray-700 border-b pb-2 mb-4">Personal Information</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label asp-for="FirstName" class="block text-gray-700 font-semibold mb-2"></label>
+                            <input asp-for="FirstName" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-success focus:border-transparent" />
+                            <span asp-validation-for="FirstName" class="text-red-500 text-sm"></span>
+                        </div>
+                        
+                        <div>
+                            <label asp-for="LastName" class="block text-gray-700 font-semibold mb-2"></label>
+                            <input asp-for="LastName" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-success focus:border-transparent" />
+                            <span asp-validation-for="LastName" class="text-red-500 text-sm"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label asp-for="PhoneNumber" class="block text-gray-700 font-semibold mb-2"></label>
+                        <input asp-for="PhoneNumber" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-success focus:border-transparent" />
+                        <span asp-validation-for="PhoneNumber" class="text-red-500 text-sm"></span>
+                    </div>
+                </div>
+                
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-gray-700 border-b pb-2 mb-4">Property Information</h3>
+                    
+                    <div class="mb-4">
+                        <label asp-for="Address" class="block text-gray-700 font-semibold mb-2"></label>
+                        <input asp-for="Address" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-success focus:border-transparent" />
+                        <span asp-validation-for="Address" class="text-red-500 text-sm"></span>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label asp-for="LotNumber" class="block text-gray-700 font-semibold mb-2"></label>
+                            <input asp-for="LotNumber" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-success focus:border-transparent" />
+                            <span asp-validation-for="LotNumber" class="text-red-500 text-sm"></span>
+                        </div>
+                        
+                        <div>
+                            <label asp-for="BlockNumber" class="block text-gray-700 font-semibold mb-2"></label>
+                            <input asp-for="BlockNumber" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-success focus:border-transparent" />
+                            <span asp-validation-for="BlockNumber" class="text-red-500 text-sm"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label asp-for="JoinDate" class="block text-gray-700 font-semibold mb-2"></label>
+                        <input type="text" value="@Model.JoinDate.ToString("yyyy-MM-dd")" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-success focus:border-transparent bg-gray-100" readonly />
+                        <input asp-for="JoinDate" type="hidden" />
+                    </div>
+                </div>
+                
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-gray-700 border-b pb-2 mb-4">Password</h3>
+                    
+                    <div class="mb-4">
+                        <div class="flex items-center">
+                            <input asp-for="ChangePassword" class="mr-2 rounded border-gray-300 text-success focus:ring-success" />
+                            <label asp-for="ChangePassword" class="text-gray-700"></label>
+                        </div>
+                    </div>
+                    
+                    <div id="passwordFields" class="hidden">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <label asp-for="NewPassword" class="block text-gray-700 font-semibold mb-2"></label>
+                                <input asp-for="NewPassword" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-success focus:border-transparent" />
+                                <span asp-validation-for="NewPassword" class="text-red-500 text-sm"></span>
+                            </div>
+                            
+                            <div>
+                                <label asp-for="ConfirmNewPassword" class="block text-gray-700 font-semibold mb-2"></label>
+                                <input asp-for="ConfirmNewPassword" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-success focus:border-transparent" />
+                                <span asp-validation-for="ConfirmNewPassword" class="text-red-500 text-sm"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex justify-between items-center mt-6">
+                    <a href="@Url.Action("Index", "Home")" class="text-gray-600 hover:text-gray-800">
+                        <i class="bi bi-arrow-left mr-1"></i> Back to Dashboard
+                    </a>
+                    
+                    <button type="submit" class="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">
+                        <i class="bi bi-check-circle mr-2"></i>Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        // Show/hide password fields based on checkbox
+        document.addEventListener('DOMContentLoaded', function() {
+            const changePasswordCheckbox = document.getElementById('ChangePassword');
+            const passwordFields = document.getElementById('passwordFields');
+            
+            // Initial state
+            if (changePasswordCheckbox.checked) {
+                passwordFields.classList.remove('hidden');
+            }
+            
+            // Handle checkbox change
+            changePasswordCheckbox.addEventListener('change', function() {
+                if (this.checked) {
+                    passwordFields.classList.remove('hidden');
+                } else {
+                    passwordFields.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+} 

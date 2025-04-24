@@ -1,0 +1,14 @@
+<table class="records-table" id="records-table">
+                            <thead>
+                                <tr>
+                                    <th>Student ID</th>
+                                    <th>Student Name</th>
+                                    <th>Purpose (Language Used)</th>
+                                    <th>Laboratory</th>
+                                    <th>Session Start</th>
+                                    <th>Session End</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td colspan="6" style="text-align: center;">No sit-in records found</td></tr>                            </tbody>
+                        </table>

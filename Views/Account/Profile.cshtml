@@ -1,0 +1,70 @@
+@model HomeownersSubdivision.Models.User
+
+@{
+    ViewData["Title"] = "My Profile";
+}
+
+<div class="container">
+    <h1>My Profile</h1>
+    <hr />
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Profile Information</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <label class="col-sm-3 col-form-label"><strong>Name:</strong></label>
+                        <div class="col-sm-9">
+                            <p class="form-control-plaintext">@Model.FirstName @Model.LastName</p>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-3 col-form-label"><strong>Username:</strong></label>
+                        <div class="col-sm-9">
+                            <p class="form-control-plaintext">@Model.Username</p>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-3 col-form-label"><strong>Email:</strong></label>
+                        <div class="col-sm-9">
+                            <p class="form-control-plaintext">@Model.Email</p>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-3 col-form-label"><strong>Phone:</strong></label>
+                        <div class="col-sm-9">
+                            <p class="form-control-plaintext">@(Model.PhoneNumber ?? "Not provided")</p>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-3 col-form-label"><strong>Role:</strong></label>
+                        <div class="col-sm-9">
+                            <p class="form-control-plaintext">@Model.Role</p>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-3 col-form-label"><strong>Joined:</strong></label>
+                        <div class="col-sm-9">
+                            <p class="form-control-plaintext">@Model.CreatedAt.ToString("MMMM dd, yyyy")</p>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-3 col-form-label"><strong>Last Login:</strong></label>
+                        <div class="col-sm-9">
+                            <p class="form-control-plaintext">
+                                @(Model.LastLoginDate != null ? ((DateTime)Model.LastLoginDate).ToString("MMMM dd, yyyy HH:mm") : "N/A")
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-3">
+                <a asp-action="ChangePassword" class="btn btn-primary">Change Password</a>
+            </div>
+        </div>
+    </div>
+</div> 

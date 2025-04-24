@@ -1,0 +1,100 @@
+@model HomeownersSubdivision.Models.User
+
+@{
+    ViewData["Title"] = "User Details";
+}
+
+<div class="container">
+    <h1>User Details</h1>
+    <hr />
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Basic Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <label class="col-sm-3 col-form-label"><strong>First Name:</strong></label>
+                        <div class="col-sm-9">
+                            <p class="form-control-plaintext">@Model.FirstName</p>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-3 col-form-label"><strong>Last Name:</strong></label>
+                        <div class="col-sm-9">
+                            <p class="form-control-plaintext">@Model.LastName</p>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-3 col-form-label"><strong>Phone Number:</strong></label>
+                        <div class="col-sm-9">
+                            <p class="form-control-plaintext">@(Model.PhoneNumber ?? "Not provided")</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Account Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <label class="col-sm-3 col-form-label"><strong>Username:</strong></label>
+                        <div class="col-sm-9">
+                            <p class="form-control-plaintext">@Model.Username</p>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-3 col-form-label"><strong>Email:</strong></label>
+                        <div class="col-sm-9">
+                            <p class="form-control-plaintext">@Model.Email</p>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-3 col-form-label"><strong>Role:</strong></label>
+                        <div class="col-sm-9">
+                            <p class="form-control-plaintext"><span class="badge bg-info">@Model.Role</span></p>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-3 col-form-label"><strong>Status:</strong></label>
+                        <div class="col-sm-9">
+                            <p class="form-control-plaintext">
+                                @if (Model.IsActive)
+                                {
+                                    <span class="badge bg-success">Active</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">Inactive</span>
+                                }
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-3 col-form-label"><strong>Created Date:</strong></label>
+                        <div class="col-sm-9">
+                            <p class="form-control-plaintext">@Model.CreatedAt.ToString("MMMM dd, yyyy")</p>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-3 col-form-label"><strong>Last Login:</strong></label>
+                        <div class="col-sm-9">
+                            <p class="form-control-plaintext">
+                                @(Model.LastLoginDate != null ? ((DateTime)Model.LastLoginDate).ToString("MMMM dd, yyyy HH:mm") : "Never")
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            </div>
+        </div>
+    </div>
+</div> 

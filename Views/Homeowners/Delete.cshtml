@@ -1,0 +1,80 @@
+@model HomeownersSubdivision.Models.Homeowner
+
+@{
+    ViewData["Title"] = "Delete Homeowner";
+}
+
+<div class="container">
+    <h1>Delete Homeowner</h1>
+    
+    <div class="alert alert-danger mb-4">
+        <h3>Are you sure you want to delete this homeowner?</h3>
+        <p>This action cannot be undone.</p>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">Homeowner Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-2">
+                        <div class="col-sm-3">
+                            <strong>Name:</strong>
+                        </div>
+                        <div class="col-sm-9">
+                            @Model.FirstName @Model.LastName
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-sm-3">
+                            <strong>Address:</strong>
+                        </div>
+                        <div class="col-sm-9">
+                            @Model.Address
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-sm-3">
+                            <strong>Block/Lot:</strong>
+                        </div>
+                        <div class="col-sm-9">
+                            Block @Model.BlockNumber, Lot @Model.LotNumber
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-sm-3">
+                            <strong>Email:</strong>
+                        </div>
+                        <div class="col-sm-9">
+                            @Model.Email
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-sm-3">
+                            <strong>Phone:</strong>
+                        </div>
+                        <div class="col-sm-9">
+                            @Model.Phone
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-sm-3">
+                            <strong>Join Date:</strong>
+                        </div>
+                        <div class="col-sm-9">
+                            @Model.JoinDate.ToString("MMMM dd, yyyy")
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <form asp-action="Delete">
+                <input type="hidden" asp-for="Id" />
+                <button type="submit" class="btn btn-danger">Delete</button>
+                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div> 

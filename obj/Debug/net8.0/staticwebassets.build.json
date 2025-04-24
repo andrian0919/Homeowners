@@ -1,0 +1,743 @@
+{
+  "Version": 1,
+  "Hash": "7HuOD2gJCpx9g4nt1BLDa+r7B6RH+x5IDy21KxCielM=",
+  "Source": "HomeownersSubdivision",
+  "BasePath": "_content/HomeownersSubdivision",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "HomeownersSubdivision\\wwwroot",
+      "Source": "HomeownersSubdivision",
+      "ContentRoot": "C:\\Users\\User\\OneDrive\\Desktop\\HomeownersSubdivision\\wwwroot\\",
+      "BasePath": "_content/HomeownersSubdivision",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\Users\\User\\OneDrive\\Desktop\\HomeownersSubdivision\\wwwroot\\css\\site.css",
+      "SourceId": "HomeownersSubdivision",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\User\\OneDrive\\Desktop\\HomeownersSubdivision\\wwwroot\\",
+      "BasePath": "_content/HomeownersSubdivision",
+      "RelativePath": "css/site#[.{fingerprint}]?.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "t5r83hb8v7",
+      "Integrity": "gbLKKd/x7vNwFIrflC4NS0dZW1tzypweQdt0K2g5b5I=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\site.css"
+    },
+    {
+      "Identity": "C:\\Users\\User\\OneDrive\\Desktop\\HomeownersSubdivision\\wwwroot\\images\\neighborhood.jpg",
+      "SourceId": "HomeownersSubdivision",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\User\\OneDrive\\Desktop\\HomeownersSubdivision\\wwwroot\\",
+      "BasePath": "_content/HomeownersSubdivision",
+      "RelativePath": "images/neighborhood#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "64a3rlppm0",
+      "Integrity": "CmtnnJ3oh2rYD49pnlcYxaWAycSinKv6GNMxgle5RK4=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\neighborhood.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\User\\OneDrive\\Desktop\\HomeownersSubdivision\\wwwroot\\images\\Novocaine 2025 1080p WEB h264-ETHEL.Hi.srt",
+      "SourceId": "HomeownersSubdivision",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\User\\OneDrive\\Desktop\\HomeownersSubdivision\\wwwroot\\",
+      "BasePath": "_content/HomeownersSubdivision",
+      "RelativePath": "images/Novocaine 2025 1080p WEB h264-ETHEL.Hi#[.{fingerprint}]?.srt",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "cmvage12xp",
+      "Integrity": "bKl4q9Iq/zv9buU3vVrj5axxgWuG/Sji77u6XNMizv4=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\Novocaine 2025 1080p WEB h264-ETHEL.Hi.srt"
+    },
+    {
+      "Identity": "C:\\Users\\User\\OneDrive\\Desktop\\HomeownersSubdivision\\wwwroot\\images\\sit_in_records.xls",
+      "SourceId": "HomeownersSubdivision",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\User\\OneDrive\\Desktop\\HomeownersSubdivision\\wwwroot\\",
+      "BasePath": "_content/HomeownersSubdivision",
+      "RelativePath": "images/sit_in_records#[.{fingerprint}]?.xls",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "bqltojgjya",
+      "Integrity": "vehvKqvxnIXv/f29SzL+b1P8NFehFD7pdfttmLz4oSo=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\sit_in_records.xls"
+    },
+    {
+      "Identity": "C:\\Users\\User\\OneDrive\\Desktop\\HomeownersSubdivision\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js",
+      "SourceId": "HomeownersSubdivision",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\User\\OneDrive\\Desktop\\HomeownersSubdivision\\wwwroot\\",
+      "BasePath": "_content/HomeownersSubdivision",
+      "RelativePath": "lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min#[.{fingerprint}]?.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "ghl8vd80rs",
+      "Integrity": "xHFuVGBLb5xrywgAhfBAW8G6lTVX0qJsoHk+GXcJKzo=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js"
+    },
+    {
+      "Identity": "C:\\Users\\User\\OneDrive\\Desktop\\HomeownersSubdivision\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.min.js",
+      "SourceId": "HomeownersSubdivision",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\User\\OneDrive\\Desktop\\HomeownersSubdivision\\wwwroot\\",
+      "BasePath": "_content/HomeownersSubdivision",
+      "RelativePath": "lib/jquery-validation/dist/jquery.validate.min#[.{fingerprint}]?.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "jsrh27xbuy",
+      "Integrity": "DcuB/GcVHbK/KH9B27a38CCK72f16H18t/wbTSmJPtM=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.min.js"
+    },
+    {
+      "Identity": "C:\\Users\\User\\OneDrive\\Desktop\\HomeownersSubdivision\\wwwroot\\lib\\jquery\\dist\\jquery.min.js",
+      "SourceId": "HomeownersSubdivision",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\User\\OneDrive\\Desktop\\HomeownersSubdivision\\wwwroot\\",
+      "BasePath": "_content/HomeownersSubdivision",
+      "RelativePath": "lib/jquery/dist/jquery.min#[.{fingerprint}]?.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "yu78tspv7y",
+      "Integrity": "Nqnn8clbgv+5l0PgxcTOldg8mkMKrFn4TvPL+rYUUGg=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\lib\\jquery\\dist\\jquery.min.js"
+    }
+  ],
+  "Endpoints": [
+    {
+      "Route": "css/site.css",
+      "AssetFile": "C:\\Users\\User\\OneDrive\\Desktop\\HomeownersSubdivision\\wwwroot\\css\\site.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "8144"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"gbLKKd/x7vNwFIrflC4NS0dZW1tzypweQdt0K2g5b5I=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 20 Mar 2025 13:08:21 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-gbLKKd/x7vNwFIrflC4NS0dZW1tzypweQdt0K2g5b5I="
+        }
+      ]
+    },
+    {
+      "Route": "css/site.t5r83hb8v7.css",
+      "AssetFile": "C:\\Users\\User\\OneDrive\\Desktop\\HomeownersSubdivision\\wwwroot\\css\\site.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "8144"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"gbLKKd/x7vNwFIrflC4NS0dZW1tzypweQdt0K2g5b5I=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 20 Mar 2025 13:08:21 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "t5r83hb8v7"
+        },
+        {
+          "Name": "label",
+          "Value": "css/site.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-gbLKKd/x7vNwFIrflC4NS0dZW1tzypweQdt0K2g5b5I="
+        }
+      ]
+    },
+    {
+      "Route": "images/neighborhood.64a3rlppm0.jpg",
+      "AssetFile": "C:\\Users\\User\\OneDrive\\Desktop\\HomeownersSubdivision\\wwwroot\\images\\neighborhood.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "259027"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"CmtnnJ3oh2rYD49pnlcYxaWAycSinKv6GNMxgle5RK4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 21 Mar 2025 01:50:32 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "64a3rlppm0"
+        },
+        {
+          "Name": "label",
+          "Value": "images/neighborhood.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-CmtnnJ3oh2rYD49pnlcYxaWAycSinKv6GNMxgle5RK4="
+        }
+      ]
+    },
+    {
+      "Route": "images/neighborhood.jpg",
+      "AssetFile": "C:\\Users\\User\\OneDrive\\Desktop\\HomeownersSubdivision\\wwwroot\\images\\neighborhood.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "259027"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"CmtnnJ3oh2rYD49pnlcYxaWAycSinKv6GNMxgle5RK4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 21 Mar 2025 01:50:32 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-CmtnnJ3oh2rYD49pnlcYxaWAycSinKv6GNMxgle5RK4="
+        }
+      ]
+    },
+    {
+      "Route": "images/Novocaine 2025 1080p WEB h264-ETHEL.Hi.cmvage12xp.srt",
+      "AssetFile": "C:\\Users\\User\\OneDrive\\Desktop\\HomeownersSubdivision\\wwwroot\\images\\Novocaine 2025 1080p WEB h264-ETHEL.Hi.srt",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "116106"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/octet-stream"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"bKl4q9Iq/zv9buU3vVrj5axxgWuG/Sji77u6XNMizv4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 16 Apr 2025 18:59:35 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "cmvage12xp"
+        },
+        {
+          "Name": "label",
+          "Value": "images/Novocaine 2025 1080p WEB h264-ETHEL.Hi.srt"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-bKl4q9Iq/zv9buU3vVrj5axxgWuG/Sji77u6XNMizv4="
+        }
+      ]
+    },
+    {
+      "Route": "images/Novocaine 2025 1080p WEB h264-ETHEL.Hi.srt",
+      "AssetFile": "C:\\Users\\User\\OneDrive\\Desktop\\HomeownersSubdivision\\wwwroot\\images\\Novocaine 2025 1080p WEB h264-ETHEL.Hi.srt",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "116106"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/octet-stream"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"bKl4q9Iq/zv9buU3vVrj5axxgWuG/Sji77u6XNMizv4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 16 Apr 2025 18:59:35 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-bKl4q9Iq/zv9buU3vVrj5axxgWuG/Sji77u6XNMizv4="
+        }
+      ]
+    },
+    {
+      "Route": "images/sit_in_records.bqltojgjya.xls",
+      "AssetFile": "C:\\Users\\User\\OneDrive\\Desktop\\HomeownersSubdivision\\wwwroot\\images\\sit_in_records.xls",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "770"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/vnd.ms-excel"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"vehvKqvxnIXv/f29SzL+b1P8NFehFD7pdfttmLz4oSo=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 07 Apr 2025 15:13:33 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "bqltojgjya"
+        },
+        {
+          "Name": "label",
+          "Value": "images/sit_in_records.xls"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-vehvKqvxnIXv/f29SzL+b1P8NFehFD7pdfttmLz4oSo="
+        }
+      ]
+    },
+    {
+      "Route": "images/sit_in_records.xls",
+      "AssetFile": "C:\\Users\\User\\OneDrive\\Desktop\\HomeownersSubdivision\\wwwroot\\images\\sit_in_records.xls",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "770"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/vnd.ms-excel"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"vehvKqvxnIXv/f29SzL+b1P8NFehFD7pdfttmLz4oSo=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 07 Apr 2025 15:13:33 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-vehvKqvxnIXv/f29SzL+b1P8NFehFD7pdfttmLz4oSo="
+        }
+      ]
+    },
+    {
+      "Route": "lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.ghl8vd80rs.js",
+      "AssetFile": "C:\\Users\\User\\OneDrive\\Desktop\\HomeownersSubdivision\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "288"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"xHFuVGBLb5xrywgAhfBAW8G6lTVX0qJsoHk+GXcJKzo=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 20 Mar 2025 09:25:41 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "ghl8vd80rs"
+        },
+        {
+          "Name": "label",
+          "Value": "lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-xHFuVGBLb5xrywgAhfBAW8G6lTVX0qJsoHk+GXcJKzo="
+        }
+      ]
+    },
+    {
+      "Route": "lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js",
+      "AssetFile": "C:\\Users\\User\\OneDrive\\Desktop\\HomeownersSubdivision\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "288"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"xHFuVGBLb5xrywgAhfBAW8G6lTVX0qJsoHk+GXcJKzo=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 20 Mar 2025 09:25:41 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-xHFuVGBLb5xrywgAhfBAW8G6lTVX0qJsoHk+GXcJKzo="
+        }
+      ]
+    },
+    {
+      "Route": "lib/jquery-validation/dist/jquery.validate.min.js",
+      "AssetFile": "C:\\Users\\User\\OneDrive\\Desktop\\HomeownersSubdivision\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.min.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "245"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"DcuB/GcVHbK/KH9B27a38CCK72f16H18t/wbTSmJPtM=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 20 Mar 2025 09:25:31 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-DcuB/GcVHbK/KH9B27a38CCK72f16H18t/wbTSmJPtM="
+        }
+      ]
+    },
+    {
+      "Route": "lib/jquery-validation/dist/jquery.validate.min.jsrh27xbuy.js",
+      "AssetFile": "C:\\Users\\User\\OneDrive\\Desktop\\HomeownersSubdivision\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.min.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "245"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"DcuB/GcVHbK/KH9B27a38CCK72f16H18t/wbTSmJPtM=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 20 Mar 2025 09:25:31 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "jsrh27xbuy"
+        },
+        {
+          "Name": "label",
+          "Value": "lib/jquery-validation/dist/jquery.validate.min.js"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-DcuB/GcVHbK/KH9B27a38CCK72f16H18t/wbTSmJPtM="
+        }
+      ]
+    },
+    {
+      "Route": "lib/jquery/dist/jquery.min.js",
+      "AssetFile": "C:\\Users\\User\\OneDrive\\Desktop\\HomeownersSubdivision\\wwwroot\\lib\\jquery\\dist\\jquery.min.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Nqnn8clbgv+5l0PgxcTOldg8mkMKrFn4TvPL+rYUUGg=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 20 Mar 2025 09:25:15 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-Nqnn8clbgv+5l0PgxcTOldg8mkMKrFn4TvPL+rYUUGg="
+        }
+      ]
+    },
+    {
+      "Route": "lib/jquery/dist/jquery.min.yu78tspv7y.js",
+      "AssetFile": "C:\\Users\\User\\OneDrive\\Desktop\\HomeownersSubdivision\\wwwroot\\lib\\jquery\\dist\\jquery.min.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Nqnn8clbgv+5l0PgxcTOldg8mkMKrFn4TvPL+rYUUGg=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 20 Mar 2025 09:25:15 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "yu78tspv7y"
+        },
+        {
+          "Name": "label",
+          "Value": "lib/jquery/dist/jquery.min.js"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-Nqnn8clbgv+5l0PgxcTOldg8mkMKrFn4TvPL+rYUUGg="
+        }
+      ]
+    }
+  ]
+}

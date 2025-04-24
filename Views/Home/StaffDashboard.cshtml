@@ -1,0 +1,201 @@
+@{
+    ViewData["Title"] = "Staff Dashboard";
+}
+
+<div class="staff-theme">
+    <div class="jumbotron staff-gradient rounded-lg p-8 mb-6">
+        <div class="container mx-auto">
+            <h1 class="text-4xl font-heading font-bold mb-2 flex items-center">
+                <i class="fas fa-briefcase mr-2"></i>Staff Dashboard
+            </h1>
+            <p class="text-xl opacity-90">Manage day-to-day operations for Homeowners Subdivision.</p>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="animate-fade-in-up card-delay-1">
+            <div class="bg-white rounded-lg shadow overflow-hidden card-hover h-full flex flex-col">
+                <div class="bg-staffPrimary text-white px-5 py-4">
+                    <h2 class="text-lg font-semibold flex items-center">
+                        <i class="fas fa-home mr-2"></i>Homeowners
+                    </h2>
+                </div>
+                <div class="p-5 flex-grow flex flex-col">
+                    <div class="text-center">
+                        <i class="fas fa-home text-staffPrimary opacity-25 text-5xl mb-4"></i>
+                    </div>
+                    <p class="text-gray-600 mb-4 flex-grow">View homeowner information, properties, and contact details. Respond to inquiries.</p>
+                    <div class="mt-auto">
+                        <a asp-controller="Homeowners" asp-action="Index" class="btn-info w-full text-center flex items-center justify-center">
+                            <i class="fas fa-arrow-right mr-1"></i> View Homeowners
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="animate-fade-in-up card-delay-2">
+            <div class="bg-white rounded-lg shadow overflow-hidden card-hover h-full flex flex-col">
+                <div class="bg-staffPrimary text-white px-5 py-4">
+                    <h2 class="text-lg font-semibold flex items-center">
+                        <i class="fas fa-tasks mr-2"></i>Tasks
+                    </h2>
+                </div>
+                <div class="p-5 flex-grow flex flex-col">
+                    <div class="text-center">
+                        <i class="fas fa-tasks text-staffPrimary opacity-25 text-5xl mb-4"></i>
+                    </div>
+                    <p class="text-gray-600 mb-4 flex-grow">View and manage assigned tasks, duties, and responsibilities.</p>
+                    <div class="mt-auto">
+                        <a href="#" class="btn-info w-full text-center flex items-center justify-center">
+                            <i class="fas fa-arrow-right mr-1"></i> Manage Tasks
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="animate-fade-in-up card-delay-3">
+            <div class="bg-white rounded-lg shadow overflow-hidden card-hover h-full flex flex-col">
+                <div class="bg-staffPrimary text-white px-5 py-4">
+                    <h2 class="text-lg font-semibold flex items-center">
+                        <i class="fas fa-calendar-alt mr-2"></i>Schedule
+                    </h2>
+                </div>
+                <div class="p-5 flex-grow flex flex-col">
+                    <div class="text-center">
+                        <i class="fas fa-calendar-alt text-staffPrimary opacity-25 text-5xl mb-4"></i>
+                    </div>
+                    <p class="text-gray-600 mb-4 flex-grow">View upcoming events, meetings, and community activities.</p>
+                    <div class="mt-auto">
+                        <a href="#" class="btn-info w-full text-center flex items-center justify-center">
+                            <i class="fas fa-arrow-right mr-1"></i> View Schedule
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="animate-fade-in-up card-delay-4">
+            <div class="bg-white rounded-lg shadow overflow-hidden card-hover h-full flex flex-col">
+                <div class="bg-staffPrimary text-white px-5 py-4">
+                    <h2 class="text-lg font-semibold flex items-center">
+                        <i class="fas fa-envelope mr-2"></i>Messages
+                    </h2>
+                </div>
+                <div class="p-5 flex-grow flex flex-col">
+                    <div class="text-center">
+                        <i class="fas fa-envelope text-staffPrimary opacity-25 text-5xl mb-4"></i>
+                    </div>
+                    <p class="text-gray-600 mb-4 flex-grow">View and respond to messages from homeowners and management.</p>
+                    <div class="mt-auto">
+                        <a href="#" class="btn-info w-full text-center flex items-center justify-center">
+                            <i class="fas fa-arrow-right mr-1"></i> View Messages
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="animate-fade-in-up card-delay-5">
+            <div class="bg-white rounded-lg shadow overflow-hidden card-hover h-full flex flex-col">
+                <div class="bg-staffPrimary text-white px-5 py-4">
+                    <h2 class="text-lg font-semibold flex items-center">
+                        <i class="fas fa-exclamation-circle mr-2"></i>Maintenance Requests
+                    </h2>
+                </div>
+                <div class="p-5 flex-grow flex flex-col">
+                    <div class="text-center">
+                        <i class="fas fa-exclamation-circle text-staffPrimary opacity-25 text-5xl mb-4"></i>
+                    </div>
+                    <p class="text-gray-600 mb-4 flex-grow">Process and track maintenance requests from homeowners.</p>
+                    <div class="mt-auto">
+                        <a href="#" class="btn-info w-full text-center flex items-center justify-center">
+                            <i class="fas fa-arrow-right mr-1"></i> View Requests
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="animate-fade-in-up card-delay-6">
+            <div class="bg-white rounded-lg shadow overflow-hidden card-hover h-full flex flex-col">
+                <div class="bg-staffPrimary text-white px-5 py-4">
+                    <h2 class="text-lg font-semibold flex items-center">
+                        <i class="fas fa-file-alt mr-2"></i>Reports
+                    </h2>
+                </div>
+                <div class="p-5 flex-grow flex flex-col">
+                    <div class="text-center">
+                        <i class="fas fa-file-alt text-staffPrimary opacity-25 text-5xl mb-4"></i>
+                    </div>
+                    <p class="text-gray-600 mb-4 flex-grow">Generate and view reports for management review.</p>
+                    <div class="mt-auto">
+                        <a href="#" class="btn-info w-full text-center flex items-center justify-center">
+                            <i class="fas fa-arrow-right mr-1"></i> Generate Reports
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-8 animate-fade-in-up" style="animation-delay: 0.7s;">
+        <div class="bg-white rounded-lg shadow overflow-hidden">
+            <div class="bg-staffPrimary text-white px-5 py-4">
+                <h2 class="text-lg font-semibold flex items-center">
+                    <i class="fas fa-bell mr-2"></i>Recent Activity
+                </h2>
+            </div>
+            <div class="p-6">
+                <ul class="space-y-4">
+                    <li class="border-b border-gray-100 pb-4">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h5 class="text-lg font-medium flex items-center">
+                                    <i class="fas fa-user-plus text-staffPrimary mr-2"></i>
+                                    New homeowner registration
+                                </h5>
+                                <p class="text-gray-600 mt-1">John Doe registered as a new homeowner at Block 12, Lot 4.</p>
+                            </div>
+                            <span class="bg-gray-100 text-gray-700 text-xs px-3 py-1 rounded-full">3 days ago</span>
+                        </div>
+                    </li>
+                    <li class="border-b border-gray-100 pb-4">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h5 class="text-lg font-medium flex items-center">
+                                    <i class="fas fa-tools text-staffPrimary mr-2"></i>
+                                    Maintenance request submitted
+                                </h5>
+                                <p class="text-gray-600 mt-1">Jane Smith reported issues with streetlights at Block 8.</p>
+                            </div>
+                            <span class="bg-gray-100 text-gray-700 text-xs px-3 py-1 rounded-full">5 days ago</span>
+                        </div>
+                    </li>
+                    <li class="pb-2">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h5 class="text-lg font-medium flex items-center">
+                                    <i class="fas fa-calendar-day text-staffPrimary mr-2"></i>
+                                    Community event scheduled
+                                </h5>
+                                <p class="text-gray-600 mt-1">Annual homeowners meeting scheduled for next month.</p>
+                            </div>
+                            <span class="bg-gray-100 text-gray-700 text-xs px-3 py-1 rounded-full">1 week ago</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="bg-gray-50 px-6 py-3 flex justify-end">
+                <a href="#" class="btn-outline-info text-sm px-3 py-1 inline-flex items-center">
+                    <i class="fas fa-list mr-1"></i> View All Activity
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+} 

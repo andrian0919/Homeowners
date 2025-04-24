@@ -1,0 +1,89 @@
+@model IEnumerable<HomeownersSubdivision.Models.Notification>
+
+@if (!Model.Any())
+{
+    <div class="py-6 px-4 text-center text-gray-500">
+        <div class="text-3xl mb-2">
+            <i class="bi bi-bell-slash"></i>
+        </div>
+        <p>No new notifications</p>
+    </div>
+}
+else
+{
+    <div class="py-2 max-h-96 overflow-y-auto">
+        @foreach (var notification in Model)
+        {
+            <div class="px-4 py-3 hover:bg-gray-50 border-b last:border-0 @(notification.Status == NotificationStatus.Unread ? "bg-blue-50" : "")">
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 pt-1">
+                        @switch (notification.Type)
+                        {
+                            case NotificationType.Announcement:
+                                <i class="bi bi-megaphone text-blue-500"></i>
+                                break;
+                            case NotificationType.Event:
+                                <i class="bi bi-calendar-event text-green-500"></i>
+                                break;
+                            case NotificationType.MaintenanceRequest:
+                                <i class="bi bi-tools text-orange-500"></i>
+                                break;
+                            case NotificationType.Payment:
+                                <i class="bi bi-credit-card text-purple-500"></i>
+                                break;
+                            default:
+                                <i class="bi bi-info-circle text-gray-500"></i>
+                                break;
+                        }
+                    </div>
+                    
+                    <div class="ml-3 flex-1">
+                        <p class="text-sm font-medium text-gray-900">
+                            @notification.Title
+                        </p>
+                        <p class="text-sm text-gray-600 line-clamp-2">
+                            @notification.Message
+                        </p>
+                        <p class="text-xs text-gray-500 mt-1">
+                            @{
+                                var timeAgo = DateTime.Now - notification.CreatedAt;
+                                string timeAgoString;
+                                
+                                if (timeAgo.TotalMinutes < 1)
+                                {
+                                    timeAgoString = "Just now";
+                                }
+                                else if (timeAgo.TotalHours < 1)
+                                {
+                                    timeAgoString = $"{(int)timeAgo.TotalMinutes}m ago";
+                                }
+                                else if (timeAgo.TotalDays < 1)
+                                {
+                                    timeAgoString = $"{(int)timeAgo.TotalHours}h ago";
+                                }
+                                else if (timeAgo.TotalDays < 7)
+                                {
+                                    timeAgoString = $"{(int)timeAgo.TotalDays}d ago";
+                                }
+                                else
+                                {
+                                    timeAgoString = notification.CreatedAt.ToString("MMM d");
+                                }
+                            }
+                            @timeAgoString
+                        </p>
+                        <a href="@Url.Action("Details", "Notifications", new { id = notification.Id })" class="absolute inset-0">
+                            <span class="sr-only">View notification</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    
+    <div class="p-2 border-t bg-gray-50">
+        <a href="@Url.Action("Index", "Notifications")" class="block w-full text-center py-2 text-sm font-medium text-success-600 hover:text-success-700 rounded hover:bg-gray-100">
+            View all notifications
+        </a>
+    </div>
+} 

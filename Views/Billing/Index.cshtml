@@ -1,0 +1,234 @@
+@model IEnumerable<HomeownersSubdivision.Models.Bill>
+@{
+    ViewData["Title"] = "Billing Management";
+}
+
+<div class="container py-5">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1 class="fw-bold text-primary">Billing Management</h1>
+            <p class="text-muted lead">View and manage bills for all homeowners</p>
+        </div>
+        <div class="col-md-4 d-flex justify-content-end align-items-center">
+            <a href="@Url.Action("Create")" class="btn btn-primary me-2">
+                <i class="bi bi-plus-circle me-2"></i> Create Bill
+            </a>
+            <a href="@Url.Action("CreateBulk")" class="btn btn-outline-primary me-2">
+                <i class="bi bi-people me-2"></i> Bulk Create
+            </a>
+            <div class="dropdown">
+                <button class="btn btn-outline-primary dropdown-toggle" type="button" id="billActions" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-gear me-2"></i> Actions
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="billActions">
+                    <li><a class="dropdown-item" href="@Url.Action("GenerateReport")"><i class="bi bi-file-earmark-text me-2"></i> Generate Report</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="@Url.Action("Index", "Payments")"><i class="bi bi-credit-card me-2"></i> View Payments</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters and search -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-4">
+                    <label for="search" class="form-label">Search</label>
+                    <input type="text" class="form-control" id="search" name="searchString" value="@ViewBag.CurrentFilter" placeholder="Search by description or homeowner name">
+                </div>
+                <div class="col-md-3">
+                    <label for="status" class="form-label">Status</label>
+                    <select name="status" id="status" class="form-select">
+                        <option value="">All Statuses</option>
+                        @foreach (var status in ViewBag.StatusOptions ?? new List<string>())
+                        {
+                            <option value="@status" selected="@(ViewBag.CurrentStatus == status)">@status</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-search me-2"></i> Filter
+                    </button>
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <a href="@Url.Action("Index")" class="btn btn-outline-secondary w-100">
+                        <i class="bi bi-x-circle me-2"></i> Clear
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Success/Error Messages -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle me-2"></i> @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-circle me-2"></i> @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <!-- Bills Table -->
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Homeowner</th>
+                            <th>Description</th>
+                            <th>Issue Date</th>
+                            <th>Due Date</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            foreach (var bill in Model)
+                            {
+                                <tr>
+                                    <td><span class="badge bg-secondary">#@bill.Id</span></td>
+                                    <td>@bill.User?.FullName</td>
+                                    <td>
+                                        <span class="d-block fw-bold">@bill.Description</span>
+                                        <span class="badge bg-info text-dark">@bill.Type</span>
+                                    </td>
+                                    <td>@bill.IssueDate.ToString("MM/dd/yyyy")</td>
+                                    <td>
+                                        @{
+                                            string dueDateClass = bill.IsOverdue ? "text-danger fw-bold" : "";
+                                        }
+                                        <span class="@dueDateClass">@bill.DueDate.ToString("MM/dd/yyyy")</span>
+                                        @if (bill.IsOverdue)
+                                        {
+                                            <span class="badge bg-danger">Overdue</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <span class="fw-bold">$@bill.Amount.ToString("N2")</span>
+                                        @if (bill.PaidAmount > 0 && bill.PaidAmount < bill.Amount)
+                                        {
+                                            <div class="small text-muted">
+                                                Paid: $@bill.PaidAmount.ToString("N2")
+                                            </div>
+                                            <div class="small text-muted">
+                                                Due: $@bill.RemainingAmount.ToString("N2")
+                                            </div>
+                                        }
+                                    </td>
+                                    <td>
+                                        @{
+                                            string badgeClass = "bg-secondary";
+                                            
+                                            switch (bill.Status)
+                                            {
+                                                case "Unpaid":
+                                                    badgeClass = "bg-warning text-dark";
+                                                    break;
+                                                case "Paid":
+                                                    badgeClass = "bg-success";
+                                                    break;
+                                                case "Overdue":
+                                                    badgeClass = "bg-danger";
+                                                    break;
+                                                case "Cancelled":
+                                                    badgeClass = "bg-secondary";
+                                                    break;
+                                            }
+                                        }
+                                        <span class="badge @badgeClass">@bill.Status</span>
+                                    </td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="bi bi-three-dots"></i>
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-end">
+                                                <li><a class="dropdown-item" href="@Url.Action("Details", new { id = bill.Id })"><i class="bi bi-eye me-2"></i> View Details</a></li>
+                                                <li><a class="dropdown-item" href="@Url.Action("Edit", new { id = bill.Id })"><i class="bi bi-pencil me-2"></i> Edit</a></li>
+                                                <li><hr class="dropdown-divider"></li>
+                                                @if (bill.Status != "Paid" && bill.DueDate < DateTime.Now.AddDays(7))
+                                                {
+                                                    <li>
+                                                        <form asp-action="SendReminder" asp-route-id="@bill.Id" method="post" class="d-inline">
+                                                            <button type="submit" class="dropdown-item text-warning">
+                                                                <i class="bi bi-bell me-2"></i> Send Reminder
+                                                            </button>
+                                                        </form>
+                                                    </li>
+                                                }
+                                                <li><a class="dropdown-item text-danger" href="@Url.Action("Delete", new { id = bill.Id })"><i class="bi bi-trash me-2"></i> Delete</a></li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="8" class="text-center py-4">
+                                    <div class="d-flex flex-column align-items-center">
+                                        <i class="bi bi-search fa-3x text-muted mb-3"></i>
+                                        <p class="text-muted mb-0">No bills found matching your criteria.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    @if (ViewBag.TotalPages > 1)
+    {
+        <div class="d-flex justify-content-center mt-4">
+            <nav aria-label="Bills pagination">
+                <ul class="pagination">
+                    <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
+                        <a class="page-link" href="@Url.Action("Index", new { page = ViewBag.CurrentPage - 1, searchString = ViewBag.CurrentFilter, status = ViewBag.CurrentStatus })" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                    {
+                        <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
+                            <a class="page-link" href="@Url.Action("Index", new { page = i, searchString = ViewBag.CurrentFilter, status = ViewBag.CurrentStatus })">@i</a>
+                        </li>
+                    }
+                    <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
+                        <a class="page-link" href="@Url.Action("Index", new { page = ViewBag.CurrentPage + 1, searchString = ViewBag.CurrentFilter, status = ViewBag.CurrentStatus })" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        $(function() {
+            // Auto-submit form when changing select fields
+            $('#status').change(function() {
+                $(this).closest('form').submit();
+            });
+        });
+    </script>
+} 

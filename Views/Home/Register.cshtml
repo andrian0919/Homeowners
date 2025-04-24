@@ -1,0 +1,293 @@
+@model HomeownersSubdivision.Models.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="min-h-screen py-12 px-4 sm:px-6 lg:px-8 bg-cover bg-center" style="background-image: url('/images/neighborhood.jpg');">
+    <div class="max-w-2xl mx-auto bg-white bg-opacity-95 rounded-xl shadow-xl overflow-hidden transform transition-all">
+        <div class="relative h-32 bg-gradient-to-r from-success to-blue-700 flex items-end">
+            <div class="absolute inset-0 bg-black opacity-20"></div>
+            <div class="relative w-full p-6 text-white">
+                <div class="absolute right-6 top-6 bg-white p-2 rounded-full shadow-lg opacity-90">
+                    <i class="bi bi-person-plus text-2xl text-success"></i>
+                </div>
+                <h2 class="text-3xl font-bold font-heading mb-1">Create Account</h2>
+                <p class="text-white text-opacity-90">
+                    Join our community and access homeowner services
+                </p>
+            </div>
+        </div>
+
+        <div class="p-8">
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 animate-fade-in" role="alert">
+                    <p>@TempData["ErrorMessage"]</p>
+                </div>
+            }
+            
+            <form asp-action="Register" method="post" class="space-y-5">
+                <div asp-validation-summary="ModelOnly" class="text-red-500 mb-4 p-3 bg-red-50 rounded-md"></div>
+                
+                <div class="flex flex-wrap -mx-3 mb-2">
+                    <div class="w-full md:w-1/2 px-3 mb-4 md:mb-0">
+                        <label asp-for="FirstName" class="block text-gray-700 font-medium mb-2"></label>
+                        <div class="relative rounded-md shadow-sm">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="bi bi-person text-gray-400"></i>
+                            </div>
+                            <input asp-for="FirstName" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-success focus:border-success transition duration-150 ease-in-out" placeholder="Enter your first name" />
+                        </div>
+                        <span asp-validation-for="FirstName" class="text-red-500 text-sm"></span>
+                    </div>
+                    
+                    <div class="w-full md:w-1/2 px-3">
+                        <label asp-for="LastName" class="block text-gray-700 font-medium mb-2"></label>
+                        <div class="relative rounded-md shadow-sm">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="bi bi-person text-gray-400"></i>
+                            </div>
+                            <input asp-for="LastName" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-success focus:border-success transition duration-150 ease-in-out" placeholder="Enter your last name" />
+                        </div>
+                        <span asp-validation-for="LastName" class="text-red-500 text-sm"></span>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <label asp-for="Username" class="block text-gray-700 font-medium mb-2"></label>
+                    <div class="relative rounded-md shadow-sm">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="bi bi-at text-gray-400"></i>
+                        </div>
+                        <input asp-for="Username" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-success focus:border-success transition duration-150 ease-in-out" placeholder="Choose a username" />
+                    </div>
+                    <span asp-validation-for="Username" class="text-red-500 text-sm"></span>
+                </div>
+                
+                <div class="mb-4">
+                    <label asp-for="Email" class="block text-gray-700 font-medium mb-2"></label>
+                    <div class="relative rounded-md shadow-sm">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="bi bi-envelope text-gray-400"></i>
+                        </div>
+                        <input asp-for="Email" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-success focus:border-success transition duration-150 ease-in-out" placeholder="Enter your email address" />
+                    </div>
+                    <span asp-validation-for="Email" class="text-red-500 text-sm"></span>
+                </div>
+                
+                <div class="mb-4">
+                    <label asp-for="PhoneNumber" class="block text-gray-700 font-medium mb-2"></label>
+                    <div class="relative rounded-md shadow-sm">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="bi bi-telephone text-gray-400"></i>
+                        </div>
+                        <input asp-for="PhoneNumber" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-success focus:border-success transition duration-150 ease-in-out" placeholder="Enter your phone number" />
+                    </div>
+                    <span asp-validation-for="PhoneNumber" class="text-red-500 text-sm"></span>
+                </div>
+                
+                <div class="border border-gray-200 rounded-lg p-5 mb-4 bg-gray-50">
+                    <h3 class="text-lg font-medium text-gray-700 mb-3">Property Information</h3>
+                    
+                    <div class="flex flex-wrap -mx-3">
+                        <div class="w-full md:w-1/2 px-3 mb-4 md:mb-0">
+                            <label asp-for="LotNumber" class="block text-gray-700 font-medium mb-2"></label>
+                            <div class="relative rounded-md shadow-sm">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="bi bi-hash text-gray-400"></i>
+                                </div>
+                                <input asp-for="LotNumber" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-success focus:border-success transition duration-150 ease-in-out" placeholder="Enter your lot number" />
+                            </div>
+                            <span asp-validation-for="LotNumber" class="text-red-500 text-sm"></span>
+                        </div>
+                        
+                        <div class="w-full md:w-1/2 px-3">
+                            <label asp-for="BlockNumber" class="block text-gray-700 font-medium mb-2"></label>
+                            <div class="relative rounded-md shadow-sm">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="bi bi-geo-alt text-gray-400"></i>
+                                </div>
+                                <input asp-for="BlockNumber" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-success focus:border-success transition duration-150 ease-in-out" placeholder="Enter your block number" />
+                            </div>
+                            <span asp-validation-for="BlockNumber" class="text-red-500 text-sm"></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="border border-gray-200 rounded-lg p-5 mb-4 bg-gray-50">
+                    <h3 class="text-lg font-medium text-gray-700 mb-3">Security</h3>
+                    
+                    <div class="mb-4">
+                        <label asp-for="Password" class="block text-gray-700 font-medium mb-2"></label>
+                        <div class="relative rounded-md shadow-sm">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="bi bi-lock text-gray-400"></i>
+                            </div>
+                            <input asp-for="Password" id="password-field" class="block w-full pl-10 pr-10 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-success focus:border-success transition duration-150 ease-in-out" placeholder="Choose a password" />
+                            <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                                <button type="button" id="toggle-password" class="text-gray-400 hover:text-gray-600 focus:outline-none">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <span asp-validation-for="Password" class="text-red-500 text-sm"></span>
+                        
+                        <div class="mt-2">
+                            <div class="w-full bg-gray-200 rounded-full h-2.5 mb-1">
+                                <div class="bg-red-500 h-2.5 rounded-full" id="password-strength" style="width: 0%"></div>
+                            </div>
+                            <p class="text-xs text-gray-500" id="password-feedback">Password strength</p>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label asp-for="ConfirmPassword" class="block text-gray-700 font-medium mb-2"></label>
+                        <div class="relative rounded-md shadow-sm">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="bi bi-lock-fill text-gray-400"></i>
+                            </div>
+                            <input asp-for="ConfirmPassword" id="confirm-password-field" class="block w-full pl-10 pr-10 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-success focus:border-success transition duration-150 ease-in-out" placeholder="Confirm your password" />
+                            <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                                <button type="button" id="toggle-confirm-password" class="text-gray-400 hover:text-gray-600 focus:outline-none">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <span asp-validation-for="ConfirmPassword" class="text-red-500 text-sm"></span>
+                    </div>
+                </div>
+                
+                <div class="flex items-center mb-4">
+                    <input id="terms" name="terms" type="checkbox" class="h-4 w-4 text-success focus:ring-success border-gray-300 rounded" required />
+                    <label for="terms" class="ml-2 block text-sm text-gray-700">
+                        I agree to the <a href="#" class="text-success hover:underline">Terms and Conditions</a> and <a href="#" class="text-success hover:underline">Privacy Policy</a>
+                    </label>
+                </div>
+                
+                <div>
+                    <button type="submit" class="group relative w-full flex justify-center py-3 px-4 border border-transparent rounded-md text-white bg-success bg-blue-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-success transition duration-150 ease-in-out">
+                        <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+                            <i class="bi bi-person-plus"></i>
+                        </span>
+                        Create Account
+                    </button>
+                </div>
+                
+                <div class="text-center mt-6">
+                    <p class="text-sm text-gray-600">
+                        Already have an account? 
+                        <a href="@Url.Action("Login", "Home")" class="font-medium text-success text-green-800 hover:text-green-800 transition duration-150 ease-in-out">
+                            Login here
+                        </a>
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Password visibility toggle
+            const togglePassword = document.getElementById('toggle-password');
+            const passwordField = document.getElementById('password-field');
+            
+            if (togglePassword && passwordField) {
+                togglePassword.addEventListener('click', function() {
+                    const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordField.setAttribute('type', type);
+                    
+                    // Toggle the eye icon
+                    const eyeIcon = togglePassword.querySelector('i');
+                    eyeIcon.classList.toggle('bi-eye');
+                    eyeIcon.classList.toggle('bi-eye-slash');
+                });
+            }
+            
+            // Confirm Password visibility toggle
+            const toggleConfirmPassword = document.getElementById('toggle-confirm-password');
+            const confirmPasswordField = document.getElementById('confirm-password-field');
+            
+            if (toggleConfirmPassword && confirmPasswordField) {
+                toggleConfirmPassword.addEventListener('click', function() {
+                    const type = confirmPasswordField.getAttribute('type') === 'password' ? 'text' : 'password';
+                    confirmPasswordField.setAttribute('type', type);
+                    
+                    // Toggle the eye icon
+                    const eyeIcon = toggleConfirmPassword.querySelector('i');
+                    eyeIcon.classList.toggle('bi-eye');
+                    eyeIcon.classList.toggle('bi-eye-slash');
+                });
+            }
+            
+            // Password strength meter
+            const strengthMeter = document.getElementById('password-strength');
+            const strengthFeedback = document.getElementById('password-feedback');
+            
+            if (passwordField && strengthMeter && strengthFeedback) {
+                passwordField.addEventListener('input', function() {
+                    const password = this.value;
+                    let strength = 0;
+                    let feedback = '';
+                    
+                    if (password.length > 0) {
+                        // Length check
+                        if (password.length > 7) strength += 25;
+                        
+                        // Uppercase check
+                        if (/[A-Z]/.test(password)) strength += 25;
+                        
+                        // Lowercase check
+                        if (/[a-z]/.test(password)) strength += 25;
+                        
+                        // Number check
+                        if (/[0-9]/.test(password)) strength += 25;
+                        
+                        // Special char check (optional bonus)
+                        if (/[^A-Za-z0-9]/.test(password)) strength += 5;
+                        
+                        // Cap at 100%
+                        strength = Math.min(strength, 100);
+                        
+                        // Set color based on strength
+                        let color = 'bg-red-500';
+                        if (strength > 70) {
+                            color = 'bg-green-500';
+                            feedback = 'Strong password';
+                        } else if (strength > 40) {
+                            color = 'bg-yellow-500';
+                            feedback = 'Moderate password';
+                        } else {
+                            feedback = 'Weak password';
+                        }
+                        
+                        strengthMeter.className = `${color} h-2.5 rounded-full`;
+                    } else {
+                        strength = 0;
+                        feedback = 'Password strength';
+                    }
+                    
+                    strengthMeter.style.width = `${strength}%`;
+                    strengthFeedback.textContent = feedback;
+                });
+            }
+            
+            // Animation for form elements
+            const formSections = document.querySelectorAll('form > div');
+            formSections.forEach((section, index) => {
+                section.style.opacity = '0';
+                section.style.transform = 'translateY(20px)';
+                section.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                
+                setTimeout(() => {
+                    section.style.opacity = '1';
+                    section.style.transform = 'translateY(0)';
+                }, 100 + (index * 80));
+            });
+        });
+    </script>
+} 

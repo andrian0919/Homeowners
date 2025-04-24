@@ -1,0 +1,121 @@
+@model HomeownersSubdivision.Models.LoginViewModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="min-h-[80vh] flex items-center justify-center bg-cover bg-center py-12 px-4 sm:px-6 lg:px-8" style="background-image: url('/images/neighborhood.jpg');">
+    <div class="max-w-md w-full space-y-8 bg-white bg-opacity-95 rounded-xl shadow-2xl overflow-hidden transform transition-all animate-fade-in-up p-8">
+        <div class="text-center mb-6">
+            <h2 class="text-3xl font-extrabold text-gray-900 mb-2">Welcome Back</h2>
+            <p class="text-sm text-gray-600">Login to access your homeowner dashboard</p>
+            <div class="mt-3">
+                <div class="inline-flex h-14 w-14 rounded-full bg-blue-100 p-3 items-center justify-center">
+                    <i class="bi bi-house-door text-3xl text-success"></i>
+                </div>
+            </div>
+        </div>
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 animate-fade-in" role="alert">
+                <p>@TempData["ErrorMessage"]</p>
+            </div>
+        }
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6 animate-fade-in" role="alert">
+                <p>@TempData["SuccessMessage"]</p>
+            </div>
+        }
+
+        <form asp-action="Login" method="post" class="space-y-6">
+            <div asp-validation-summary="ModelOnly" class="text-red-500 mb-4 p-3 bg-red-50 rounded-md"></div>
+            
+            <div class="animate-fade-in-up" style="animation-delay: 100ms;">
+                <label asp-for="Username" class="block text-sm font-medium text-gray-700 mb-1">Username</label>
+                <div class="relative rounded-md shadow-sm">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="bi bi-person text-gray-400"></i>
+                    </div>
+                    <input asp-for="Username" class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-success focus:border-success" placeholder="Enter your username" />
+                </div>
+                <span asp-validation-for="Username" class="mt-1 text-sm text-red-600"></span>
+            </div>
+            
+            <div class="animate-fade-in-up" style="animation-delay: 200ms;">
+                <label asp-for="Password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                <div class="relative rounded-md shadow-sm">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="bi bi-lock text-gray-400"></i>
+                    </div>
+                    <input asp-for="Password" id="password-field" class="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-success focus:border-success" placeholder="Enter your password" />
+                    <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                        <button type="button" id="toggle-password" class="text-gray-400 hover:text-gray-600 focus:outline-none">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <span asp-validation-for="Password" class="mt-1 text-sm text-red-600"></span>
+            </div>
+            
+            <div class="flex items-center justify-between animate-fade-in-up" style="animation-delay: 300ms;">
+                <div class="flex items-center">
+                    <input id="remember-me" name="RememberMe" type="checkbox" class="h-4 w-4 text-success focus:ring-success border-gray-300 rounded" />
+                    <label for="remember-me" class="ml-2 block text-sm text-gray-700">
+                        Remember me
+                    </label>
+                </div>
+                
+                <div class="text-sm">
+                    <a href="#" class="font-medium text-blue-600 hover:text-blue-800">
+                        Forgot password?
+                    </a>
+                </div>
+            </div>
+            
+            <div class="animate-fade-in-up" style="animation-delay: 400ms;">
+                <button type="submit" class="group relative w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out">
+                    <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+                        <i class="bi bi-box-arrow-in-right"></i>
+                    </span>
+                    Login
+                </button>
+            </div>
+            
+            <div class="text-center mt-6 animate-fade-in-up" style="animation-delay: 500ms;">
+                <p class="text-sm text-gray-600">
+                    Don't have an account? 
+                    <a href="@Url.Action("Register", "Home")" class="font-medium text-blue-600 hover:text-blue-800 transition duration-150 ease-in-out">
+                        Register here
+                    </a>
+                </p>
+            </div>
+        </form>
+    </div>
+</div>  
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Password visibility toggle
+            const togglePassword = document.getElementById('toggle-password');
+            const passwordField = document.getElementById('password-field');
+            
+            if (togglePassword && passwordField) {
+                togglePassword.addEventListener('click', function() {
+                    const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordField.setAttribute('type', type);
+                    
+                    // Toggle the eye icon
+                    const eyeIcon = togglePassword.querySelector('i');
+                    eyeIcon.classList.toggle('bi-eye');
+                    eyeIcon.classList.toggle('bi-eye-slash');
+                });
+            }
+        });
+    </script>
+} 

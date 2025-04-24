@@ -1,0 +1,143 @@
+@model IEnumerable<HomeownersSubdivision.Models.Notification>
+
+@{
+    ViewData["Title"] = "Notifications";
+}
+
+<div class="container mx-auto px-4 py-8">
+    <div class="flex justify-between mb-6">
+        <h1 class="text-3xl font-bold text-gray-800 flex items-center">
+            <i class="bi bi-bell me-2"></i> Notifications
+        </h1>
+        
+        <form asp-action="MarkAllAsRead" method="post">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="px-4 py-2 bg-success-600 hover:bg-success-700 text-white rounded shadow">
+                <i class="bi bi-check-all me-1"></i> Mark All as Read
+            </button>
+        </form>
+    </div>
+    
+    <div class="bg-white rounded-lg shadow-md overflow-hidden mb-6">
+        <div class="flex gap-4 px-4 py-3 bg-gray-100 border-b">
+            <a href="@Url.Action("Index")" class="font-medium text-gray-700 hover:text-success-600 @(ViewContext.RouteData.Values["action"].ToString() == "Index" ? "text-success-600 border-b-2 border-success-600" : "")">
+                All Notifications
+            </a>
+            <a href="@Url.Action("Unread")" class="font-medium text-gray-700 hover:text-success-600 @(ViewContext.RouteData.Values["action"].ToString() == "Unread" ? "text-success-600 border-b-2 border-success-600" : "")">
+                Unread
+            </a>
+        </div>
+        
+        @if (!Model.Any())
+        {
+            <div class="p-8 text-center">
+                <div class="text-gray-400 text-5xl mb-4">
+                    <i class="bi bi-bell-slash"></i>
+                </div>
+                <p class="text-gray-600 mb-2">No notifications to display</p>
+                <p class="text-gray-500 text-sm">Notifications about announcements and other updates will appear here</p>
+            </div>
+        }
+        else
+        {
+            <div class="divide-y">
+                @foreach (var notification in Model)
+                {
+                    <div class="p-4 @(notification.Status == NotificationStatus.Unread ? "bg-blue-50" : "")">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 pt-1">
+                                @switch (notification.Type)
+                                {
+                                    case NotificationType.Announcement:
+                                        <i class="bi bi-megaphone text-blue-500 text-xl"></i>
+                                        break;
+                                    case NotificationType.Event:
+                                        <i class="bi bi-calendar-event text-green-500 text-xl"></i>
+                                        break;
+                                    case NotificationType.MaintenanceRequest:
+                                        <i class="bi bi-tools text-orange-500 text-xl"></i>
+                                        break;
+                                    case NotificationType.Payment:
+                                        <i class="bi bi-credit-card text-purple-500 text-xl"></i>
+                                        break;
+                                    default:
+                                        <i class="bi bi-info-circle text-gray-500 text-xl"></i>
+                                        break;
+                                }
+                            </div>
+                            
+                            <div class="ml-3 flex-1">
+                                <div class="flex justify-between">
+                                    <h3 class="text-lg font-semibold @(notification.Status == NotificationStatus.Unread ? "text-gray-900" : "text-gray-700")">
+                                        @notification.Title
+                                    </h3>
+                                    
+                                    <div class="flex items-center">
+                                        @if (notification.Status == NotificationStatus.Unread)
+                                        {
+                                            <span class="inline-flex h-2 w-2 rounded-full bg-blue-600 mr-2" title="Unread"></span>
+                                        }
+                                        
+                                        <span class="text-sm text-gray-500" title="@notification.CreatedAt">
+                                            @{
+                                                var timeAgo = DateTime.Now - notification.CreatedAt;
+                                                string timeAgoString;
+                                                
+                                                if (timeAgo.TotalMinutes < 1)
+                                                {
+                                                    timeAgoString = "Just now";
+                                                }
+                                                else if (timeAgo.TotalHours < 1)
+                                                {
+                                                    timeAgoString = $"{(int)timeAgo.TotalMinutes}m ago";
+                                                }
+                                                else if (timeAgo.TotalDays < 1)
+                                                {
+                                                    timeAgoString = $"{(int)timeAgo.TotalHours}h ago";
+                                                }
+                                                else if (timeAgo.TotalDays < 7)
+                                                {
+                                                    timeAgoString = $"{(int)timeAgo.TotalDays}d ago";
+                                                }
+                                                else
+                                                {
+                                                    timeAgoString = notification.CreatedAt.ToString("MMM d, yyyy");
+                                                }
+                                            }
+                                            @timeAgoString
+                                        </span>
+                                    </div>
+                                </div>
+                                
+                                <p class="mt-1 text-gray-600 whitespace-pre-line">@notification.Message</p>
+                                
+                                <div class="mt-2 flex justify-between">
+                                    <div>
+                                        @if (notification.RelatedItemId.HasValue)
+                                        {
+                                            <a href="@Url.Action("Details", "Notifications", new { id = notification.Id })" class="inline-flex items-center text-sm font-medium text-success-600 hover:text-success-700">
+                                                <span>View Details</span>
+                                                <i class="bi bi-arrow-right ml-1"></i>
+                                            </a>
+                                        }
+                                    </div>
+                                    
+                                    @if (notification.Status == NotificationStatus.Unread)
+                                    {
+                                        <form asp-action="MarkAsRead" method="post" class="inline">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@notification.Id" />
+                                            <button type="submit" class="text-sm text-gray-600 hover:text-success-600">
+                                                Mark as read
+                                            </button>
+                                        </form>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div> 
