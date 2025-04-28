@@ -210,6 +210,58 @@ namespace HomeownersSubdivision.Data
                 context.Announcements.AddRange(announcements);
                 context.SaveChanges();
 
+                // Add facilities
+                var facilities = new List<Facility>
+                {
+                    new Facility
+                    {
+                        Name = "Main Function Hall",
+                        Type = FacilityType.FunctionHall,
+                        Description = "Large indoor event space for community gatherings and private events",
+                        MaxCapacity = 150,
+                        HourlyRate = 50.00m,
+                        OpeningTime = new TimeSpan(9, 0, 0), // 9:00 AM
+                        ClosingTime = new TimeSpan(22, 0, 0), // 10:00 PM
+                        IsActive = true
+                    },
+                    new Facility
+                    {
+                        Name = "Swimming Pool",
+                        Type = FacilityType.SwimmingPool,
+                        Description = "Outdoor swimming pool with lap lanes and recreational area",
+                        MaxCapacity = 50,
+                        HourlyRate = 25.00m,
+                        OpeningTime = new TimeSpan(8, 0, 0), // 8:00 AM
+                        ClosingTime = new TimeSpan(20, 0, 0), // 8:00 PM
+                        IsActive = true
+                    },
+                    new Facility
+                    {
+                        Name = "Basketball Court",
+                        Type = FacilityType.SportsCourt,
+                        Description = "Full-sized basketball court with lighting for evening games",
+                        MaxCapacity = 20,
+                        HourlyRate = 15.00m,
+                        OpeningTime = new TimeSpan(7, 0, 0), // 7:00 AM
+                        ClosingTime = new TimeSpan(21, 0, 0), // 9:00 PM
+                        IsActive = true
+                    },
+                    new Facility
+                    {
+                        Name = "Tennis Court",
+                        Type = FacilityType.SportsCourt,
+                        Description = "Professional tennis court with proper surface and net",
+                        MaxCapacity = 4,
+                        HourlyRate = 20.00m,
+                        OpeningTime = new TimeSpan(7, 0, 0), // 7:00 AM
+                        ClosingTime = new TimeSpan(21, 0, 0), // 9:00 PM
+                        IsActive = true
+                    }
+                };
+
+                context.Facilities.AddRange(facilities);
+                context.SaveChanges();
+
                 // Add maintenance requests
                 var maintenanceRequests = new List<MaintenanceRequest>
                 {

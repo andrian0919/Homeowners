@@ -254,7 +254,18 @@ namespace HomeownersSubdivision.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var requestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
+            
+            var errorViewModel = new ErrorViewModel 
+            { 
+                RequestId = requestId
+            };
+            
+            // Check if we're in development environment
+            var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            ViewBag.ShowDevInfo = string.Equals(env, "Development", StringComparison.OrdinalIgnoreCase);
+            
+            return View(errorViewModel);
         }
     }
 } 

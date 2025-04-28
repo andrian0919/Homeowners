@@ -1,0 +1,63 @@
+@model HomeownersSubdivision.Models.FacilityReservation
+@{
+    ViewData["Title"] = "Cancel Reservation";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h3>Cancel Reservation</h3>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-danger">
+                        <h4><i class="fas fa-exclamation-triangle"></i> Warning!</h4>
+                        <p>Are you sure you want to cancel this reservation? This action cannot be undone.</p>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <h4>Reservation Details</h4>
+                        <dl class="row">
+                            <dt class="col-sm-4">Facility</dt>
+                            <dd class="col-sm-8">@Model.Facility.Name</dd>
+
+                            <dt class="col-sm-4">Date</dt>
+                            <dd class="col-sm-8">@Model.ReservationDate.ToLongDateString()</dd>
+
+                            <dt class="col-sm-4">Time</dt>
+                            <dd class="col-sm-8">
+                                @Model.StartTime.ToString(@"hh\:mm tt") - @Model.EndTime.ToString(@"hh\:mm tt")
+                                (@((Model.EndTime - Model.StartTime).TotalHours.ToString("0.#")) hour(s))
+                            </dd>
+
+                            <dt class="col-sm-4">Number of Guests</dt>
+                            <dd class="col-sm-8">@Model.NumberOfGuests</dd>
+
+                            @if (!string.IsNullOrWhiteSpace(Model.Purpose))
+                            {
+                                <dt class="col-sm-4">Purpose</dt>
+                                <dd class="col-sm-8">@Model.Purpose</dd>
+                            }
+
+                            <dt class="col-sm-4">Total Cost</dt>
+                            <dd class="col-sm-8">@string.Format("{0:C}", Model.TotalCost)</dd>
+                        </dl>
+                    </div>
+                    
+                    <form asp-action="Cancel" class="mt-4">
+                        <input type="hidden" asp-for="Id" />
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Back to Details
+                            </a>
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-times"></i> Cancel Reservation
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

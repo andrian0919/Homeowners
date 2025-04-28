@@ -64,6 +64,9 @@ namespace HomeownersSubdivision.Models
 
         // Optional reference to related content
         public int? RelatedItemId { get; set; }
+        
+        // Link to navigate to when notification is clicked
+        public string? Link { get; set; }
 
         // When the notification was created
         [Required]

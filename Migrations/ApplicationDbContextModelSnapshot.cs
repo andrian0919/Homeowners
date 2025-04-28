@@ -146,6 +146,106 @@ namespace HomeownersSubdivision.Migrations
                     b.ToTable("Events");
                 });
 
+            modelBuilder.Entity("HomeownersSubdivision.Models.Facility", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<TimeSpan>("ClosingTime")
+                        .HasColumnType("time(6)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<decimal>("HourlyRate")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<int>("MaxCapacity")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<TimeSpan>("OpeningTime")
+                        .HasColumnType("time(6)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Facilities");
+                });
+
+            modelBuilder.Entity("HomeownersSubdivision.Models.FacilityReservation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<TimeSpan>("EndTime")
+                        .HasColumnType("time(6)");
+
+                    b.Property<int>("FacilityId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NumberOfGuests")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Purpose")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<string>("RejectionReason")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("ReservationDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<TimeSpan>("StartTime")
+                        .HasColumnType("time(6)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("TotalCost")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReservationDate");
+
+                    b.HasIndex("Status");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("FacilityId", "ReservationDate");
+
+                    b.ToTable("FacilityReservations");
+                });
+
             modelBuilder.Entity("HomeownersSubdivision.Models.Homeowner", b =>
                 {
                     b.Property<int>("Id")
@@ -260,6 +360,9 @@ namespace HomeownersSubdivision.Migrations
 
                     b.Property<bool>("IsSent")
                         .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Link")
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Message")
                         .IsRequired()
@@ -652,6 +755,25 @@ namespace HomeownersSubdivision.Migrations
                     b.Navigation("Creator");
                 });
 
+            modelBuilder.Entity("HomeownersSubdivision.Models.FacilityReservation", b =>
+                {
+                    b.HasOne("HomeownersSubdivision.Models.Facility", "Facility")
+                        .WithMany("Reservations")
+                        .HasForeignKey("FacilityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HomeownersSubdivision.Models.User", "User")
+                        .WithMany("FacilityReservations")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Facility");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("HomeownersSubdivision.Models.MaintenanceRequest", b =>
                 {
                     b.HasOne("HomeownersSubdivision.Models.User", "AssignedTo")
@@ -751,6 +873,11 @@ namespace HomeownersSubdivision.Migrations
                     b.Navigation("Payments");
                 });
 
+            modelBuilder.Entity("HomeownersSubdivision.Models.Facility", b =>
+                {
+                    b.Navigation("Reservations");
+                });
+
             modelBuilder.Entity("HomeownersSubdivision.Models.Payment", b =>
                 {
                     b.Navigation("RefundRequests");
@@ -758,6 +885,8 @@ namespace HomeownersSubdivision.Migrations
 
             modelBuilder.Entity("HomeownersSubdivision.Models.User", b =>
                 {
+                    b.Navigation("FacilityReservations");
+
                     b.Navigation("RefundRequests");
                 });
 #pragma warning restore 612, 618

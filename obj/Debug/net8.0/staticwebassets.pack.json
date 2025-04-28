@@ -1,31 +1,31 @@
 {
   "Files": [
     {
-      "Id": "C:\\Users\\User\\OneDrive\\Desktop\\HomeownersSubdivision\\wwwroot\\css\\site.css",
+      "Id": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\css\\site.css",
       "PackagePath": "staticwebassets\\css\\site.css"
     },
     {
-      "Id": "C:\\Users\\User\\OneDrive\\Desktop\\HomeownersSubdivision\\wwwroot\\images\\Novocaine 2025 1080p WEB h264-ETHEL.Hi.srt",
+      "Id": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\Novocaine 2025 1080p WEB h264-ETHEL.Hi.srt",
       "PackagePath": "staticwebassets\\images\\Novocaine 2025 1080p WEB h264-ETHEL.Hi.srt"
     },
     {
-      "Id": "C:\\Users\\User\\OneDrive\\Desktop\\HomeownersSubdivision\\wwwroot\\images\\neighborhood.jpg",
+      "Id": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\neighborhood.jpg",
       "PackagePath": "staticwebassets\\images\\neighborhood.jpg"
     },
     {
-      "Id": "C:\\Users\\User\\OneDrive\\Desktop\\HomeownersSubdivision\\wwwroot\\images\\sit_in_records.xls",
+      "Id": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\sit_in_records.xls",
       "PackagePath": "staticwebassets\\images\\sit_in_records.xls"
     },
     {
-      "Id": "C:\\Users\\User\\OneDrive\\Desktop\\HomeownersSubdivision\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js",
+      "Id": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js",
       "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js"
     },
     {
-      "Id": "C:\\Users\\User\\OneDrive\\Desktop\\HomeownersSubdivision\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.min.js",
+      "Id": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.min.js",
       "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\jquery.validate.min.js"
     },
     {
-      "Id": "C:\\Users\\User\\OneDrive\\Desktop\\HomeownersSubdivision\\wwwroot\\lib\\jquery\\dist\\jquery.min.js",
+      "Id": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\lib\\jquery\\dist\\jquery.min.js",
       "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.js"
     },
     {

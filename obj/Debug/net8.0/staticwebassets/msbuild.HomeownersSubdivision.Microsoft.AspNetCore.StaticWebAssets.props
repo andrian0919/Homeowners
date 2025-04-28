@@ -12,8 +12,8 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>t5r83hb8v7</Fingerprint>
-      <Integrity>gbLKKd/x7vNwFIrflC4NS0dZW1tzypweQdt0K2g5b5I=</Integrity>
+      <Fingerprint>vnc0xqxtaz</Fingerprint>
+      <Integrity>5Qa59wO3H4vkDmeX1uCiYxfTlP6vK4vou2Vw/xVlubk=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\site.css'))</OriginalItemSpec>
@@ -48,8 +48,8 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>cmvage12xp</Fingerprint>
-      <Integrity>bKl4q9Iq/zv9buU3vVrj5axxgWuG/Sji77u6XNMizv4=</Integrity>
+      <Fingerprint>mmtwhcpro5</Fingerprint>
+      <Integrity>AvG/nMSKPParmpUdZMkgswUdBSa8qAckmfTAiRhc7YM=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\Novocaine 2025 1080p WEB h264-ETHEL.Hi.srt'))</OriginalItemSpec>
@@ -66,8 +66,8 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>bqltojgjya</Fingerprint>
-      <Integrity>vehvKqvxnIXv/f29SzL+b1P8NFehFD7pdfttmLz4oSo=</Integrity>
+      <Fingerprint>7lmnoystgi</Fingerprint>
+      <Integrity>G7LcQhf4PbMctA9kju5Baf51UAbJAFLZq3XJRm5vuVc=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\sit_in_records.xls'))</OriginalItemSpec>

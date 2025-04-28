@@ -4084,19 +4084,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\User\\.nuget\\packages\\": {}
+    "C:\\Users\\Andrian\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\User\\OneDrive\\Desktop\\HomeownersSubdivision\\HomeownersSubdivision.csproj",
+      "projectUniqueName": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\HomeownersSubdivision.csproj",
       "projectName": "HomeownersSubdivision",
-      "projectPath": "C:\\Users\\User\\OneDrive\\Desktop\\HomeownersSubdivision\\HomeownersSubdivision.csproj",
-      "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\User\\OneDrive\\Desktop\\HomeownersSubdivision\\obj\\",
+      "projectPath": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\HomeownersSubdivision.csproj",
+      "packagesPath": "C:\\Users\\Andrian\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\Andrian\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -4120,7 +4120,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.200"
+      "SdkAnalysisLevel": "9.0.100"
     },
     "frameworks": {
       "net8.0": {
@@ -4168,7 +4168,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.202/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.105/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

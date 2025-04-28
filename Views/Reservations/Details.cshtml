@@ -1,0 +1,142 @@
+@model HomeownersSubdivision.Models.ReservationDetailsViewModel
+@{
+    ViewData["Title"] = $"Reservation Details: {Model.Facility.Name}";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3>Reservation Details</h3>
+                    <div>
+                        @switch (Model.Reservation.Status)
+                        {
+                            case ReservationStatus.Pending:
+                                <span class="badge bg-warning text-dark">Pending</span>
+                                break;
+                            case ReservationStatus.Approved:
+                                <span class="badge bg-success">Approved</span>
+                                break;
+                            case ReservationStatus.Rejected:
+                                <span class="badge bg-danger">Rejected</span>
+                                break;
+                            case ReservationStatus.Cancelled:
+                                <span class="badge bg-secondary">Cancelled</span>
+                                break;
+                            case ReservationStatus.Completed:
+                                <span class="badge bg-info">Completed</span>
+                                break;
+                        }
+                    </div>
+                </div>
+                
+                <div class="card-body">
+                    <h4 class="mb-3">Facility Information</h4>
+                    <dl class="row">
+                        <dt class="col-sm-4">Facility Name</dt>
+                        <dd class="col-sm-8">@Model.Facility.Name</dd>
+                        
+                        <dt class="col-sm-4">Facility Type</dt>
+                        <dd class="col-sm-8">@Model.Facility.Type</dd>
+                        
+                        <dt class="col-sm-4">Hourly Rate</dt>
+                        <dd class="col-sm-8">@string.Format("{0:C}", Model.Facility.HourlyRate)</dd>
+                    </dl>
+                    
+                    <hr class="my-4" />
+                    
+                    <h4 class="mb-3">Reservation Information</h4>
+                    <dl class="row">
+                        <dt class="col-sm-4">Reservation ID</dt>
+                        <dd class="col-sm-8">#@Model.Reservation.Id</dd>
+                        
+                        <dt class="col-sm-4">Reserved By</dt>
+                        <dd class="col-sm-8">@Model.User.FullName</dd>
+                        
+                        <dt class="col-sm-4">Date</dt>
+                        <dd class="col-sm-8">@Model.Reservation.ReservationDate.ToLongDateString()</dd>
+                        
+                        <dt class="col-sm-4">Time</dt>
+                        <dd class="col-sm-8">
+                            @Model.Reservation.StartTime.ToString(@"hh\:mm tt") - @Model.Reservation.EndTime.ToString(@"hh\:mm tt")
+                            (@Model.Reservation.Duration.TotalHours.ToString("0.#") hour(s))
+                        </dd>
+                        
+                        <dt class="col-sm-4">Number of Guests</dt>
+                        <dd class="col-sm-8">@Model.Reservation.NumberOfGuests</dd>
+                        
+                        @if (!string.IsNullOrWhiteSpace(Model.Reservation.Purpose))
+                        {
+                            <dt class="col-sm-4">Purpose</dt>
+                            <dd class="col-sm-8">@Model.Reservation.Purpose</dd>
+                        }
+                        
+                        <dt class="col-sm-4">Total Cost</dt>
+                        <dd class="col-sm-8">@string.Format("{0:C}", Model.Reservation.TotalCost)</dd>
+                        
+                        <dt class="col-sm-4">Status</dt>
+                        <dd class="col-sm-8">
+                            @switch (Model.Reservation.Status)
+                            {
+                                case ReservationStatus.Pending:
+                                    <span class="badge bg-warning text-dark">Pending</span>
+                                    break;
+                                case ReservationStatus.Approved:
+                                    <span class="badge bg-success">Approved</span>
+                                    break;
+                                case ReservationStatus.Rejected:
+                                    <span class="badge bg-danger">Rejected</span>
+                                    break;
+                                case ReservationStatus.Cancelled:
+                                    <span class="badge bg-secondary">Cancelled</span>
+                                    break;
+                                case ReservationStatus.Completed:
+                                    <span class="badge bg-info">Completed</span>
+                                    break;
+                            }
+                        </dd>
+                        
+                        @if (Model.Reservation.Status == ReservationStatus.Rejected && !string.IsNullOrWhiteSpace(Model.Reservation.RejectionReason))
+                        {
+                            <dt class="col-sm-4">Rejection Reason</dt>
+                            <dd class="col-sm-8">
+                                <div class="alert alert-danger mb-0">@Model.Reservation.RejectionReason</div>
+                            </dd>
+                        }
+                        
+                        <dt class="col-sm-4">Created On</dt>
+                        <dd class="col-sm-8">@Model.Reservation.CreatedAt.ToString("g")</dd>
+                        
+                        @if (Model.Reservation.UpdatedAt.HasValue)
+                        {
+                            <dt class="col-sm-4">Last Updated</dt>
+                            <dd class="col-sm-8">@Model.Reservation.UpdatedAt.Value.ToString("g")</dd>
+                        }
+                    </dl>
+                </div>
+                
+                <div class="card-footer">
+                    <div class="d-flex justify-content-between">
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Back to List
+                        </a>
+                        <div>
+                            @if ((Model.Reservation.Status == ReservationStatus.Pending || Model.Reservation.Status == ReservationStatus.Approved) && 
+                                 (User.IsInRole("Administrator") || User.IsInRole("Staff") || 
+                                  (Model.User.Username == User.Identity?.Name && Model.Reservation.ReservationDate > DateTime.Today)))
+                            {
+                                <a asp-action="Edit" asp-route-id="@Model.Reservation.Id" class="btn btn-warning me-2">
+                                    <i class="fas fa-edit"></i> Edit
+                                </a>
+                                <a asp-action="Cancel" asp-route-id="@Model.Reservation.Id" class="btn btn-danger">
+                                    <i class="fas fa-times"></i> Cancel
+                                </a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

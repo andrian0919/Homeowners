@@ -20,6 +20,8 @@ namespace HomeownersSubdivision.Data
         public DbSet<Payment> Payments { get; set; } = null!;
         public DbSet<PaymentMethod> PaymentMethods { get; set; } = null!;
         public DbSet<RefundRequest> RefundRequests { get; set; } = null!;
+        public DbSet<Facility> Facilities { get; set; } = null!;
+        public DbSet<FacilityReservation> FacilityReservations { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -141,6 +143,29 @@ namespace HomeownersSubdivision.Data
 
             modelBuilder.Entity<RefundRequest>()
                 .HasIndex(r => r.RequestDate);
+                
+            // Configure relationships for Facility and FacilityReservation
+            modelBuilder.Entity<FacilityReservation>()
+                .HasOne(fr => fr.Facility)
+                .WithMany(f => f.Reservations)
+                .HasForeignKey(fr => fr.FacilityId)
+                .OnDelete(DeleteBehavior.Cascade);
+                
+            modelBuilder.Entity<FacilityReservation>()
+                .HasOne(fr => fr.User)
+                .WithMany(u => u.FacilityReservations)
+                .HasForeignKey(fr => fr.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+                
+            // Create indexes for FacilityReservation
+            modelBuilder.Entity<FacilityReservation>()
+                .HasIndex(fr => fr.Status);
+                
+            modelBuilder.Entity<FacilityReservation>()
+                .HasIndex(fr => fr.ReservationDate);
+                
+            modelBuilder.Entity<FacilityReservation>()
+                .HasIndex(fr => new { fr.FacilityId, fr.ReservationDate });
         }
     }
 } 

@@ -231,6 +231,14 @@
                                asp-area="" asp-controller="Announcements" asp-action="Index">
                                 <i class="bi bi-megaphone mr-1"></i> Announcements
                             </a>
+                            <a class="nav-link @(ViewContext?.RouteData?.Values["Controller"]?.ToString() == "Facilities" ? "active" : "")" 
+                               asp-area="" asp-controller="Facilities" asp-action="Index">
+                                <i class="bi bi-building mr-1"></i> Facilities
+                            </a>
+                            <a class="nav-link @(ViewContext?.RouteData?.Values["Controller"]?.ToString() == "Reservations" ? "active" : "")" 
+                               asp-area="" asp-controller="Reservations" asp-action="Index">
+                                <i class="bi bi-calendar-check mr-1"></i> Reservations
+                            </a>
                             <a class="nav-link @(ViewContext?.RouteData?.Values["Action"]?.ToString() == "ManageUsers" ? "active" : "")" 
                                asp-area="" asp-controller="Home" asp-action="ManageUsers">
                                 <i class="bi bi-people mr-1"></i> Manage Users
@@ -251,6 +259,14 @@
                                asp-area="" asp-controller="Announcements" asp-action="Index">
                                 <i class="bi bi-megaphone mr-1"></i> Announcements
                             </a>
+                            <a class="nav-link @(ViewContext?.RouteData?.Values["Controller"]?.ToString() == "Facilities" ? "active" : "")" 
+                               asp-area="" asp-controller="Facilities" asp-action="Index">
+                                <i class="bi bi-building mr-1"></i> Facilities
+                            </a>
+                            <a class="nav-link @(ViewContext?.RouteData?.Values["Controller"]?.ToString() == "Reservations" ? "active" : "")" 
+                               asp-area="" asp-controller="Reservations" asp-action="Index">
+                                <i class="bi bi-calendar-check mr-1"></i> Reservations
+                            </a>
                             <a class="nav-link @(ViewContext?.RouteData?.Values["Action"]?.ToString() == "ManageHomeowners" ? "active" : "")" 
                                asp-area="" asp-controller="Home" asp-action="ManageHomeowners">
                                 <i class="bi bi-people mr-1"></i> Homeowners
@@ -266,6 +282,14 @@
                             <a class="nav-link @(ViewContext?.RouteData?.Values["Controller"]?.ToString() == "Announcements" ? "active" : "")" 
                                asp-area="" asp-controller="Announcements" asp-action="Index">
                                 <i class="bi bi-megaphone mr-1"></i> Announcements
+                            </a>
+                            <a class="nav-link @(ViewContext?.RouteData?.Values["Controller"]?.ToString() == "Facilities" ? "active" : "")" 
+                               asp-area="" asp-controller="Facilities" asp-action="Index">
+                                <i class="bi bi-building mr-1"></i> Facilities
+                            </a>
+                            <a class="nav-link @(ViewContext?.RouteData?.Values["Controller"]?.ToString() == "Reservations" ? "active" : "")" 
+                               asp-area="" asp-controller="Reservations" asp-action="Index">
+                                <i class="bi bi-calendar-check mr-1"></i> My Reservations
                             </a>
                             <a class="nav-link @(ViewContext?.RouteData?.Values["Action"]?.ToString() == "MyProperty" ? "active" : "")" 
                                asp-area="" asp-controller="Home" asp-action="MyProperty">

@@ -1,4 +1,7 @@
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HomeownersSubdivision.Models
 {
@@ -136,5 +139,163 @@ namespace HomeownersSubdivision.Models
     
     public class StaffProfileViewModel : BaseProfileViewModel
     {
+    }
+
+    public class FacilityListViewModel
+    {
+        public List<Facility> Facilities { get; set; } = new List<Facility>();
+    }
+
+    public class FacilityDetailsViewModel
+    {
+        public Facility Facility { get; set; } = null!;
+        public List<FacilityReservation> UpcomingReservations { get; set; } = new List<FacilityReservation>();
+    }
+
+    public class CreateFacilityViewModel
+    {
+        [Required]
+        [StringLength(100)]
+        public string Name { get; set; } = string.Empty;
+
+        [Required]
+        public FacilityType Type { get; set; }
+
+        [StringLength(500)]
+        public string Description { get; set; } = string.Empty;
+
+        [Range(1, 1000)]
+        public int MaxCapacity { get; set; }
+
+        [Range(0, 10000)]
+        [DataType(DataType.Currency)]
+        public decimal HourlyRate { get; set; }
+
+        [DataType(DataType.Time)]
+        public TimeSpan OpeningTime { get; set; } = new TimeSpan(8, 0, 0); // Default: 8:00 AM
+        
+        [DataType(DataType.Time)]
+        public TimeSpan ClosingTime { get; set; } = new TimeSpan(22, 0, 0); // Default: 10:00 PM
+    }
+
+    public class EditFacilityViewModel
+    {
+        public int Id { get; set; }
+        
+        [Required]
+        [StringLength(100)]
+        public string Name { get; set; } = string.Empty;
+
+        [Required]
+        public FacilityType Type { get; set; }
+
+        [StringLength(500)]
+        public string Description { get; set; } = string.Empty;
+
+        [Range(1, 1000)]
+        public int MaxCapacity { get; set; }
+
+        [Range(0, 10000)]
+        [DataType(DataType.Currency)]
+        public decimal HourlyRate { get; set; }
+
+        [DataType(DataType.Time)]
+        public TimeSpan OpeningTime { get; set; }
+        
+        [DataType(DataType.Time)]
+        public TimeSpan ClosingTime { get; set; }
+        
+        public bool IsActive { get; set; }
+    }
+
+    public class FacilityReservationListViewModel
+    {
+        public List<FacilityReservation> Reservations { get; set; } = new List<FacilityReservation>();
+        public List<Facility> AvailableFacilities { get; set; } = new List<Facility>();
+    }
+
+    public class CreateReservationViewModel
+    {
+        [Required]
+        public int FacilityId { get; set; }
+
+        [Required]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime ReservationDate { get; set; } = DateTime.Today.AddDays(1);
+
+        [Required]
+        [DataType(DataType.Time)]
+        public TimeSpan StartTime { get; set; }
+
+        [Required]
+        [DataType(DataType.Time)]
+        public TimeSpan EndTime { get; set; }
+
+        [Range(1, 1000)]
+        public int NumberOfGuests { get; set; } = 1;
+
+        [StringLength(500)]
+        public string Purpose { get; set; } = string.Empty;
+        
+        public List<Facility> AvailableFacilities { get; set; } = new List<Facility>();
+        
+        [NotMapped]
+        public string FacilityName { get; set; } = string.Empty;
+        
+        [NotMapped]
+        public decimal HourlyRate { get; set; }
+        
+        [NotMapped]
+        public decimal TotalCost { get; set; }
+    }
+
+    public class EditReservationViewModel
+    {
+        public int Id { get; set; }
+        
+        [Required]
+        public int FacilityId { get; set; }
+
+        [Required]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime ReservationDate { get; set; }
+
+        [Required]
+        [DataType(DataType.Time)]
+        public TimeSpan StartTime { get; set; }
+
+        [Required]
+        [DataType(DataType.Time)]
+        public TimeSpan EndTime { get; set; }
+
+        [Range(1, 1000)]
+        public int NumberOfGuests { get; set; }
+
+        [StringLength(500)]
+        public string Purpose { get; set; } = string.Empty;
+        
+        public ReservationStatus Status { get; set; }
+        
+        public string? RejectionReason { get; set; }
+        
+        public List<Facility> AvailableFacilities { get; set; } = new List<Facility>();
+        
+        [NotMapped]
+        public string FacilityName { get; set; } = string.Empty;
+        
+        [NotMapped]
+        public decimal HourlyRate { get; set; }
+        
+        [NotMapped]
+        public decimal TotalCost { get; set; }
+    }
+
+    public class ReservationDetailsViewModel
+    {
+        public FacilityReservation Reservation { get; set; } = null!;
+        public User User { get; set; } = null!;
+        public Facility Facility { get; set; } = null!;
     }
 } 

@@ -1,0 +1,145 @@
+@model HomeownersSubdivision.Models.FacilityDetailsViewModel
+@{
+    ViewData["Title"] = $"Facility: {Model.Facility.Name}";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3 class="mb-0">@Model.Facility.Name</h3>
+                    @if (!Model.Facility.IsActive)
+                    {
+                        <span class="badge bg-warning text-dark">Inactive</span>
+                    }
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-4">Type</dt>
+                        <dd class="col-sm-8">@Model.Facility.Type</dd>
+
+                        <dt class="col-sm-4">Maximum Capacity</dt>
+                        <dd class="col-sm-8">@Model.Facility.MaxCapacity persons</dd>
+
+                        <dt class="col-sm-4">Hourly Rate</dt>
+                        <dd class="col-sm-8">@string.Format("{0:C}", Model.Facility.HourlyRate)</dd>
+
+                        <dt class="col-sm-4">Opening Hours</dt>
+                        <dd class="col-sm-8">@Model.Facility.OpeningTime.ToString(@"hh\:mm") - @Model.Facility.ClosingTime.ToString(@"hh\:mm")</dd>
+
+                        @if (!string.IsNullOrWhiteSpace(Model.Facility.Description))
+                        {
+                            <dt class="col-sm-4">Description</dt>
+                            <dd class="col-sm-8">@Model.Facility.Description</dd>
+                        }
+
+                        <dt class="col-sm-4">Status</dt>
+                        <dd class="col-sm-8">
+                            @if (Model.Facility.IsActive)
+                            {
+                                <span class="badge bg-success">Active</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning text-dark">Inactive</span>
+                            }
+                        </dd>
+                    </dl>
+                </div>
+                <div class="card-footer">
+                    <div class="d-flex">
+                        <a asp-action="Index" class="btn btn-secondary me-2">
+                            <i class="fas fa-arrow-left"></i> Back to List
+                        </a>
+                        @if (User.IsInRole("Administrator") || User.IsInRole("Staff"))
+                        {
+                            <a asp-action="Edit" asp-route-id="@Model.Facility.Id" class="btn btn-warning me-2">
+                                <i class="fas fa-edit"></i> Edit
+                            </a>
+                        }
+                        @if (User.IsInRole("Administrator") && !Model.UpcomingReservations.Any())
+                        {
+                            <a asp-action="Delete" asp-route-id="@Model.Facility.Id" class="btn btn-danger me-2">
+                                <i class="fas fa-trash"></i> Delete
+                            </a>
+                        }
+                        @if (Model.Facility.IsActive)
+                        {
+                            <a asp-controller="Reservations" asp-action="Create" asp-route-facilityId="@Model.Facility.Id" class="btn btn-success">
+                                <i class="fas fa-calendar-plus"></i> Make Reservation
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Upcoming Reservations</h4>
+                </div>
+                <div class="card-body">
+                    @if (!Model.UpcomingReservations.Any())
+                    {
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle"></i> There are no upcoming reservations for this facility.
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Time</th>
+                                        <th>User</th>
+                                        <th>Status</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var reservation in Model.UpcomingReservations)
+                                    {
+                                        <tr>
+                                            <td>@reservation.ReservationDate.ToShortDateString()</td>
+                                            <td>@reservation.StartTime.ToString(@"hh\:mm") - @reservation.EndTime.ToString(@"hh\:mm")</td>
+                                            <td>@reservation.User.FullName</td>
+                                            <td>
+                                                @switch (reservation.Status)
+                                                {
+                                                    case ReservationStatus.Pending:
+                                                        <span class="badge bg-warning text-dark">Pending</span>
+                                                        break;
+                                                    case ReservationStatus.Approved:
+                                                        <span class="badge bg-success">Approved</span>
+                                                        break;
+                                                    case ReservationStatus.Rejected:
+                                                        <span class="badge bg-danger">Rejected</span>
+                                                        break;
+                                                    case ReservationStatus.Cancelled:
+                                                        <span class="badge bg-secondary">Cancelled</span>
+                                                        break;
+                                                    case ReservationStatus.Completed:
+                                                        <span class="badge bg-info">Completed</span>
+                                                        break;
+                                                }
+                                            </td>
+                                            <td>
+                                                <a asp-controller="Reservations" asp-action="Details" asp-route-id="@reservation.Id" class="btn btn-sm btn-info">
+                                                    <i class="fas fa-info-circle"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

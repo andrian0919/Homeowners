@@ -1,0 +1,77 @@
+@model HomeownersSubdivision.Models.FacilityListViewModel
+@{
+    ViewData["Title"] = "Facilities";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Facilities</h1>
+        @if (User.IsInRole("Administrator") || User.IsInRole("Staff"))
+        {
+            <a asp-action="Create" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Add New Facility
+            </a>
+        }
+    </div>
+
+    @if (!Model.Facilities.Any())
+    {
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i> No facilities have been added yet.
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var facility in Model.Facilities)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">@facility.Name</h5>
+                            @if (!facility.IsActive)
+                            {
+                                <span class="badge bg-warning text-dark">Inactive</span>
+                            }
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">
+                                <strong>Type:</strong> @facility.Type
+                            </p>
+                            <p class="card-text">
+                                <strong>Capacity:</strong> @facility.MaxCapacity persons
+                            </p>
+                            <p class="card-text">
+                                <strong>Rate:</strong> @string.Format("{0:C}", facility.HourlyRate) per hour
+                            </p>
+                            <p class="card-text">
+                                <strong>Hours:</strong> @facility.OpeningTime.ToString(@"hh\:mm") - @facility.ClosingTime.ToString(@"hh\:mm")
+                            </p>
+                            @if (!string.IsNullOrWhiteSpace(facility.Description))
+                            {
+                                <p class="card-text">@facility.Description</p>
+                            }
+                        </div>
+                        <div class="card-footer d-flex justify-content-between">
+                            <a asp-action="Details" asp-route-id="@facility.Id" class="btn btn-sm btn-info">
+                                <i class="fas fa-info-circle"></i> Details
+                            </a>
+                            @if (facility.IsActive)
+                            {
+                                <a asp-controller="Reservations" asp-action="Create" asp-route-facilityId="@facility.Id" class="btn btn-sm btn-success">
+                                    <i class="fas fa-calendar-plus"></i> Reserve
+                                </a>
+                            }
+                            @if (User.IsInRole("Administrator") || User.IsInRole("Staff"))
+                            {
+                                <a asp-action="Edit" asp-route-id="@facility.Id" class="btn btn-sm btn-warning">
+                                    <i class="fas fa-edit"></i> Edit
+                                </a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div> 

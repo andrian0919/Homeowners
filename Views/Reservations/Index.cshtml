@@ -1,0 +1,153 @@
+@model HomeownersSubdivision.Models.FacilityReservationListViewModel
+@{
+    ViewData["Title"] = "Facility Reservations";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Facility Reservations</h1>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="fas fa-calendar-plus"></i> New Reservation
+        </a>
+    </div>
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle"></i> @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (!Model.Reservations.Any())
+    {
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i> You have no facility reservations.
+            @if (Model.AvailableFacilities.Any())
+            {
+                <span>Reserve a facility now!</span>
+            }
+            else
+            {
+                <span>No facilities are currently available for reservation.</span>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Facility</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                @if (User.IsInRole("Administrator") || User.IsInRole("Staff"))
+                                {
+                                    <th>User</th>
+                                }
+                                <th>Guests</th>
+                                <th>Status</th>
+                                <th>Total Cost</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var reservation in Model.Reservations)
+                            {
+                                <tr>
+                                    <td>@reservation.Facility.Name</td>
+                                    <td>@reservation.ReservationDate.ToShortDateString()</td>
+                                    <td>@reservation.StartTime.ToString(@"hh\:mm tt") - @reservation.EndTime.ToString(@"hh\:mm tt")</td>
+                                    @if (User.IsInRole("Administrator") || User.IsInRole("Staff"))
+                                    {
+                                        <td>@reservation.User.FullName</td>
+                                    }
+                                    <td>@reservation.NumberOfGuests</td>
+                                    <td>
+                                        @switch (reservation.Status)
+                                        {
+                                            case ReservationStatus.Pending:
+                                                <span class="badge bg-warning text-dark">Pending</span>
+                                                break;
+                                            case ReservationStatus.Approved:
+                                                <span class="badge bg-success">Approved</span>
+                                                break;
+                                            case ReservationStatus.Rejected:
+                                                <span class="badge bg-danger">Rejected</span>
+                                                break;
+                                            case ReservationStatus.Cancelled:
+                                                <span class="badge bg-secondary">Cancelled</span>
+                                                break;
+                                            case ReservationStatus.Completed:
+                                                <span class="badge bg-info">Completed</span>
+                                                break;
+                                        }
+                                    </td>
+                                    <td>@string.Format("{0:C}", reservation.TotalCost)</td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <a asp-action="Details" asp-route-id="@reservation.Id" class="btn btn-sm btn-info">
+                                                <i class="fas fa-info-circle"></i>
+                                            </a>
+                                            @if ((reservation.Status == ReservationStatus.Pending || reservation.Status == ReservationStatus.Approved) && 
+                                                 (User.IsInRole("Administrator") || User.IsInRole("Staff") || reservation.ReservationDate > DateTime.Today))
+                                            {
+                                                <a asp-action="Edit" asp-route-id="@reservation.Id" class="btn btn-sm btn-warning">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <a asp-action="Cancel" asp-route-id="@reservation.Id" class="btn btn-sm btn-danger">
+                                                    <i class="fas fa-times"></i>
+                                                </a>
+                                            }
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (Model.AvailableFacilities.Any())
+    {
+        <div class="mt-4">
+            <h3>Available Facilities</h3>
+            <div class="row">
+                @foreach (var facility in Model.AvailableFacilities)
+                {
+                    <div class="col-md-4 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">@facility.Name</h5>
+                                <p class="card-text">
+                                    <strong>Type:</strong> @facility.Type<br />
+                                    <strong>Rate:</strong> @string.Format("{0:C}", facility.HourlyRate) per hour<br />
+                                    <strong>Hours:</strong> @facility.OpeningTime.ToString(@"hh\:mm tt") - @facility.ClosingTime.ToString(@"hh\:mm tt")
+                                </p>
+                                <a asp-action="Create" asp-route-facilityId="@facility.Id" class="btn btn-success">
+                                    <i class="fas fa-calendar-plus"></i> Book Now
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        // Auto-dismiss alerts after 5 seconds
+        $(document).ready(function () {
+            setTimeout(function () {
+                $('.alert-dismissible').alert('close');
+            }, 5000);
+        });
+    </script>
+} 

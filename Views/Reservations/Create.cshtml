@@ -1,0 +1,242 @@
+@model HomeownersSubdivision.Models.CreateReservationViewModel
+@{
+    ViewData["Title"] = "Create Reservation";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header">
+                    <h3>New Facility Reservation</h3>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create" id="reservationForm">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        
+                        <div class="form-group mb-3">
+                            <label asp-for="FacilityId" class="control-label">Facility</label>
+                            <select asp-for="FacilityId" class="form-control" id="facilitySelect">
+                                @foreach (var facility in Model.AvailableFacilities)
+                                {
+                                    <option value="@facility.Id" data-hourly-rate="@facility.HourlyRate" data-opening="@facility.OpeningTime.ToString(@"hh\:mm")" data-closing="@facility.ClosingTime.ToString(@"hh\:mm")">
+                                        @facility.Name (@facility.Type) - @string.Format("{0:C}", facility.HourlyRate)/hour
+                                    </option>
+                                }
+                            </select>
+                            <span asp-validation-for="FacilityId" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="ReservationDate" class="control-label">Date</label>
+                                    <input asp-for="ReservationDate" class="form-control" type="date" id="reservationDate" min="@DateTime.Today.AddDays(1).ToString("yyyy-MM-dd")" />
+                                    <span asp-validation-for="ReservationDate" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="NumberOfGuests" class="control-label">Number of Guests</label>
+                                    <input asp-for="NumberOfGuests" class="form-control" type="number" min="1" />
+                                    <span asp-validation-for="NumberOfGuests" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="StartTime" class="control-label">Start Time</label>
+                                    <input asp-for="StartTime" class="form-control" type="time" id="startTime" />
+                                    <span asp-validation-for="StartTime" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="EndTime" class="control-label">End Time</label>
+                                    <input asp-for="EndTime" class="form-control" type="time" id="endTime" />
+                                    <span asp-validation-for="EndTime" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-12 mt-2">
+                                <small class="text-muted" id="facilityHours"></small>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            <label asp-for="Purpose" class="control-label">Purpose of Reservation</label>
+                            <textarea asp-for="Purpose" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="Purpose" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <h5>Cost Summary</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row mb-2">
+                                    <div class="col-6">Hourly Rate:</div>
+                                    <div class="col-6 text-end" id="hourlyRateDisplay">@string.Format("{0:C}", Model.HourlyRate)</div>
+                                </div>
+                                <div class="row mb-2">
+                                    <div class="col-6">Duration:</div>
+                                    <div class="col-6 text-end" id="durationDisplay">0 hours</div>
+                                </div>
+                                <hr />
+                                <div class="row fw-bold">
+                                    <div class="col-6">Total Cost:</div>
+                                    <div class="col-6 text-end" id="totalCostDisplay">@string.Format("{0:C}", 0)</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="availabilityAlert" class="alert d-none my-3">
+                        </div>
+                        
+                        <div class="form-group d-flex justify-content-between mt-4">
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Back to List
+                            </a>
+                            <button type="submit" class="btn btn-primary" id="submitButton">
+                                <i class="fas fa-calendar-check"></i> Create Reservation
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        $(document).ready(function () {
+            // Initial setup
+            updateFacilityInfo();
+            calculateTotal();
+            
+            // Update when facility changes
+            $('#facilitySelect').change(function() {
+                updateFacilityInfo();
+                checkAvailability();
+                calculateTotal();
+            });
+            
+            // Update when date, start time or end time change
+            $('#reservationDate, #startTime, #endTime').change(function() {
+                checkAvailability();
+                calculateTotal();
+            });
+            
+            function updateFacilityInfo() {
+                const selectedOption = $('#facilitySelect option:selected');
+                const openingTime = selectedOption.data('opening');
+                const closingTime = selectedOption.data('closing');
+                
+                $('#facilityHours').text(`Facility hours: ${openingTime} - ${closingTime}`);
+                
+                const hourlyRate = selectedOption.data('hourly-rate');
+                $('#hourlyRateDisplay').text(`$${hourlyRate.toFixed(2)}`);
+                
+                // Set default times if not already set
+                if (!$('#startTime').val()) {
+                    $('#startTime').val(openingTime);
+                }
+                
+                // Set end time one hour after start time if not already set
+                if (!$('#endTime').val()) {
+                    const startParts = openingTime.split(':');
+                    let endHour = parseInt(startParts[0]) + 1;
+                    if (endHour > 23) endHour = 23;
+                    const endTime = `${endHour.toString().padStart(2, '0')}:${startParts[1]}`;
+                    $('#endTime').val(endTime);
+                }
+            }
+            
+            function parseTime(timeStr) {
+                if (!timeStr) return null;
+                const [hours, minutes] = timeStr.split(':').map(Number);
+                return hours * 60 + minutes;
+            }
+            
+            function calculateTotal() {
+                const selectedOption = $('#facilitySelect option:selected');
+                const hourlyRate = selectedOption.data('hourly-rate');
+                
+                const startTimeStr = $('#startTime').val();
+                const endTimeStr = $('#endTime').val();
+                
+                if (!startTimeStr || !endTimeStr) {
+                    $('#durationDisplay').text('0 hours');
+                    $('#totalCostDisplay').text('$0.00');
+                    return;
+                }
+                
+                const startMinutes = parseTime(startTimeStr);
+                const endMinutes = parseTime(endTimeStr);
+                
+                if (endMinutes <= startMinutes) {
+                    $('#durationDisplay').text('Invalid time range');
+                    $('#totalCostDisplay').text('$0.00');
+                    return;
+                }
+                
+                const durationMinutes = endMinutes - startMinutes;
+                const durationHours = durationMinutes / 60;
+                const totalCost = hourlyRate * durationHours;
+                
+                $('#durationDisplay').text(`${durationHours.toFixed(1)} hours`);
+                $('#totalCostDisplay').text(`$${totalCost.toFixed(2)}`);
+            }
+            
+            function checkAvailability() {
+                const facilityId = $('#facilitySelect').val();
+                const date = $('#reservationDate').val();
+                const startTime = $('#startTime').val();
+                const endTime = $('#endTime').val();
+                
+                if (!facilityId || !date || !startTime || !endTime) {
+                    return;
+                }
+                
+                $.ajax({
+                    url: `/Reservations/CheckAvailability`,
+                    type: 'GET',
+                    data: {
+                        facilityId: facilityId,
+                        date: date,
+                        startTime: startTime,
+                        endTime: endTime
+                    },
+                    success: function(result) {
+                        const alert = $('#availabilityAlert');
+                        alert.removeClass('d-none alert-success alert-danger');
+                        
+                        if (result.available) {
+                            alert.addClass('alert-success');
+                            alert.html(`<i class="fas fa-check-circle"></i> ${result.message}`);
+                            $('#submitButton').prop('disabled', false);
+                        } else {
+                            alert.addClass('alert-danger');
+                            alert.html(`<i class="fas fa-exclamation-circle"></i> ${result.message}`);
+                            $('#submitButton').prop('disabled', true);
+                        }
+                    },
+                    error: function() {
+                        const alert = $('#availabilityAlert');
+                        alert.removeClass('d-none alert-success').addClass('alert-danger');
+                        alert.html('<i class="fas fa-exclamation-circle"></i> An error occurred while checking availability.');
+                    }
+                });
+            }
+            
+            // Initial availability check
+            if ($('#facilitySelect').val()) {
+                checkAvailability();
+            }
+        });
+    </script>
+} 

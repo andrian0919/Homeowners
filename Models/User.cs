@@ -56,6 +56,9 @@ namespace HomeownersSubdivision.Models
         // Navigation property for RefundRequests
         public List<RefundRequest> RefundRequests { get; set; } = new List<RefundRequest>();
         
+        // Navigation property for Facility Reservations
+        public virtual ICollection<FacilityReservation> FacilityReservations { get; set; } = new List<FacilityReservation>();
+        
         [NotMapped]
         public string FullName => $"{FirstName} {LastName}";
     }
