@@ -1,0 +1,58 @@
+@model HomeownersSubdivision.Models.Analytics.DashboardWidget
+
+@{
+    var widgetType = Model.Type;
+    var reportDefinition = Model.ReportDefinition;
+}
+
+@if (reportDefinition == null)
+{
+    <div class="text-center p-4">
+        <i class="bi bi-exclamation-circle text-3xl text-gray-300 mb-2"></i>
+        <p class="text-gray-500">Report definition not found</p>
+    </div>
+    return;
+}
+
+@switch (widgetType)
+{
+    case HomeownersSubdivision.Models.Analytics.WidgetType.Counter:
+        <div class="text-center">
+            <div class="text-4xl font-bold mb-2">--</div>
+            <div class="text-sm text-gray-600">@reportDefinition.Name</div>
+            <a href="@Url.Action("Details", new { id = reportDefinition.Id })" class="text-xs text-blue-600 mt-2 inline-block">View Details</a>
+        </div>
+        break;
+        
+    case HomeownersSubdivision.Models.Analytics.WidgetType.LineChart:
+    case HomeownersSubdivision.Models.Analytics.WidgetType.BarChart:
+    case HomeownersSubdivision.Models.Analytics.WidgetType.PieChart:
+        <div class="text-center">
+            <div class="h-40 flex items-center justify-center">
+                <i class="bi bi-graph-up text-5xl text-gray-300"></i>
+            </div>
+            <div class="text-sm text-gray-600">@reportDefinition.Name</div>
+            <a href="@Url.Action("Generate", new { id = reportDefinition.Id })" class="btn-sm btn-primary mt-2">
+                Generate Report
+            </a>
+        </div>
+        break;
+        
+    case HomeownersSubdivision.Models.Analytics.WidgetType.Table:
+        <div class="text-center">
+            <div class="h-40 flex items-center justify-center">
+                <i class="bi bi-table text-5xl text-gray-300"></i>
+            </div>
+            <div class="text-sm text-gray-600">@reportDefinition.Name</div>
+            <a href="@Url.Action("Generate", new { id = reportDefinition.Id })" class="btn-sm btn-primary mt-2">
+                Generate Report
+            </a>
+        </div>
+        break;
+        
+    default:
+        <div class="text-center p-4">
+            <p class="text-gray-500">Widget type not supported</p>
+        </div>
+        break;
+} 

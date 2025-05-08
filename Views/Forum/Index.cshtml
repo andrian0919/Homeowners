@@ -1,0 +1,207 @@
+@model HomeownersSubdivision.ViewModels.ForumIndexViewModel
+
+@{
+    ViewData["Title"] = "Community Forum";
+}
+
+@await Html.PartialAsync("_LuxuryBackground")
+
+
+<div class="container mx-auto px-4 py-8 luxury-page-container">
+    <div class="flex flex-col md:flex-row justify-between items-center mb-8">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-800">Community Forum</h1>
+            <p class="text-gray-600 mt-2">Connect with fellow homeowners and discuss community matters</p>
+        </div>
+        <div class="mt-4 md:mt-0">
+            <a href="@Url.Action("Search", "Forum")" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 mr-2">
+                <svg class="-ml-1 mr-2 h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                </svg>
+                Search
+            </a>
+        </div>
+    </div>
+
+    <!-- Forum statistics -->
+    <div class="bg-white rounded-lg shadow-sm p-4 mb-8 flex flex-wrap">
+        <div class="w-1/2 md:w-1/4 text-center p-2">
+            <p class="text-sm text-gray-500">Total Topics</p>
+            <p class="text-2xl font-bold text-indigo-600">@Model.TotalTopics</p>
+        </div>
+        <div class="w-1/2 md:w-1/4 text-center p-2">
+            <p class="text-sm text-gray-500">Total Posts</p>
+            <p class="text-2xl font-bold text-indigo-600">@Model.TotalPosts</p>
+        </div>
+        <div class="w-1/2 md:w-1/4 text-center p-2">
+            <p class="text-sm text-gray-500">Categories</p>
+            <p class="text-2xl font-bold text-indigo-600">@Model.Categories.Count</p>
+        </div>
+        <div class="w-1/2 md:w-1/4 text-center p-2">
+            <p class="text-sm text-gray-500">Recent Topics</p>
+            <p class="text-2xl font-bold text-indigo-600">@Model.RecentTopics.Count</p>
+        </div>
+    </div>
+
+    <!-- Categories Section -->
+    <div class="mb-8">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Forum Categories</h2>
+        <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+            @foreach (var category in Model.Categories)
+            {
+                <div class="border-b border-gray-200 last:border-b-0 hover:bg-gray-50 transition-colors duration-150">
+                    <a href="@Url.Action("Category", "Forum", new { id = category.Id })" class="flex items-start p-4">
+                        <div class="flex-shrink-0 mt-1">
+                            <svg class="h-10 w-10 text-indigo-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
+                            </svg>
+                        </div>
+                        <div class="ml-4 flex-1">
+                            <h3 class="text-lg font-medium text-gray-900">@category.Name</h3>
+                            <p class="text-sm text-gray-600">@category.Description</p>
+                            <div class="mt-2 flex items-center text-sm text-gray-500">
+                                <span>@category.TopicCount topic@(category.TopicCount != 1 ? "s" : "")</span>
+                                @if (!category.IsActive)
+                                {
+                                    <span class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                        Inactive
+                                    </span>
+                                }
+                            </div>
+                        </div>
+                        <div class="ml-4 flex-shrink-0 self-center">
+                            <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Recent Topics Section -->
+    <div class="mb-8">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Recent Discussions</h2>
+        @if (Model.RecentTopics.Any())
+        {
+            <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Topic</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Author</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Replies</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Activity</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            @foreach (var topic in Model.RecentTopics)
+                            {
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            @if (topic.IsPinned)
+                                            {
+                                                <span class="mr-2 flex-shrink-0">
+                                                    <svg class="h-4 w-4 text-amber-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                        <path fill-rule="evenodd" d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 8l2.55 3.4A1 1 0 0116 13H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z" clip-rule="evenodd" />
+                                                    </svg>
+                                                </span>
+                                            }
+                                            @if (topic.IsLocked)
+                                            {
+                                                <span class="mr-2 flex-shrink-0">
+                                                    <svg class="h-4 w-4 text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                        <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+                                                    </svg>
+                                                </span>
+                                            }
+                                            <a href="@Url.Action("Topic", "Forum", new { id = topic.Id })" class="text-indigo-600 hover:text-indigo-900">
+                                                @topic.Title
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <a href="@Url.Action("Category", "Forum", new { id = topic.CategoryId })" class="text-sm text-gray-700">
+                                            @topic.CategoryName
+                                        </a>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        @topic.AuthorName
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        @topic.ReplyCount
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        @topic.LastActivityAt.ToString("MMM dd, yyyy HH:mm")
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="bg-white rounded-lg shadow-sm p-8 text-center">
+                <p class="text-gray-500">No topics have been created yet. Be the first to start a discussion!</p>
+            </div>
+        }
+    </div>
+
+    @if (User.Identity.IsAuthenticated)
+    {
+        <!-- Admin actions -->
+        @if (User.IsInRole("Administrator"))
+        {
+            <div class="mt-8 flex justify-end">
+                <a href="@Url.Action("ManageCategories", "Forum")" class="btn-luxury hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                    </svg>
+                    Manage Categories
+                </a>
+            </div>
+        }
+    }
+</div>
+
+<!-- Alert for messages -->
+@if (TempData.ContainsKey("SuccessMessage") || TempData.ContainsKey("ErrorMessage"))
+{
+    <div id="notification" class="fixed bottom-4 right-4 px-4 py-3 rounded-lg shadow-lg @(TempData.ContainsKey("SuccessMessage") ? "bg-green-50 text-green-800 border border-green-200" : "bg-red-50 text-red-800 border border-red-200")">
+        <div class="flex items-center">
+            @if (TempData.ContainsKey("SuccessMessage"))
+            {
+                <svg class="h-5 w-5 text-green-400 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                </svg>
+                <span>@TempData["SuccessMessage"]</span>
+            }
+            else
+            {
+                <svg class="h-5 w-5 text-red-400 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                </svg>
+                <span>@TempData["ErrorMessage"]</span>
+            }
+        </div>
+    </div>
+
+    <script>
+        setTimeout(function () {
+            var notification = document.getElementById('notification');
+            if (notification) {
+                notification.style.opacity = '0';
+                notification.style.transition = 'opacity 1s';
+                setTimeout(function () {
+                    notification.style.display = 'none';
+                }, 1000);
+            }
+        }, 5000);
+    </script>
+} 

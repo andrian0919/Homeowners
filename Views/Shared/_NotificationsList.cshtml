@@ -1,0 +1,86 @@
+@model List<HomeownersSubdivision.Models.Notification>
+
+@if (!Model.Any())
+{
+    <div class="p-4 text-center text-gray-500">
+        <i class="bi bi-bell-slash text-2xl mb-2"></i>
+        <p>No notifications</p>
+    </div>
+}
+else
+{
+    <div class="divide-y divide-gray-100">
+        @foreach (var notification in Model)
+        {
+            var isUrgent = notification.Priority == NotificationPriority.High || notification.Priority == NotificationPriority.Urgent;
+            var bgColor = isUrgent ? "bg-red-50" : "bg-white";
+            var textColor = isUrgent ? "text-red-700" : "text-gray-700";
+            
+            // Set icon and color based on notification type
+            string icon;
+            string iconColor;
+            switch (notification.Type)
+            {
+                case NotificationType.Payment:
+                    icon = "bi-credit-card";
+                    iconColor = "text-purple-500";
+                    break;
+                case NotificationType.Announcement:
+                    icon = "bi-megaphone";
+                    iconColor = "text-blue-500";
+                    break;
+                case NotificationType.MaintenanceRequest:
+                case NotificationType.ServiceRequest:
+                    icon = "bi-tools";
+                    iconColor = "text-orange-500";
+                    break;
+                case NotificationType.Event:
+                    icon = "bi-calendar-event";
+                    iconColor = "text-green-500";
+                    break;
+                case NotificationType.Assignment:
+                    icon = "bi-person-check";
+                    iconColor = "text-indigo-500";
+                    break;
+                case NotificationType.Update:
+                    icon = "bi-arrow-clockwise";
+                    iconColor = "text-yellow-500";
+                    break;
+                case NotificationType.System:
+                    icon = "bi-gear";
+                    iconColor = "text-gray-500";
+                    break;
+                default:
+                    icon = "bi-bell";
+                    iconColor = "text-gray-500";
+                    break;
+            }
+            
+            <div class="p-4 @bgColor hover:bg-gray-50 transition-colors duration-150 cursor-pointer"
+                 onclick="window.location.href='@Url.Action("Navigate", "Notifications", new { id = notification.Id })'">
+                <div class="flex items-start">
+                    <div class="flex-shrink-0">
+                        <i class="bi @icon text-lg @iconColor"></i>
+                    </div>
+                    <div class="ml-3 w-0 flex-1">
+                        <p class="text-sm font-medium @textColor">
+                            @notification.Title
+                        </p>
+                        <p class="mt-1 text-sm @textColor">
+                            @notification.Message
+                        </p>
+                        <div class="mt-2 flex items-center text-xs text-gray-500">
+                            <span>@notification.CreatedAt.ToString("MMM d, yyyy h:mm tt")</span>
+                            @if (!notification.Status.HasFlag(NotificationStatus.Read))
+                            {
+                                <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-primary text-white">
+                                    New
+                                </span>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+} 

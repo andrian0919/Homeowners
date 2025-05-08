@@ -59,6 +59,11 @@ namespace HomeownersSubdivision.Models
         // Navigation property for Facility Reservations
         public virtual ICollection<FacilityReservation> FacilityReservations { get; set; } = new List<FacilityReservation>();
         
+        // Forum-related navigation properties
+        public virtual ICollection<ForumTopic> ForumTopics { get; set; } = new List<ForumTopic>();
+        public virtual ICollection<ForumPost> ForumPosts { get; set; } = new List<ForumPost>();
+        public virtual ICollection<ForumReaction> ForumReactions { get; set; } = new List<ForumReaction>();
+        
         [NotMapped]
         public string FullName => $"{FirstName} {LastName}";
     }

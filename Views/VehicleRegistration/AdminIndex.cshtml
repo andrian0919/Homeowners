@@ -1,0 +1,292 @@
+@model IEnumerable<HomeownersSubdivision.Models.VehicleRegistration>
+
+@{
+    ViewData["Title"] = "Manage Vehicle Registrations";
+}
+
+@await Html.PartialAsync("_LuxuryBackground")
+
+<style>
+    .main-heading {
+        display: flex;
+        align-items: center;
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(to right, #1a1a2e, #3366FF);
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        color: white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .main-heading i {
+        font-size: 1.75rem;
+        margin-right: 0.75rem;
+        color: #6889F7;
+    }
+    
+    .admin-card {
+        background-color: white;
+        border-radius: 0.5rem;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+    
+    .admin-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.5rem 1rem;
+        border-radius: 0.375rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    
+    .admin-button-primary {
+        background: linear-gradient(to right, #3366FF, #4D76E1);
+        color: white;
+    }
+    
+    .admin-button-primary:hover {
+        background: linear-gradient(to right, #4D76E1, #6889F7);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .admin-button-success {
+        background: linear-gradient(to right, #10B981, #34D399);
+        color: white;
+    }
+    
+    .admin-button-success:hover {
+        background: linear-gradient(to right, #34D399, #6EE7B7);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .admin-button-danger {
+        background: linear-gradient(to right, #E53E3E, #F56565);
+        color: white;
+    }
+    
+    .admin-button-danger:hover {
+        background: linear-gradient(to right, #F56565, #FC8181);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .admin-panel {
+        background-color: white;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+    
+    .admin-table thead {
+        background: linear-gradient(to right, #1a1a2e, #16213e);
+    }
+    
+    .admin-table th {
+        color: white;
+        font-weight: 600;
+        padding: 0.75rem 1rem;
+    }
+    
+    .admin-filter {
+        background-color: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.375rem;
+        padding: 0.5rem;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        transition: all 0.2s ease;
+        color: #333333;
+    }
+    
+    .admin-filter:focus {
+        border-color: #3366FF;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+        outline: none;
+    }
+    
+    .action-link {
+        color: #3366FF;
+        transition: all 0.2s ease;
+    }
+    
+    .action-link:hover {
+        color: #4D76E1;
+        text-decoration: underline;
+    }
+</style>
+
+<div class="container mx-auto px-4 py-8 luxury-page-container">
+    <div class="main-heading">
+        <i class="fas fa-car"></i> Manage Vehicle Registrations
+        </div>
+    
+    <p class="text-gray-200 mb-6">Review and manage vehicle registrations for all residents</p>
+    
+    <div class="flex flex-col md:flex-row justify-end mb-6 gap-3">
+        <select id="statusFilter" class="admin-filter">
+                <option value="all">All Statuses</option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+                <option value="expired">Expired</option>
+            </select>
+        <select id="expiryFilter" class="admin-filter">
+                <option value="all">All Expiry</option>
+                <option value="expired">Expired</option>
+                <option value="thisMonth">Expires This Month</option>
+                <option value="nextMonth">Expires Next Month</option>
+                <option value="thisYear">Expires This Year</option>
+            </select>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="admin-panel p-8 text-center">
+            <i class="fas fa-car text-gray-400 text-5xl mb-4"></i>
+            <p class="text-gray-600 text-lg">No vehicle registrations found in the system.</p>
+        </div>
+    }
+    else
+    {
+        <div class="admin-panel">
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200 admin-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Owner</th>
+                            <th scope="col">License Plate</th>
+                            <th scope="col">Make & Model</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Color</th>
+                            <th scope="col">Reg. Date</th>
+                            <th scope="col">Expiry Date</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @foreach (var item in Model)
+                    {
+                        var isExpired = item.ExpiryDate.HasValue && item.ExpiryDate.Value < DateTime.Now;
+                        var today = DateTime.Today;
+                        var expiresThisMonth = item.ExpiryDate.HasValue && 
+                                               item.ExpiryDate.Value.Month == today.Month && 
+                                               item.ExpiryDate.Value.Year == today.Year;
+                        var expiresNextMonth = item.ExpiryDate.HasValue && 
+                                               ((item.ExpiryDate.Value.Month == today.Month + 1 && item.ExpiryDate.Value.Year == today.Year) ||
+                                               (today.Month == 12 && item.ExpiryDate.Value.Month == 1 && item.ExpiryDate.Value.Year == today.Year + 1));
+                        var expiresThisYear = item.ExpiryDate.HasValue && item.ExpiryDate.Value.Year == today.Year;
+                        
+                        <tr class="hover:bg-gray-50" 
+                            data-status="@(item.IsActive ? "active" : "inactive")@(isExpired ? " expired" : "")"
+                            data-expiry="@(isExpired ? "expired" : "")@(expiresThisMonth ? " thisMonth" : "")@(expiresNextMonth ? " nextMonth" : "")@(expiresThisYear ? " thisYear" : "")">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                @item.Owner.FullName
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">@item.LicensePlate</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">@item.Make @item.Model</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">@item.Type</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                <div class="flex items-center">
+                                    <span class="h-4 w-4 rounded-full mr-2" style="background-color: @(string.IsNullOrEmpty(item.Color) ? "#CCCCCC" : item.Color)"></span>
+                                    @item.Color
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">@item.RegistrationDate.ToString("MMM dd, yyyy")</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                @if (item.ExpiryDate.HasValue)
+                                {
+                                    var expiryClass = isExpired ? "text-red-600 font-semibold" : (expiresThisMonth ? "text-orange-600 font-semibold" : "");
+                                    <span class="@expiryClass">@item.ExpiryDate.Value.ToString("MMM dd, yyyy")</span>
+                                }
+                                else
+                                {
+                                    <span>N/A</span>
+                                }
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                @if (item.IsActive && !isExpired)
+                                {
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                        Active
+                                    </span>
+                                }
+                                else if (isExpired)
+                                {
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                        Expired
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                                        Inactive
+                                    </span>
+                                }
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                <div class="flex space-x-2">
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="action-link">
+                                            <i class="fas fa-edit mr-1"></i> Edit
+                                        </a>
+                                        <a asp-action="Details" asp-route-id="@item.Id" class="action-link">
+                                            <i class="fas fa-eye mr-1"></i> Details
+                                    </a>
+                                    <form asp-action="ToggleStatus" asp-route-id="@item.Id">
+                                        <button type="submit" class="@(item.IsActive ? "text-red-600 hover:text-red-900" : "text-green-600 hover:text-green-900")">
+                                            @if (item.IsActive)
+                                            {
+                                                    <i class="fas fa-ban mr-1"></i>
+                                                <span>Deactivate</span>
+                                            }
+                                            else
+                                            {
+                                                    <i class="fas fa-check-circle mr-1"></i>
+                                                <span>Activate</span>
+                                            }
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const statusFilter = document.getElementById('statusFilter');
+            const expiryFilter = document.getElementById('expiryFilter');
+            const rows = document.querySelectorAll('tbody tr');
+            
+            function applyFilters() {
+                const statusValue = statusFilter.value;
+                const expiryValue = expiryFilter.value;
+                
+                rows.forEach(row => {
+                    const rowStatus = row.getAttribute('data-status');
+                    const rowExpiry = row.getAttribute('data-expiry');
+                    
+                    let statusMatch = statusValue === 'all' || rowStatus.includes(statusValue);
+                    let expiryMatch = expiryValue === 'all' || rowExpiry.includes(expiryValue);
+                    
+                    row.style.display = statusMatch && expiryMatch ? '' : 'none';
+                });
+            }
+            
+            statusFilter.addEventListener('change', applyFilters);
+            expiryFilter.addEventListener('change', applyFilters);
+        });
+    </script>
+} 

@@ -1,0 +1,287 @@
+@model IEnumerable<HomeownersSubdivision.Models.VisitorPass>
+
+@{
+    ViewData["Title"] = "Manage Visitor Passes";
+}
+
+@await Html.PartialAsync("_LuxuryBackground")
+
+<style>
+    .main-heading {
+        display: flex;
+        align-items: center;
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(to right, #1a1a2e, #3366FF);
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        color: white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .main-heading i {
+        font-size: 1.75rem;
+        margin-right: 0.75rem;
+        color: #6889F7;
+    }
+    
+    .admin-card {
+        background-color: white;
+        border-radius: 0.5rem;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+    
+    .admin-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.5rem 1rem;
+        border-radius: 0.375rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    
+    .admin-button-primary {
+        background: linear-gradient(to right, #3366FF, #4D76E1);
+        color: white;
+    }
+    
+    .admin-button-primary:hover {
+        background: linear-gradient(to right, #4D76E1, #6889F7);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .admin-button-success {
+        background: linear-gradient(to right, #10B981, #34D399);
+        color: white;
+    }
+    
+    .admin-button-success:hover {
+        background: linear-gradient(to right, #34D399, #6EE7B7);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .admin-button-danger {
+        background: linear-gradient(to right, #E53E3E, #F56565);
+        color: white;
+    }
+    
+    .admin-button-danger:hover {
+        background: linear-gradient(to right, #F56565, #FC8181);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .admin-panel {
+        background-color: white;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+    
+    .admin-table thead {
+        background: linear-gradient(to right, #1a1a2e, #16213e);
+    }
+    
+    .admin-table th {
+        color: white;
+        font-weight: 600;
+        padding: 0.75rem 1rem;
+    }
+    
+    .admin-filter {
+        background-color: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.375rem;
+        padding: 0.5rem;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        transition: all 0.2s ease;
+        color: #333333;
+    }
+    
+    .admin-filter:focus {
+        border-color: #3366FF;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+        outline: none;
+    }
+    
+    .action-link {
+        color: #3366FF;
+        transition: all 0.2s ease;
+    }
+    
+    .action-link:hover {
+        color: #4D76E1;
+        text-decoration: underline;
+    }
+</style>
+
+<div class="container mx-auto px-4 py-8 luxury-page-container">
+    <div class="main-heading">
+        <i class="fas fa-id-card"></i> Manage Visitor Passes
+        </div>
+    
+    <p class="text-gray-200 mb-6">Review and approve visitor pass requests from residents</p>
+    
+    <div class="flex flex-col md:flex-row justify-end mb-6 gap-3">
+        <select id="statusFilter" class="admin-filter">
+                <option value="all">All Statuses</option>
+                <option value="pending">Pending</option>
+                <option value="approved">Approved</option>
+                <option value="rejected">Rejected</option>
+                <option value="expired">Expired</option>
+            </select>
+        <select id="dateFilter" class="admin-filter">
+                <option value="all">All Dates</option>
+                <option value="today">Today</option>
+                <option value="tomorrow">Tomorrow</option>
+                <option value="thisWeek">This Week</option>
+                <option value="nextWeek">Next Week</option>
+            </select>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="admin-panel p-8 text-center">
+            <i class="fas fa-id-card text-gray-400 text-5xl mb-4"></i>
+            <p class="text-gray-600 text-lg">No visitor passes found in the system.</p>
+        </div>
+    }
+    else
+    {
+        <div class="admin-panel">
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200 admin-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Requested By</th>
+                            <th scope="col">Visitor Name</th>
+                            <th scope="col">Contact</th>
+                            <th scope="col">Visit Date</th>
+                            <th scope="col">Expiry Date</th>
+                            <th scope="col">Purpose</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @foreach (var item in Model)
+                    {
+                        <tr class="hover:bg-gray-50" data-status="@item.Status.ToString().ToLower()" 
+                            data-date="@item.VisitDate.Date.ToString("yyyy-MM-dd")">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                @item.RequestedBy.FullName
+                            </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">@item.VisitorName</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">@item.VisitorContact</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">@item.VisitDate.ToString("MMM dd, yyyy")</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">@item.ExpiryDate.ToString("MMM dd, yyyy")</td>
+                                <td class="px-6 py-4 text-sm text-gray-700 max-w-xs truncate">@item.Purpose</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                @{
+                                    string badgeColor = item.Status switch
+                                    {
+                                        VisitorPassStatus.Pending => "bg-yellow-100 text-yellow-800",
+                                        VisitorPassStatus.Approved => "bg-green-100 text-green-800",
+                                        VisitorPassStatus.Rejected => "bg-red-100 text-red-800",
+                                        VisitorPassStatus.Expired => "bg-gray-100 text-gray-800",
+                                        _ => "bg-blue-100 text-blue-800"
+                                    };
+                                }
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full @badgeColor">
+                                    @item.Status
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                @if (item.Status == VisitorPassStatus.Pending)
+                                {
+                                    <div class="flex space-x-2">
+                                        <form asp-action="Approve" asp-route-id="@item.Id">
+                                                <button type="submit" class="admin-button admin-button-success">
+                                                    <i class="fas fa-check mr-1"></i> Approve
+                                            </button>
+                                        </form>
+                                        <form asp-action="Reject" asp-route-id="@item.Id">
+                                                <button type="submit" class="admin-button admin-button-danger">
+                                                    <i class="fas fa-times mr-1"></i> Reject
+                                            </button>
+                                        </form>
+                                    </div>
+                                }
+                                else
+                                {
+                                        <a asp-action="Details" asp-route-id="@item.Id" class="action-link">
+                                            <i class="fas fa-eye mr-1"></i> View Details
+                                    </a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const statusFilter = document.getElementById('statusFilter');
+            const dateFilter = document.getElementById('dateFilter');
+            const rows = document.querySelectorAll('tbody tr');
+            
+            function applyFilters() {
+                const statusValue = statusFilter.value;
+                const dateValue = dateFilter.value;
+                
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                
+                const tomorrow = new Date(today);
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                
+                const weekStart = new Date(today);
+                weekStart.setDate(today.getDate() - today.getDay());
+                
+                const weekEnd = new Date(weekStart);
+                weekEnd.setDate(weekStart.getDate() + 6);
+                
+                const nextWeekStart = new Date(weekEnd);
+                nextWeekStart.setDate(nextWeekStart.getDate() + 1);
+                
+                const nextWeekEnd = new Date(nextWeekStart);
+                nextWeekEnd.setDate(nextWeekStart.getDate() + 6);
+                
+                rows.forEach(row => {
+                    const rowStatus = row.getAttribute('data-status');
+                    const rowDate = new Date(row.getAttribute('data-date'));
+                    
+                    let statusMatch = statusValue === 'all' || rowStatus === statusValue;
+                    
+                    let dateMatch = true;
+                    if (dateValue === 'today') {
+                        dateMatch = rowDate.getTime() === today.getTime();
+                    } else if (dateValue === 'tomorrow') {
+                        dateMatch = rowDate.getTime() === tomorrow.getTime();
+                    } else if (dateValue === 'thisWeek') {
+                        dateMatch = rowDate >= weekStart && rowDate <= weekEnd;
+                    } else if (dateValue === 'nextWeek') {
+                        dateMatch = rowDate >= nextWeekStart && rowDate <= nextWeekEnd;
+                    }
+                    
+                    row.style.display = statusMatch && dateMatch ? '' : 'none';
+                });
+            }
+            
+            statusFilter.addEventListener('change', applyFilters);
+            dateFilter.addEventListener('change', applyFilters);
+        });
+    </script>
+} 

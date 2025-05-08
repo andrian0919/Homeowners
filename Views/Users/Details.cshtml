@@ -4,97 +4,65 @@
     ViewData["Title"] = "User Details";
 }
 
-<div class="container">
-    <h1>User Details</h1>
-    <hr />
-
-    <div class="row">
-        <div class="col-md-8">
-            <div class="card mb-4">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Basic Information</h5>
+<div class="container max-w-2xl mx-auto py-8">
+    <div class="luxury-content-card p-8 animate-luxury">
+        <h1 class="text-2xl font-bold text-gray-800 mb-6 flex items-center"><i class="fas fa-user text-primary mr-2"></i> User Details</h1>
+        <div class="mb-8">
+            <h2 class="text-lg font-semibold text-gray-700 mb-4">Basic Information</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-2">
+                <div>
+                    <span class="block text-gray-500 text-xs font-semibold">First Name</span>
+                    <span class="block text-gray-800">@Model.FirstName</span>
                 </div>
-                <div class="card-body">
-                    <div class="row mb-3">
-                        <label class="col-sm-3 col-form-label"><strong>First Name:</strong></label>
-                        <div class="col-sm-9">
-                            <p class="form-control-plaintext">@Model.FirstName</p>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <label class="col-sm-3 col-form-label"><strong>Last Name:</strong></label>
-                        <div class="col-sm-9">
-                            <p class="form-control-plaintext">@Model.LastName</p>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <label class="col-sm-3 col-form-label"><strong>Phone Number:</strong></label>
-                        <div class="col-sm-9">
-                            <p class="form-control-plaintext">@(Model.PhoneNumber ?? "Not provided")</p>
-                        </div>
-                    </div>
+                <div>
+                    <span class="block text-gray-500 text-xs font-semibold">Last Name</span>
+                    <span class="block text-gray-800">@Model.LastName</span>
                 </div>
             </div>
-
-            <div class="card mb-4">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Account Information</h5>
+            <div class="mb-2">
+                <span class="block text-gray-500 text-xs font-semibold">Phone Number</span>
+                <span class="block text-gray-800">@(Model.PhoneNumber ?? "Not provided")</span>
+            </div>
+        </div>
+        <div class="mb-8">
+            <h2 class="text-lg font-semibold text-gray-700 mb-4">Account Information</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-2">
+                <div>
+                    <span class="block text-gray-500 text-xs font-semibold">Username</span>
+                    <span class="block text-gray-800">@Model.Username</span>
                 </div>
-                <div class="card-body">
-                    <div class="row mb-3">
-                        <label class="col-sm-3 col-form-label"><strong>Username:</strong></label>
-                        <div class="col-sm-9">
-                            <p class="form-control-plaintext">@Model.Username</p>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <label class="col-sm-3 col-form-label"><strong>Email:</strong></label>
-                        <div class="col-sm-9">
-                            <p class="form-control-plaintext">@Model.Email</p>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <label class="col-sm-3 col-form-label"><strong>Role:</strong></label>
-                        <div class="col-sm-9">
-                            <p class="form-control-plaintext"><span class="badge bg-info">@Model.Role</span></p>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <label class="col-sm-3 col-form-label"><strong>Status:</strong></label>
-                        <div class="col-sm-9">
-                            <p class="form-control-plaintext">
-                                @if (Model.IsActive)
-                                {
-                                    <span class="badge bg-success">Active</span>
-                                }
-                                else
-                                {
-                                    <span class="badge bg-danger">Inactive</span>
-                                }
-                            </p>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <label class="col-sm-3 col-form-label"><strong>Created Date:</strong></label>
-                        <div class="col-sm-9">
-                            <p class="form-control-plaintext">@Model.CreatedAt.ToString("MMMM dd, yyyy")</p>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <label class="col-sm-3 col-form-label"><strong>Last Login:</strong></label>
-                        <div class="col-sm-9">
-                            <p class="form-control-plaintext">
-                                @(Model.LastLoginDate != null ? ((DateTime)Model.LastLoginDate).ToString("MMMM dd, yyyy HH:mm") : "Never")
-                            </p>
-                        </div>
-                    </div>
+                <div>
+                    <span class="block text-gray-500 text-xs font-semibold">Email</span>
+                    <span class="block text-gray-800">@Model.Email</span>
                 </div>
             </div>
-
-            <div>
-                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
-                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            <div class="mb-2">
+                <span class="block text-gray-500 text-xs font-semibold">Role</span>
+                <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-blue-400 to-blue-600 text-white">@Model.Role</span>
             </div>
+            <div class="mb-2">
+                <span class="block text-gray-500 text-xs font-semibold">Status</span>
+                @if (Model.IsActive)
+                {
+                    <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">Active</span>
+                }
+                else
+                {
+                    <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-800">Inactive</span>
+                }
+            </div>
+            <div class="mb-2">
+                <span class="block text-gray-500 text-xs font-semibold">Created Date</span>
+                <span class="block text-gray-800">@Model.CreatedAt.ToString("MMMM dd, yyyy")</span>
+            </div>
+            <div class="mb-2">
+                <span class="block text-gray-500 text-xs font-semibold">Last Login</span>
+                <span class="block text-gray-800">@(Model.LastLoginDate != null ? ((DateTime)Model.LastLoginDate).ToString("MMMM dd, yyyy HH:mm") : "Never")</span>
+            </div>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-3 mt-6">
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn-outline-luxury w-full sm:w-auto flex justify-center items-center"><i class="fas fa-edit mr-2"></i> Edit</a>
+            <a asp-action="Index" class="btn-outline-luxury w-full sm:w-auto flex justify-center items-center"><i class="fas fa-arrow-left mr-2"></i> Back to List</a>
         </div>
     </div>
 </div> 

@@ -12,6 +12,10 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
 using System.Diagnostics;
+using ClosedXML.Excel;
+using iTextSharp.text.pdf;
+using iTextSharp.text;
+using System.IO;
 
 namespace HomeownersSubdivision.Controllers
 {
@@ -80,17 +84,16 @@ namespace HomeownersSubdivision.Controllers
             catch (Exception ex)
             {
                 // Log the exception
-                _logger.LogError(ex, "Error in Reservations/Index");
+                _logger.LogError(ex, "Error in Reservations/Index: {Message}", ex.Message);
                 
                 // Add error message to TempData
-                TempData["ErrorMessage"] = $"An error occurred: {ex.Message}";
+                TempData["ErrorMessage"] = "An error occurred while loading reservations. Please try again.";
                 
-                // Return to error view with details
+                // Return a simpler error view with minimal dependencies
                 return View("Error", new ErrorViewModel 
                 { 
                     RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier,
-                    ErrorMessage = ex.Message,
-                    StackTrace = ex.StackTrace
+                    ErrorMessage = "An error occurred while loading reservations."
                 });
             }
         }
@@ -299,13 +302,23 @@ namespace HomeownersSubdivision.Controllers
                             Type = NotificationType.System,
                             Priority = NotificationPriority.Normal,
                             DeliveryMethod = DeliveryMethod.InApp,
-                            Link = $"/Reservations/Details/{reservation.Id}"
+                            Link = $"/Reservations/Details/{reservation.Id}",
+                            IsSent = true,
+                            SentAt = DateTime.Now
                         };
                         
                         _context.Notifications.Add(notification);
                     }
                     
-                    await _context.SaveChangesAsync();
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (Exception notificationEx)
+                    {
+                        // Log but don't fail if notification creation fails
+                        _logger.LogError(notificationEx, "Error creating notifications for reservation {ReservationId}", reservation.Id);
+                    }
 
                     return RedirectToAction(nameof(Index));
                 }
@@ -548,11 +561,22 @@ namespace HomeownersSubdivision.Controllers
                                     Type = NotificationType.System,
                                     Priority = NotificationPriority.Normal,
                                     DeliveryMethod = DeliveryMethod.InApp,
-                                    Link = $"/Reservations/Details/{reservation.Id}"
+                                    Link = $"/Reservations/Details/{reservation.Id}",
+                                    IsSent = true,
+                                    SentAt = DateTime.Now
                                 };
                                 
                                 _context.Notifications.Add(notification);
-                                await _context.SaveChangesAsync();
+                                
+                                try
+                                {
+                                    await _context.SaveChangesAsync();
+                                }
+                                catch (Exception notificationEx)
+                                {
+                                    // Log but don't fail if notification creation fails
+                                    _logger.LogError(notificationEx, "Error creating status change notification for reservation {ReservationId}", reservation.Id);
+                                }
                             }
                         }
                     }
@@ -697,13 +721,23 @@ namespace HomeownersSubdivision.Controllers
                             Type = NotificationType.System,
                             Priority = NotificationPriority.Normal,
                             DeliveryMethod = DeliveryMethod.InApp,
-                            Link = $"/Reservations/Details/{reservation.Id}"
+                            Link = $"/Reservations/Details/{reservation.Id}",
+                            IsSent = true,
+                            SentAt = DateTime.Now
                         };
                         
                         _context.Notifications.Add(notification);
                     }
                     
-                    await _context.SaveChangesAsync();
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (Exception notificationEx)
+                    {
+                        // Log but don't fail if notification creation fails
+                        _logger.LogError(notificationEx, "Error creating admin notifications for cancelled reservation {ReservationId}", reservation.Id);
+                    }
                 }
                 // Create a notification for the user if an admin is cancelling
                 else if (reservation.UserId != currentUser.Id)
@@ -721,11 +755,22 @@ namespace HomeownersSubdivision.Controllers
                             Type = NotificationType.System,
                             Priority = NotificationPriority.Normal,
                             DeliveryMethod = DeliveryMethod.InApp,
-                            Link = $"/Reservations/Details/{reservation.Id}"
+                            Link = $"/Reservations/Details/{reservation.Id}",
+                            IsSent = true,
+                            SentAt = DateTime.Now
                         };
                         
                         _context.Notifications.Add(notification);
-                        await _context.SaveChangesAsync();
+                        
+                        try
+                        {
+                            await _context.SaveChangesAsync();
+                        }
+                        catch (Exception notificationEx)
+                        {
+                            // Log but don't fail if notification creation fails
+                            _logger.LogError(notificationEx, "Error creating user notification for cancelled reservation {ReservationId}", reservation.Id);
+                        }
                     }
                 }
 
@@ -868,9 +913,624 @@ namespace HomeownersSubdivision.Controllers
                 maxCapacity = facility.MaxCapacity,
                 hourlyRate = facility.HourlyRate,
                 formattedHourlyRate = string.Format("{0:C}", facility.HourlyRate),
-                openingTime = facility.OpeningTime.ToString(@"hh\:mm"),
-                closingTime = facility.ClosingTime.ToString(@"hh\:mm")
+                openingTime = facility.OpeningTime.Hours.ToString("00") + ":" + facility.OpeningTime.Minutes.ToString("00"),
+                closingTime = facility.ClosingTime.Hours.ToString("00") + ":" + facility.ClosingTime.Minutes.ToString("00")
             });
+        }
+
+        // GET: Reservations/AdminIndex
+        [Authorize(Roles = "Administrator,Staff")]
+        public async Task<IActionResult> AdminIndex(string searchString, int? facilityId, string status, string dateRange, int page = 1)
+        {
+            try
+            {
+                int pageSize = 10;
+                
+                // Start with all reservations
+                var reservationsQuery = _context.FacilityReservations
+                    .Include(r => r.Facility)
+                    .Include(r => r.User)
+                    .AsQueryable();
+
+                // Apply filters
+                if (!string.IsNullOrEmpty(searchString))
+                {
+                    reservationsQuery = reservationsQuery.Where(r => 
+                        r.User.FirstName.Contains(searchString) ||
+                        r.User.LastName.Contains(searchString) ||
+                        r.Facility.Name.Contains(searchString) ||
+                        r.Purpose.Contains(searchString));
+                }
+
+                if (facilityId.HasValue)
+                {
+                    reservationsQuery = reservationsQuery.Where(r => r.FacilityId == facilityId.Value);
+                }
+
+                if (!string.IsNullOrEmpty(status) && Enum.TryParse<ReservationStatus>(status, out var statusEnum))
+                {
+                    reservationsQuery = reservationsQuery.Where(r => r.Status == statusEnum);
+                }
+
+                // Date range filters
+                var today = DateTime.Today;
+                switch (dateRange)
+                {
+                    case "Today":
+                        reservationsQuery = reservationsQuery.Where(r => r.ReservationDate == today);
+                        break;
+                    case "ThisWeek":
+                        var startOfWeek = today.AddDays(-(int)today.DayOfWeek);
+                        var endOfWeek = startOfWeek.AddDays(6);
+                        reservationsQuery = reservationsQuery.Where(r => r.ReservationDate >= startOfWeek && r.ReservationDate <= endOfWeek);
+                        break;
+                    case "ThisMonth":
+                        var startOfMonth = new DateTime(today.Year, today.Month, 1);
+                        var endOfMonth = startOfMonth.AddMonths(1).AddDays(-1);
+                        reservationsQuery = reservationsQuery.Where(r => r.ReservationDate >= startOfMonth && r.ReservationDate <= endOfMonth);
+                        break;
+                    case "NextMonth":
+                        var startOfNextMonth = new DateTime(today.Year, today.Month, 1).AddMonths(1);
+                        var endOfNextMonth = startOfNextMonth.AddMonths(1).AddDays(-1);
+                        reservationsQuery = reservationsQuery.Where(r => r.ReservationDate >= startOfNextMonth && r.ReservationDate <= endOfNextMonth);
+                        break;
+                    case "Past":
+                        reservationsQuery = reservationsQuery.Where(r => r.ReservationDate < today);
+                        break;
+                }
+
+                // Order by date (descending) and then by start time
+                reservationsQuery = reservationsQuery.OrderByDescending(r => r.ReservationDate).ThenBy(r => r.StartTime);
+
+                // Calculate total items and pages
+                var totalItems = await reservationsQuery.CountAsync();
+                var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+                
+                // Adjust current page if needed
+                page = Math.Min(Math.Max(1, page), Math.Max(1, totalPages));
+
+                // Get the reservations for the current page
+                var reservations = await reservationsQuery
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
+
+                // Get all facilities for the dropdown
+                var facilities = await _context.Facilities
+                    .OrderBy(f => f.Name)
+                    .ToListAsync();
+
+                // Calculate summary statistics
+                var totalReservations = await _context.FacilityReservations.CountAsync();
+                var pendingReservations = await _context.FacilityReservations.CountAsync(r => r.Status == ReservationStatus.Pending);
+                var todayReservations = await _context.FacilityReservations.CountAsync(r => r.ReservationDate == today);
+                var totalRevenue = await _context.FacilityReservations
+                    .Where(r => r.Status != ReservationStatus.Cancelled && r.Status != ReservationStatus.Rejected)
+                    .SumAsync(r => r.TotalCost);
+
+                // Set up ViewBag properties for the view
+                ViewBag.CurrentFilter = searchString;
+                ViewBag.CurrentFacility = facilityId?.ToString();
+                ViewBag.CurrentStatus = status;
+                ViewBag.CurrentDateRange = dateRange;
+                ViewBag.CurrentPage = page;
+                ViewBag.TotalPages = totalPages;
+                ViewBag.Facilities = facilities;
+                ViewBag.TotalReservations = totalReservations;
+                ViewBag.PendingReservations = pendingReservations;
+                ViewBag.TodayReservations = todayReservations;
+                ViewBag.TotalRevenue = totalRevenue;
+
+                return View(reservations);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                _logger.LogError(ex, "Error in Reservations/AdminIndex: {Message}", ex.Message);
+                
+                // Add error message to TempData
+                TempData["ErrorMessage"] = "An error occurred while loading the admin reservations. Please try again.";
+                
+                // Return a simpler error view with minimal dependencies
+                return View("Error", new ErrorViewModel 
+                { 
+                    RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier,
+                    ErrorMessage = "An error occurred while loading the admin reservations."
+                });
+            }
+        }
+
+        // POST: Reservations/Approve/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator,Staff")]
+        public async Task<IActionResult> Approve(int id)
+        {
+            try
+            {
+                var reservation = await _context.FacilityReservations
+                    .Include(r => r.Facility)
+                    .Include(r => r.User)
+                    .FirstOrDefaultAsync(m => m.Id == id);
+
+                if (reservation == null)
+                {
+                    return NotFound();
+                }
+
+                // Only allow approval if the reservation is pending
+                if (reservation.Status != ReservationStatus.Pending)
+                {
+                    TempData["ErrorMessage"] = "Only pending reservations can be approved.";
+                    return RedirectToAction(nameof(AdminIndex));
+                }
+
+                // Update reservation status
+                reservation.Status = ReservationStatus.Approved;
+                reservation.UpdatedAt = DateTime.Now;
+                _context.Update(reservation);
+                await _context.SaveChangesAsync();
+
+                // Create a notification for the user
+                if (reservation.User != null)
+                {
+                    var notification = new Notification
+                    {
+                        UserId = reservation.User.Id,
+                        Title = "Reservation Approved",
+                        Message = $"Your reservation for {reservation.Facility.Name} on {reservation.ReservationDate:MM/dd/yyyy} from {reservation.StartTime:hh\\:mm} to {reservation.EndTime:hh\\:mm} has been approved.",
+                        CreatedAt = DateTime.Now,
+                        Status = NotificationStatus.Unread,
+                        Type = NotificationType.System,
+                        Priority = NotificationPriority.Normal,
+                        DeliveryMethod = DeliveryMethod.InApp,
+                        Link = $"/Reservations/Details/{reservation.Id}",
+                        IsSent = true,
+                        SentAt = DateTime.Now
+                    };
+                    
+                    _context.Notifications.Add(notification);
+                    
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (Exception notificationEx)
+                    {
+                        // Log but don't fail if notification creation fails
+                        _logger.LogError(notificationEx, "Error creating approval notification for reservation {ReservationId}", reservation.Id);
+                    }
+                }
+
+                TempData["SuccessMessage"] = $"Reservation #{reservation.Id} has been approved. Notification sent to the user.";
+                return RedirectToAction(nameof(AdminIndex));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error approving reservation: {Message}", ex.Message);
+                TempData["ErrorMessage"] = "An error occurred while approving the reservation.";
+                return RedirectToAction(nameof(AdminIndex));
+            }
+        }
+
+        // POST: Reservations/Reject/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator,Staff")]
+        public async Task<IActionResult> Reject(int id, string rejectionReason)
+        {
+            try
+            {
+                var reservation = await _context.FacilityReservations
+                    .Include(r => r.Facility)
+                    .Include(r => r.User)
+                    .FirstOrDefaultAsync(m => m.Id == id);
+
+                if (reservation == null)
+                {
+                    return NotFound();
+                }
+
+                // Only allow rejection if the reservation is pending
+                if (reservation.Status != ReservationStatus.Pending)
+                {
+                    TempData["ErrorMessage"] = "Only pending reservations can be rejected.";
+                    return RedirectToAction(nameof(AdminIndex));
+                }
+
+                // Update reservation status and rejection reason
+                reservation.Status = ReservationStatus.Rejected;
+                reservation.RejectionReason = rejectionReason;
+                reservation.UpdatedAt = DateTime.Now;
+                _context.Update(reservation);
+                await _context.SaveChangesAsync();
+
+                // Create a notification for the user
+                if (reservation.User != null)
+                {
+                    var notification = new Notification
+                    {
+                        UserId = reservation.User.Id,
+                        Title = "Reservation Rejected",
+                        Message = $"Your reservation for {reservation.Facility.Name} on {reservation.ReservationDate:MM/dd/yyyy} has been rejected." + 
+                                  (!string.IsNullOrEmpty(rejectionReason) ? $" Reason: {rejectionReason}" : ""),
+                        CreatedAt = DateTime.Now,
+                        Status = NotificationStatus.Unread,
+                        Type = NotificationType.System,
+                        Priority = NotificationPriority.High,
+                        DeliveryMethod = DeliveryMethod.InApp,
+                        Link = $"/Reservations/Details/{reservation.Id}",
+                        IsSent = true,
+                        SentAt = DateTime.Now
+                    };
+                    
+                    _context.Notifications.Add(notification);
+                    
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (Exception notificationEx)
+                    {
+                        // Log but don't fail if notification creation fails
+                        _logger.LogError(notificationEx, "Error creating rejection notification for reservation {ReservationId}", reservation.Id);
+                    }
+                }
+
+                TempData["SuccessMessage"] = $"Reservation #{reservation.Id} has been rejected." + 
+                                            (!string.IsNullOrEmpty(rejectionReason) ? " Notification sent to the user with the rejection reason." : "");
+                return RedirectToAction(nameof(AdminIndex));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error rejecting reservation: {Message}", ex.Message);
+                TempData["ErrorMessage"] = "An error occurred while rejecting the reservation.";
+                return RedirectToAction(nameof(AdminIndex));
+            }
+        }
+
+        // POST: Reservations/MarkComplete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator,Staff")]
+        public async Task<IActionResult> MarkComplete(int id)
+        {
+            try
+            {
+                var reservation = await _context.FacilityReservations
+                    .Include(r => r.Facility)
+                    .Include(r => r.User)
+                    .FirstOrDefaultAsync(m => m.Id == id);
+
+                if (reservation == null)
+                {
+                    return NotFound();
+                }
+
+                // Only allow marking as complete if the reservation is approved
+                if (reservation.Status != ReservationStatus.Approved)
+                {
+                    TempData["ErrorMessage"] = "Only approved reservations can be marked as complete.";
+                    return RedirectToAction(nameof(AdminIndex));
+                }
+
+                // Update reservation status
+                reservation.Status = ReservationStatus.Completed;
+                reservation.UpdatedAt = DateTime.Now;
+                _context.Update(reservation);
+                await _context.SaveChangesAsync();
+
+                TempData["SuccessMessage"] = $"Reservation #{reservation.Id} has been marked as complete.";
+                return RedirectToAction(nameof(AdminIndex));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error marking reservation as complete: {Message}", ex.Message);
+                TempData["ErrorMessage"] = "An error occurred while marking the reservation as complete.";
+                return RedirectToAction(nameof(AdminIndex));
+            }
+        }
+
+        // GET: Reservations/ExportToExcel
+        [Authorize(Roles = "Administrator,Staff")]
+        public async Task<IActionResult> ExportToExcel()
+        {
+            try
+            {
+                var reservations = await _context.FacilityReservations
+                    .Include(r => r.Facility)
+                    .Include(r => r.User)
+                    .OrderByDescending(r => r.ReservationDate)
+                    .ThenBy(r => r.StartTime)
+                    .ToListAsync();
+
+                using (var workbook = new ClosedXML.Excel.XLWorkbook())
+                {
+                    var worksheet = workbook.Worksheets.Add("Reservations");
+                    
+                    // Add header row
+                    worksheet.Cell(1, 1).Value = "ID";
+                    worksheet.Cell(1, 2).Value = "User";
+                    worksheet.Cell(1, 3).Value = "Facility";
+                    worksheet.Cell(1, 4).Value = "Date";
+                    worksheet.Cell(1, 5).Value = "Start Time";
+                    worksheet.Cell(1, 6).Value = "End Time";
+                    worksheet.Cell(1, 7).Value = "Guests";
+                    worksheet.Cell(1, 8).Value = "Status";
+                    worksheet.Cell(1, 9).Value = "Cost";
+                    worksheet.Cell(1, 10).Value = "Created At";
+                    
+                    // Style header row
+                    var headerRow = worksheet.Row(1);
+                    headerRow.Style.Font.Bold = true;
+                    headerRow.Style.Fill.BackgroundColor = ClosedXML.Excel.XLColor.LightBlue;
+                    
+                    // Add data rows
+                    for (int i = 0; i < reservations.Count; i++)
+                    {
+                        var reservation = reservations[i];
+                        var rowIndex = i + 2;
+                        
+                        worksheet.Cell(rowIndex, 1).Value = reservation.Id;
+                        worksheet.Cell(rowIndex, 2).Value = $"{reservation.User.FirstName} {reservation.User.LastName}";
+                        worksheet.Cell(rowIndex, 3).Value = reservation.Facility.Name;
+                        worksheet.Cell(rowIndex, 4).Value = reservation.ReservationDate.ToShortDateString();
+                        worksheet.Cell(rowIndex, 5).Value = $"{reservation.StartTime.Hours:00}:{reservation.StartTime.Minutes:00}";
+                        worksheet.Cell(rowIndex, 6).Value = $"{reservation.EndTime.Hours:00}:{reservation.EndTime.Minutes:00}";
+                        worksheet.Cell(rowIndex, 7).Value = reservation.NumberOfGuests;
+                        worksheet.Cell(rowIndex, 8).Value = reservation.Status.ToString();
+                        worksheet.Cell(rowIndex, 9).Value = reservation.TotalCost;
+                        worksheet.Cell(rowIndex, 10).Value = reservation.CreatedAt.ToString();
+                        
+                        // Apply conditional formatting based on status
+                        if (reservation.Status == ReservationStatus.Approved)
+                        {
+                            worksheet.Cell(rowIndex, 8).Style.Fill.BackgroundColor = ClosedXML.Excel.XLColor.LightGreen;
+                        }
+                        else if (reservation.Status == ReservationStatus.Cancelled)
+                        {
+                            worksheet.Cell(rowIndex, 8).Style.Fill.BackgroundColor = ClosedXML.Excel.XLColor.LightCoral;
+                        }
+                        else if (reservation.Status == ReservationStatus.Pending)
+                        {
+                            worksheet.Cell(rowIndex, 8).Style.Fill.BackgroundColor = ClosedXML.Excel.XLColor.LightYellow;
+                        }
+                    }
+                    
+                    // Auto-fit columns
+                    worksheet.Columns().AdjustToContents();
+                    
+                    // Generate a unique filename with timestamp
+                    var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+                    var fileName = $"Reservations_{timestamp}.xlsx";
+                    
+                    // Convert to a byte array
+                    using (var stream = new MemoryStream())
+                    {
+                        workbook.SaveAs(stream);
+                        var content = stream.ToArray();
+                        
+                        return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error exporting reservations to Excel: {Message}", ex.Message);
+                TempData["ErrorMessage"] = "An error occurred while exporting reservations to Excel.";
+                return RedirectToAction(nameof(AdminIndex));
+            }
+        }
+
+        // GET: Reservations/GenerateReport
+        [Authorize(Roles = "Administrator,Staff")]
+        public async Task<IActionResult> GenerateReport()
+        {
+            try
+            {
+                // Get reservation data
+                var reservations = await _context.FacilityReservations
+                    .Include(r => r.Facility)
+                    .Include(r => r.User)
+                    .OrderByDescending(r => r.ReservationDate)
+                    .ThenBy(r => r.StartTime)
+                    .ToListAsync();
+                
+                // Calculate summary statistics
+                var totalReservations = reservations.Count;
+                var pendingReservations = reservations.Count(r => r.Status == ReservationStatus.Pending);
+                var approvedReservations = reservations.Count(r => r.Status == ReservationStatus.Approved);
+                var cancelledReservations = reservations.Count(r => r.Status == ReservationStatus.Cancelled);
+                var completedReservations = reservations.Count(r => r.Status == ReservationStatus.Completed);
+                var totalRevenue = reservations
+                    .Where(r => r.Status != ReservationStatus.Cancelled && r.Status != ReservationStatus.Rejected)
+                    .Sum(r => r.TotalCost);
+                
+                // Group reservations by facility
+                var facilityStats = reservations
+                    .GroupBy(r => r.Facility.Name)
+                    .Select(g => new 
+                    {
+                        FacilityName = g.Key,
+                        Count = g.Count(),
+                        Revenue = g.Where(r => r.Status != ReservationStatus.Cancelled && r.Status != ReservationStatus.Rejected)
+                                  .Sum(r => r.TotalCost)
+                    })
+                    .OrderByDescending(g => g.Count)
+                    .ToList();
+                
+                // Create a PDF document
+                using (var memoryStream = new MemoryStream())
+                {
+                    using (var document = new iTextSharp.text.Document(iTextSharp.text.PageSize.A4, 50, 50, 50, 50))
+                    {
+                        var writer = iTextSharp.text.pdf.PdfWriter.GetInstance(document, memoryStream);
+                        document.Open();
+                        
+                        // Add title
+                        var titleFont = iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA_BOLD, 18);
+                        var title = new iTextSharp.text.Paragraph($"Facility Reservations Report", titleFont);
+                        title.Alignment = iTextSharp.text.Element.ALIGN_CENTER;
+                        title.SpacingAfter = 20;
+                        document.Add(title);
+                        
+                        // Add generation info
+                        var normalFont = iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA, 10);
+                        var boldFont = iTextSharp.text.FontFactory.GetFont(iTextSharp.text.FontFactory.HELVETICA_BOLD, 10);
+                        
+                        document.Add(new iTextSharp.text.Paragraph($"Generated on: {DateTime.Now}", normalFont));
+                        document.Add(new iTextSharp.text.Paragraph(" "));  // Space
+                        
+                        // Add summary statistics
+                        var summaryTitle = new iTextSharp.text.Paragraph("Summary Statistics", boldFont);
+                        summaryTitle.SpacingAfter = 10;
+                        document.Add(summaryTitle);
+                        
+                        // Create a summary table
+                        var summaryTable = new iTextSharp.text.pdf.PdfPTable(2);
+                        summaryTable.WidthPercentage = 50;
+                        summaryTable.HorizontalAlignment = iTextSharp.text.Element.ALIGN_LEFT;
+                        summaryTable.SpacingAfter = 20;
+                        
+                        // Add summary rows
+                        AddRow(summaryTable, "Total Reservations:", totalReservations.ToString(), boldFont, normalFont);
+                        AddRow(summaryTable, "Pending:", pendingReservations.ToString(), boldFont, normalFont);
+                        AddRow(summaryTable, "Approved:", approvedReservations.ToString(), boldFont, normalFont);
+                        AddRow(summaryTable, "Cancelled:", cancelledReservations.ToString(), boldFont, normalFont);
+                        AddRow(summaryTable, "Completed:", completedReservations.ToString(), boldFont, normalFont);
+                        AddRow(summaryTable, "Total Revenue:", string.Format("₱{0:N2}", totalRevenue), boldFont, normalFont);
+                        
+                        document.Add(summaryTable);
+                        
+                        // Add facility statistics
+                        var facilityTitle = new iTextSharp.text.Paragraph("Facility Statistics", boldFont);
+                        facilityTitle.SpacingAfter = 10;
+                        document.Add(facilityTitle);
+                        
+                        // Create a facility table
+                        var facilityTable = new iTextSharp.text.pdf.PdfPTable(3);
+                        facilityTable.WidthPercentage = 100;
+                        facilityTable.SpacingAfter = 20;
+                        
+                        // Add facility table headers
+                        var facilityHeaders = new string[] { "Facility", "Reservations", "Revenue" };
+                        foreach (var header in facilityHeaders)
+                        {
+                            var cell = new iTextSharp.text.pdf.PdfPCell(new iTextSharp.text.Phrase(header, boldFont));
+                            cell.BackgroundColor = new iTextSharp.text.BaseColor(220, 220, 220);
+                            cell.HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER;
+                            cell.Padding = 5;
+                            facilityTable.AddCell(cell);
+                        }
+                        
+                        // Add facility rows
+                        foreach (var stat in facilityStats)
+                        {
+                            facilityTable.AddCell(new iTextSharp.text.Phrase(stat.FacilityName, normalFont));
+                            
+                            var countCell = new iTextSharp.text.pdf.PdfPCell(new iTextSharp.text.Phrase(stat.Count.ToString(), normalFont));
+                            countCell.HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER;
+                            facilityTable.AddCell(countCell);
+                            
+                            var revenueCell = new iTextSharp.text.pdf.PdfPCell(new iTextSharp.text.Phrase(string.Format("₱{0:N2}", stat.Revenue), normalFont));
+                            revenueCell.HorizontalAlignment = iTextSharp.text.Element.ALIGN_RIGHT;
+                            facilityTable.AddCell(revenueCell);
+                        }
+                        
+                        document.Add(facilityTable);
+                        
+                        // Add recent reservations table
+                        var recentTitle = new iTextSharp.text.Paragraph("Recent Reservations", boldFont);
+                        recentTitle.SpacingAfter = 10;
+                        document.Add(recentTitle);
+                        
+                        // Create a reservations table
+                        var recentTable = new iTextSharp.text.pdf.PdfPTable(6);
+                        recentTable.WidthPercentage = 100;
+                        
+                        // Add column widths
+                        float[] columnWidths = new float[] { 1.5f, 2.5f, 2f, 1.5f, 1.5f, 1.5f };
+                        recentTable.SetWidths(columnWidths);
+                        
+                        // Add reservation table headers
+                        var reservationHeaders = new string[] { "ID", "User", "Facility", "Date", "Status", "Cost" };
+                        foreach (var header in reservationHeaders)
+                        {
+                            var cell = new iTextSharp.text.pdf.PdfPCell(new iTextSharp.text.Phrase(header, boldFont));
+                            cell.BackgroundColor = new iTextSharp.text.BaseColor(220, 220, 220);
+                            cell.HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER;
+                            cell.Padding = 5;
+                            recentTable.AddCell(cell);
+                        }
+                        
+                        // Add reservation rows (just the most recent 20)
+                        foreach (var reservation in reservations.Take(20))
+                        {
+                            recentTable.AddCell(new iTextSharp.text.Phrase(reservation.Id.ToString(), normalFont));
+                            recentTable.AddCell(new iTextSharp.text.Phrase($"{reservation.User.FirstName} {reservation.User.LastName}", normalFont));
+                            recentTable.AddCell(new iTextSharp.text.Phrase(reservation.Facility.Name, normalFont));
+                            recentTable.AddCell(new iTextSharp.text.Phrase(reservation.ReservationDate.ToShortDateString(), normalFont));
+                            
+                            // Status cell with color
+                            var statusCell = new iTextSharp.text.pdf.PdfPCell(new iTextSharp.text.Phrase(reservation.Status.ToString(), normalFont));
+                            statusCell.HorizontalAlignment = iTextSharp.text.Element.ALIGN_CENTER;
+                            
+                            // Add background color based on status
+                            switch (reservation.Status)
+                            {
+                                case ReservationStatus.Pending:
+                                    statusCell.BackgroundColor = new iTextSharp.text.BaseColor(255, 255, 200);
+                                    break;
+                                case ReservationStatus.Approved:
+                                    statusCell.BackgroundColor = new iTextSharp.text.BaseColor(200, 255, 200);
+                                    break;
+                                case ReservationStatus.Cancelled:
+                                    statusCell.BackgroundColor = new iTextSharp.text.BaseColor(255, 200, 200);
+                                    break;
+                                case ReservationStatus.Completed:
+                                    statusCell.BackgroundColor = new iTextSharp.text.BaseColor(200, 200, 255);
+                                    break;
+                            }
+                            
+                            recentTable.AddCell(statusCell);
+                            
+                            var costCell = new iTextSharp.text.pdf.PdfPCell(new iTextSharp.text.Phrase(string.Format("₱{0:N2}", reservation.TotalCost), normalFont));
+                            costCell.HorizontalAlignment = iTextSharp.text.Element.ALIGN_RIGHT;
+                            recentTable.AddCell(costCell);
+                        }
+                        
+                        document.Add(recentTable);
+                        
+                        document.Close();
+                    }
+                    
+                    // Return the PDF
+                    var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+                    var fileName = $"ReservationReport_{timestamp}.pdf";
+                    var content = memoryStream.ToArray();
+                    
+                    return File(content, "application/pdf", fileName);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error generating reservation report: {Message}", ex.Message);
+                TempData["ErrorMessage"] = "An error occurred while generating the reservation report.";
+                return RedirectToAction(nameof(AdminIndex));
+            }
+        }
+        
+        // Helper method to add a row to a PDF table
+        private void AddRow(iTextSharp.text.pdf.PdfPTable table, string col1, string col2, 
+                          iTextSharp.text.Font font1, iTextSharp.text.Font font2)
+        {
+            var cell1 = new iTextSharp.text.pdf.PdfPCell(new iTextSharp.text.Phrase(col1, font1));
+            cell1.Border = iTextSharp.text.Rectangle.NO_BORDER;
+            table.AddCell(cell1);
+            
+            var cell2 = new iTextSharp.text.pdf.PdfPCell(new iTextSharp.text.Phrase(col2, font2));
+            cell2.Border = iTextSharp.text.Rectangle.NO_BORDER;
+            table.AddCell(cell2);
         }
     }
 } 

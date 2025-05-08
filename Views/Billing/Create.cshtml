@@ -3,122 +3,118 @@
     ViewData["Title"] = "Create New Bill";
 }
 
-<div class="container py-5">
-    <div class="row mb-4">
-        <div class="col-md-8">
-            <h1 class="fw-bold text-primary">Create New Bill</h1>
-            <p class="text-muted">Create a new bill for a homeowner</p>
+<div class="container mx-auto px-4 py-8">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">Create New Bill</h1>
+            <p class="text-gray-600">Create a new bill for a homeowner</p>
         </div>
-        <div class="col-md-4 d-flex justify-content-end align-items-center">
-            <a href="@Url.Action("Index")" class="btn btn-outline-secondary">
-                <i class="bi bi-arrow-left me-2"></i> Back to Bills
-            </a>
-        </div>
+        <a href="@Url.Action("Index")" class="inline-flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition duration-200">
+            <i class="bi bi-arrow-left mr-2"></i> Back to Bills
+        </a>
     </div>
 
-    <div class="card shadow-sm">
-        <div class="card-body p-4">
+    <div class="bg-white rounded-lg shadow-md border border-gray-200">
+        <div class="p-6">
             <form asp-action="Create" method="post">
-                <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-4" role="alert"></div>
+                <div asp-validation-summary="ModelOnly" class="bg-red-50 text-red-500 p-4 rounded-lg mb-6" role="alert"></div>
 
                 <!-- Homeowner Selection -->
-                <div class="row mb-4">
-                    <div class="col-12">
-                        <h4 class="fw-bold mb-3">
-                            <i class="bi bi-person-circle text-primary me-2"></i> Homeowner Information
-                        </h4>
-                        <div class="form-group">
-                            <label for="UserId" class="form-label">Select Homeowner</label>
-                            <select asp-for="UserId" asp-items="ViewBag.Homeowners" class="form-select" required>
-                                <option value="">-- Select Homeowner --</option>
-                            </select>
-                            <span asp-validation-for="UserId" class="text-danger"></span>
-                            <div class="form-text">The homeowner who will receive this bill</div>
-                        </div>
+                <div class="mb-8">
+                    <div class="flex items-center mb-4">
+                        <i class="bi bi-person-circle text-blue-600 text-xl mr-2"></i>
+                        <h2 class="text-xl font-semibold text-gray-800">Homeowner Information</h2>
+                    </div>
+                    <div class="space-y-2">
+                        <label for="UserId" class="block text-sm font-medium text-gray-700">Select Homeowner</label>
+                        <select asp-for="UserId" asp-items="ViewBag.Homeowners" class="w-full rounded-lg border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                            <option value="">-- Select Homeowner --</option>
+                        </select>
+                        <span asp-validation-for="UserId" class="text-sm text-red-500"></span>
+                        <p class="text-sm text-gray-500">The homeowner who will receive this bill</p>
                     </div>
                 </div>
 
                 <!-- Bill Details -->
-                <div class="row mb-4">
-                    <div class="col-12">
-                        <h4 class="fw-bold mb-3">
-                            <i class="bi bi-file-earmark-text text-primary me-2"></i> Bill Details
-                        </h4>
-                        
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label asp-for="Type" class="form-label">Bill Type</label>
-                                    <select asp-for="Type" class="form-select" required>
-                                        <option value="">-- Select Type --</option>
-                                        @foreach(var type in ViewBag.BillTypes)
-                                        {
-                                            <option value="@type">@type</option>
-                                        }
-                                    </select>
-                                    <span asp-validation-for="Type" class="text-danger"></span>
+                <div class="mb-8">
+                    <div class="flex items-center mb-4">
+                        <i class="bi bi-file-earmark-text text-blue-600 text-xl mr-2"></i>
+                        <h2 class="text-xl font-semibold text-gray-800">Bill Details</h2>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div class="space-y-2">
+                            <label asp-for="Type" class="block text-sm font-medium text-gray-700">Bill Type</label>
+                            <select asp-for="Type" class="w-full rounded-lg border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                <option value="">-- Select Type --</option>
+                                @foreach(var type in ViewBag.BillTypes)
+                                {
+                                    <option value="@type">@type</option>
+                                }
+                            </select>
+                            <span asp-validation-for="Type" class="text-sm text-red-500"></span>
+                        </div>
+                        <div class="space-y-2">
+                            <label asp-for="Amount" class="block text-sm font-medium text-gray-700">Amount ($)</label>
+                            <div class="relative rounded-lg shadow-sm">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <span class="text-gray-500 sm:text-sm">$</span>
                                 </div>
+                                <input asp-for="Amount" type="number" step="0.01" min="0.01" 
+                                       class="pl-7 w-full rounded-lg border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500" />
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label asp-for="Amount" class="form-label">Amount ($)</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">$</span>
-                                        <input asp-for="Amount" type="number" step="0.01" min="0.01" class="form-control" required />
-                                    </div>
-                                    <span asp-validation-for="Amount" class="text-danger"></span>
-                                </div>
-                            </div>
+                            <span asp-validation-for="Amount" class="text-sm text-red-500"></span>
                         </div>
+                    </div>
 
-                        <div class="form-group mb-3">
-                            <label asp-for="Description" class="form-label">Description</label>
-                            <input asp-for="Description" class="form-control" required />
-                            <span asp-validation-for="Description" class="text-danger"></span>
-                            <div class="form-text">A clear description of what this bill is for</div>
-                        </div>
+                    <div class="space-y-2 mb-6">
+                        <label asp-for="Description" class="block text-sm font-medium text-gray-700">Description</label>
+                        <input asp-for="Description" class="w-full rounded-lg border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500" />
+                        <span asp-validation-for="Description" class="text-sm text-red-500"></span>
+                        <p class="text-sm text-gray-500">A clear description of what this bill is for</p>
+                    </div>
 
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label asp-for="DueDate" class="form-label">Due Date</label>
-                                    <input asp-for="DueDate" type="date" class="form-control" required 
-                                           min="@DateTime.Now.ToString("yyyy-MM-dd")" />
-                                    <span asp-validation-for="DueDate" class="text-danger"></span>
-                                </div>
-                            </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div class="space-y-2">
+                            <label asp-for="DueDate" class="block text-sm font-medium text-gray-700">Due Date</label>
+                            <input asp-for="DueDate" type="date" class="w-full rounded-lg border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                                   min="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                            <span asp-validation-for="DueDate" class="text-sm text-red-500"></span>
                         </div>
+                    </div>
 
-                        <div class="form-group">
-                            <label asp-for="Notes" class="form-label">Additional Notes</label>
-                            <textarea asp-for="Notes" class="form-control" rows="3"></textarea>
-                            <span asp-validation-for="Notes" class="text-danger"></span>
-                            <div class="form-text">Optional notes visible to the homeowner</div>
-                        </div>
+                    <div class="space-y-2">
+                        <label asp-for="Notes" class="block text-sm font-medium text-gray-700">Additional Notes</label>
+                        <textarea asp-for="Notes" rows="3" 
+                                 class="w-full rounded-lg border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"></textarea>
+                        <span asp-validation-for="Notes" class="text-sm text-red-500"></span>
+                        <p class="text-sm text-gray-500">Optional notes visible to the homeowner</p>
                     </div>
                 </div>
 
                 <!-- Notification Options -->
-                <div class="row mb-4">
-                    <div class="col-12">
-                        <h4 class="fw-bold mb-3">
-                            <i class="bi bi-bell text-primary me-2"></i> Notification Options
-                        </h4>
-                        <div class="form-check form-switch mb-2">
-                            <input class="form-check-input" type="checkbox" id="sendNotification" name="sendNotification" checked>
-                            <label class="form-check-label" for="sendNotification">Send notification to homeowner</label>
-                        </div>
-                        <div class="form-text mb-3">The homeowner will receive a notification about this new bill</div>
+                <div class="mb-8">
+                    <div class="flex items-center mb-4">
+                        <i class="bi bi-bell text-blue-600 text-xl mr-2"></i>
+                        <h2 class="text-xl font-semibold text-gray-800">Notification Options</h2>
                     </div>
+                    <div class="flex items-center space-x-2">
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="sendNotification" name="sendNotification" class="sr-only peer" checked>
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                            <span class="ml-3 text-sm font-medium text-gray-700">Send notification to homeowner</span>
+                        </label>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-500">The homeowner will receive a notification about this new bill</p>
                 </div>
 
                 <!-- Submit Buttons -->
-                <div class="d-flex justify-content-end gap-2 mt-4">
-                    <a href="@Url.Action("Index")" class="btn btn-outline-secondary">
+                <div class="flex justify-end space-x-3">
+                    <a href="@Url.Action("Index")" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition duration-200">
                         Cancel
                     </a>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="bi bi-check-circle me-2"></i> Create Bill
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200">
+                        <i class="bi bi-check-circle mr-2"></i> Create Bill
                     </button>
                 </div>
             </form>

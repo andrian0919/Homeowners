@@ -1,0 +1,30 @@
+@model object
+
+<div class="luxury-card p-8">
+    <div class="mb-6">
+        <h2 class="text-2xl font-bold text-gray-800">@ViewData["FormTitle"]</h2>
+        @if (ViewData["FormSubtitle"] != null)
+        {
+            <p class="text-gray-600">@ViewData["FormSubtitle"]</p>
+        }
+    </div>
+    
+    <form class="form-luxury" method="@(ViewData["Method"] ?? "post")" action="@ViewData["Action"]">
+        @Html.AntiForgeryToken()
+        
+        @RenderBody()
+        
+        <div class="flex justify-end mt-6">
+            @if (ViewData["CancelUrl"] != null)
+            {
+                <a href="@ViewData["CancelUrl"]" class="btn-outline-luxury mr-3">
+                    <i class="bi bi-x-circle mr-2"></i> Cancel
+                </a>
+            }
+            
+            <button type="submit" class="btn-luxury">
+                <i class="bi bi-check-circle mr-2"></i> @(ViewData["SubmitText"] ?? "Submit")
+            </button>
+        </div>
+    </form>
+</div> 

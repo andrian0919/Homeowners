@@ -1,0 +1,144 @@
+@model HomeownersSubdivision.Models.Analytics.ReportDefinition
+
+@{
+    ViewData["Title"] = "Report Details";
+}
+
+<div class="luxury-background">
+    <div class="container mx-auto px-4 py-12">
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-3xl font-bold text-white">Report Details</h1>
+            <div class="flex space-x-3">
+                <a href="@Url.Action("Index")" class="btn-outline-luxury">
+                    <i class="bi bi-arrow-left mr-1"></i> Back to Reports
+                </a>
+                <a href="@Url.Action("Generate", new { id = Model.Id })" class="btn-luxury">
+                    <i class="bi bi-file-earmark-bar-graph mr-1"></i> Generate Report
+                </a>
+            </div>
+        </div>
+
+        <div class="luxury-card animate-luxury">
+            <div class="luxury-card-header">
+                <h2 class="text-xl font-semibold text-blue-800">@Model.Name</h2>
+                <p class="text-sm text-blue-700">@Model.Description</p>
+                <div class="flex items-center mt-3 space-x-2">
+                    <span class="px-3 py-1 text-xs rounded-full bg-blue-100 text-blue-800 font-semibold">
+                        @Model.Category
+                    </span>
+                    @if (Model.IsBuiltIn)
+                    {
+                        <span class="px-3 py-1 text-xs rounded-full bg-purple-100 text-purple-800 font-semibold">
+                            Built-in
+                        </span>
+                    }
+                </div>
+            </div>
+            
+            <div class="p-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4 text-gray-800">Report Information</h3>
+                        <div class="overflow-hidden rounded-lg shadow">
+                            <table class="table-luxury min-w-full">
+                                <tbody>
+                                    <tr>
+                                        <td class="py-3 px-4 text-sm font-medium text-gray-600">ID</td>
+                                        <td class="py-3 px-4 text-sm text-gray-900">@Model.Id</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-3 px-4 text-sm font-medium text-gray-600">Category</td>
+                                        <td class="py-3 px-4 text-sm text-gray-900">@Model.Category</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-3 px-4 text-sm font-medium text-gray-600">Query Definition</td>
+                                        <td class="py-3 px-4 text-sm text-gray-900">@Model.QueryDefinition</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-3 px-4 text-sm font-medium text-gray-600">Status</td>
+                                        <td class="py-3 px-4 text-sm text-gray-900">
+                                            @if (Model.IsEnabled)
+                                            {
+                                                <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800 font-semibold">
+                                                    Enabled
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-800 font-semibold">
+                                                    Disabled
+                                                </span>
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-3 px-4 text-sm font-medium text-gray-600">Created</td>
+                                        <td class="py-3 px-4 text-sm text-gray-900">@Model.CreatedAt.ToString("yyyy-MM-dd HH:mm")</td>
+                                    </tr>
+                                    @if (Model.LastModifiedAt.HasValue)
+                                    {
+                                        <tr>
+                                            <td class="py-3 px-4 text-sm font-medium text-gray-600">Last Modified</td>
+                                            <td class="py-3 px-4 text-sm text-gray-900">@Model.LastModifiedAt.Value.ToString("yyyy-MM-dd HH:mm")</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4 text-gray-800">Report Parameters</h3>
+                        @if (ViewBag.Parameters != null && ((IEnumerable<HomeownersSubdivision.Models.Analytics.ReportParameter>)ViewBag.Parameters).Any())
+                        {
+                            <div class="overflow-hidden rounded-lg shadow">
+                                <table class="table-luxury min-w-full">
+                                    <thead>
+                                        <tr>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Name</th>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Label</th>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Type</th>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Required</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var parameter in (IEnumerable<HomeownersSubdivision.Models.Analytics.ReportParameter>)ViewBag.Parameters)
+                                        {
+                                            <tr>
+                                                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">@parameter.Name</td>
+                                                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">@parameter.Label</td>
+                                                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">@parameter.Type</td>
+                                                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-900">
+                                                    @if (parameter.IsRequired)
+                                                    {
+                                                        <span class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-800 font-semibold">Yes</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-800 font-semibold">No</span>
+                                                    }
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="luxury-card bg-gray-50 p-5 text-center">
+                                <p class="text-gray-600 text-sm">This report doesn't require any parameters.</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+                
+                <div class="flex justify-center mt-10">
+                    <a href="@Url.Action("Generate", new { id = Model.Id })" class="btn-luxury">
+                        <i class="bi bi-file-earmark-bar-graph mr-2"></i> Generate Report
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

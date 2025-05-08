@@ -1,0 +1,157 @@
+@model HomeownersSubdivision.Models.EmergencyContact
+
+@{
+    ViewData["Title"] = "Edit Emergency Contact";
+}
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="mb-4 bg-green-50 border-l-4 border-green-400 p-4 rounded-md">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <svg class="h-5 w-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm text-green-700">@TempData["SuccessMessage"]</p>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="mb-4 bg-red-50 border-l-4 border-red-400 p-4 rounded-md">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm text-red-700">@TempData["ErrorMessage"]</p>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="md:grid md:grid-cols-3 md:gap-6">
+        <div class="md:col-span-1">
+            <div class="px-4 sm:px-0">
+                <h3 class="text-lg font-medium leading-6 text-gray-900">Edit Emergency Contact</h3>
+                <p class="mt-1 text-sm text-gray-600">
+                    Update the information for this emergency contact.
+                </p>
+            </div>
+        </div>
+        <div class="mt-5 md:mt-0 md:col-span-2">
+            <form action="/EmergencyContact/Edit/@Model.Id" method="post">
+                @Html.AntiForgeryToken()
+                <div class="shadow overflow-hidden sm:rounded-md">
+                    <div class="px-4 py-5 bg-white sm:p-6">
+                        <div class="text-red-600">
+                            @Html.ValidationSummary(true)
+                        </div>
+                        <input type="hidden" name="Id" value="@Model.Id" />
+                        <input type="hidden" name="HomeownerId" value="@Model.HomeownerId" />
+                        <input type="hidden" name="CreatedAt" value="@Model.CreatedAt.ToString("o")" />
+                        
+                        <div class="grid grid-cols-6 gap-6">
+                            <div class="col-span-6">
+                                <label for="Name" class="block text-sm font-medium text-gray-700">Name <span class="text-red-600">*</span></label>
+                                <input type="text" name="Name" id="Name" value="@Model.Name" required class="mt-1 focus:ring-primary focus:border-primary block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+                                <span class="text-xs text-red-600">@Html.ValidationMessageFor(m => m.Name)</span>
+                            </div>
+                            
+                            <div class="col-span-6">
+                                <label for="PhoneNumber" class="block text-sm font-medium text-gray-700">Phone Number <span class="text-red-600">*</span></label>
+                                <input type="tel" name="PhoneNumber" id="PhoneNumber" value="@Model.PhoneNumber" required class="mt-1 focus:ring-primary focus:border-primary block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+                                <span class="text-xs text-red-600">@Html.ValidationMessageFor(m => m.PhoneNumber)</span>
+                            </div>
+                            
+                            <div class="col-span-6">
+                                <label for="Email" class="block text-sm font-medium text-gray-700">Email (Optional)</label>
+                                <input type="email" name="Email" id="Email" value="@Model.Email" class="mt-1 focus:ring-primary focus:border-primary block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+                                <span class="text-xs text-red-600">@Html.ValidationMessageFor(m => m.Email)</span>
+                            </div>
+                            
+                            <div class="col-span-6 sm:col-span-3">
+                                <label for="Type" class="block text-sm font-medium text-gray-700">Contact Type <span class="text-red-600">*</span></label>
+                                <select name="Type" id="Type" required class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
+                                    @foreach (int typeValue in Enum.GetValues(typeof(ContactType)))
+                                    {
+                                        var type = (ContactType)typeValue;
+                                        if (Model.Type == type)
+                                        {
+                                            <option value="@typeValue" selected>@type</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@typeValue">@type</option>
+                                        }
+                                    }
+                                </select>
+                                <span class="text-xs text-red-600">@Html.ValidationMessageFor(m => m.Type)</span>
+                            </div>
+                            
+                            <div class="col-span-6 sm:col-span-3">
+                                <label for="Relationship" class="block text-sm font-medium text-gray-700">Relationship (Optional)</label>
+                                <input type="text" name="Relationship" id="Relationship" value="@Model.Relationship" class="mt-1 focus:ring-primary focus:border-primary block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+                                <span class="text-xs text-red-600">@Html.ValidationMessageFor(m => m.Relationship)</span>
+                            </div>
+                            
+                            <div class="col-span-6">
+                                <label for="Address" class="block text-sm font-medium text-gray-700">Address (Optional)</label>
+                                <input type="text" name="Address" id="Address" value="@Model.Address" class="mt-1 focus:ring-primary focus:border-primary block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+                                <span class="text-xs text-red-600">@Html.ValidationMessageFor(m => m.Address)</span>
+                            </div>
+                            
+                            <div class="col-span-6">
+                                <label for="Notes" class="block text-sm font-medium text-gray-700">Notes (Optional)</label>
+                                <textarea name="Notes" id="Notes" rows="3" class="mt-1 focus:ring-primary focus:border-primary block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">@Model.Notes</textarea>
+                                <span class="text-xs text-red-600">@Html.ValidationMessageFor(m => m.Notes)</span>
+                            </div>
+                            
+                            <div class="col-span-6">
+                                <div class="flex items-start">
+                                    <div class="flex items-center h-5">
+                                        <input type="checkbox" id="IsActive" name="IsActive" value="true" @(Model.IsActive ? "checked" : "") class="focus:ring-primary h-4 w-4 text-primary border-gray-300 rounded" />
+                                        <input type="hidden" name="IsActive" value="false" />
+                                    </div>
+                                    <div class="ml-3 text-sm">
+                                        <label for="IsActive" class="font-medium text-gray-700">Active</label>
+                                        <p class="text-gray-500">Indicate whether this contact is currently active</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="px-4 py-3 bg-gray-50 text-right sm:px-6 flex justify-between">
+                        <a href="/EmergencyContact/Index" class="inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                            Back to List
+                        </a>
+                        <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                            Save Changes
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Ensure the first IsActive hidden field is not submitted when checkbox is checked
+        document.querySelector('form').addEventListener('submit', function() {
+            var isActiveCheckbox = document.getElementById('IsActive');
+            var hiddenField = isActiveCheckbox.nextElementSibling;
+            
+            if (isActiveCheckbox.checked) {
+                hiddenField.disabled = true;
+            }
+        });
+    </script>
+} 

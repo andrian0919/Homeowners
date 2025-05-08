@@ -1,8 +1,9 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace HomeownersSubdivision.Models
 {
-    public enum MaintenanceStatus
+    public enum ServiceRequestStatus
     {
         New,
         InProgress,
@@ -17,7 +18,17 @@ namespace HomeownersSubdivision.Models
         High
     }
 
-    public class MaintenanceRequest
+    public enum ServiceRequestType
+    {
+        Maintenance,
+        Security,
+        Cleaning,
+        Plumbing,
+        Electrical,
+        Other
+    }
+
+    public class ServiceRequest
     {
         public int Id { get; set; }
         
@@ -32,10 +43,13 @@ namespace HomeownersSubdivision.Models
         public string Description { get; set; } = string.Empty;
         
         [Required]
-        public MaintenanceStatus Status { get; set; } = MaintenanceStatus.New;
+        public ServiceRequestStatus Status { get; set; } = ServiceRequestStatus.New;
         
         [Required]
         public Priority Priority { get; set; } = Priority.Low;
+        
+        [Required]
+        public ServiceRequestType RequestType { get; set; } = ServiceRequestType.Maintenance;
         
         [Display(Name = "Submission Date")]
         public DateTime SubmissionDate { get; set; } = DateTime.Now;
@@ -44,6 +58,15 @@ namespace HomeownersSubdivision.Models
         public DateTime? CompletionDate { get; set; }
         
         public int? AssignedToId { get; set; }
+        
+        // For tracking if updates have been made
+        public DateTime? LastUpdated { get; set; }
+        
+        // For staff notes or updates
+        public string? StaffNotes { get; set; }
+        
+        // For image uploads
+        public string? ImageUrl { get; set; }
         
         // Navigation properties
         public virtual Homeowner? Homeowner { get; set; }

@@ -32,6 +32,35 @@
             scrollbar-width: thin;
             scrollbar-color: #c5c5c5 #f1f1f1;
         }
+        
+        /* Card hover effect for luxury theme */
+        .card-hover {
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.2);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+        
+        /* Override some colors for luxury theme */
+        .jumbotron.homeowner-gradient {
+            background: linear-gradient(135deg, #2563EB 0%, #1E40AF 100%);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        .text-gray-800 {
+            color: #f8fafc !important;  /* Light color for headings on dark background */
+        }
+        
+        .text-gray-600 {
+            color: #94a3b8 !important;  /* Lighter gray for better contrast */
+        }
     </style>
 }
 
@@ -41,7 +70,12 @@
     var announcements = ViewBag.Announcements as List<HomeownersSubdivision.Models.Announcement>;
 }
 
-<div class="container mx-auto px-4 py-8">
+@if (ViewData["UseLuxuryBackground"] is bool useLuxuryBackground && useLuxuryBackground)
+{
+    @await Html.PartialAsync("_LuxuryBackground")
+}
+
+<div class="container mx-auto px-4 py-8 luxury-page-container">
     <div class="jumbotron homeowner-gradient mb-6 rounded-lg p-8">
         <div class="container mx-auto">
             <h1 class="text-4xl font-heading font-bold mb-2">
@@ -57,15 +91,15 @@
             <h2 class="text-2xl font-bold text-gray-800">
                 <i class="bi bi-megaphone-fill mr-2"></i>Announcements
             </h2>
-            <a href="@Url.Action("Index", "Announcements")" class="text-blue-600 hover:underline">
+            <a href="@Url.Action("Index", "Announcements")" class="text-blue-200 hover:text-blue-100">
                 View All <i class="bi bi-arrow-right ml-1"></i>
             </a>
         </div>
 
         @if (announcements == null || !announcements.Any())
         {
-            <div class="bg-gray-100 rounded-lg p-6 text-center">
-                <p class="text-gray-600">No announcements available at this time.</p>
+            <div class="bg-gray-800 bg-opacity-50 rounded-lg p-6 text-center">
+                <p class="text-gray-300">No announcements available at this time.</p>
             </div>
         }
         else
@@ -74,42 +108,40 @@
                 <div class="grid grid-cols-1 gap-4">
                     @foreach (var item in announcements.OrderByDescending(a => a.PublishDate))
                     {
-                        <div class="bg-white shadow-md rounded-lg overflow-hidden">
-                            <div class="p-6">
-                                <h3 class="text-xl font-semibold text-gray-800 mb-2">
-                                    <a href="@Url.Action("Details", "Announcements", new { id = item.Id })" class="hover:text-blue-600">
-                                        @item.Title
-                                    </a>
-                                </h3>
-                                
-                                <div class="text-sm text-gray-500 mb-3">
-                                    <span>
-                                        <i class="bi bi-calendar mr-1"></i>
-                                        @(item.PublishDate.ToString("MMMM d, yyyy"))
-                                    </span>
-                                    <span class="mx-2">•</span>
-                                    <span>
-                                        <i class="bi bi-person mr-1"></i>
-                                        @if (item.Creator != null)
-                                        {
-                                            @(item.Creator.FirstName + " " + item.Creator.LastName)
-                                        }
-                                        else
-                                        {
-                                            <span>Admin</span>
-                                        }
-                                    </span>
-                                </div>
-                                
-                                <div class="text-gray-700 mb-4 line-clamp-3">
-                                    @Html.Raw(item.Content.Length > 150 ? item.Content.Substring(0, 150) + "..." : item.Content)
-                                </div>
-                                
-                                <div class="text-right">
-                                    <a href="@Url.Action("Details", "Announcements", new { id = item.Id })" class="text-blue-600 hover:underline">
-                                        Read more
-                                    </a>
-                                </div>
+                        <div class="announcements-card p-6">
+                            <h3 class="text-xl font-semibold text-gray-900 mb-2">
+                                <a href="@Url.Action("Details", "Announcements", new { id = item.Id })" class="hover:text-blue-600">
+                                    @item.Title
+                                </a>
+                            </h3>
+                            
+                            <div class="text-sm text-gray-500 mb-3">
+                                <span>
+                                    <i class="bi bi-calendar mr-1"></i>
+                                    @(item.PublishDate.ToString("MMMM d, yyyy"))
+                                </span>
+                                <span class="mx-2">•</span>
+                                <span>
+                                    <i class="bi bi-person mr-1"></i>
+                                    @if (item.Creator != null)
+                                    {
+                                        @(item.Creator.FirstName + " " + item.Creator.LastName)
+                                    }
+                                    else
+                                    {
+                                        <span>Admin</span>
+                                    }
+                                </span>
+                            </div>
+                            
+                            <div class="text-gray-700 mb-4 line-clamp-3">
+                                @Html.Raw(item.Content.Length > 150 ? item.Content.Substring(0, 150) + "..." : item.Content)
+                            </div>
+                            
+                            <div class="text-right">
+                                <a href="@Url.Action("Details", "Announcements", new { id = item.Id })" class="text-blue-600 hover:underline">
+                                    Read more
+                                </a>
                             </div>
                         </div>
                     }
@@ -120,17 +152,17 @@
 
     <!-- Dashboard Cards -->
     <h2 class="text-2xl font-bold text-gray-800 mb-4">Quick Actions</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
         <!-- My Profile Card -->
-        <div class="bg-white rounded-lg shadow-sm overflow-hidden card-hover">
+        <div class="card-hover rounded-lg shadow-sm overflow-hidden">
             <div class="p-6">
                 <div class="flex flex-col items-center mb-4">
                     <i class="bi bi-person-circle text-purple-600 text-4xl mb-3"></i>
-                    <h3 class="text-xl font-semibold mb-2">My Profile</h3>
-                    <p class="text-gray-600 text-center">Update your personal information and settings.</p>
+                    <h3 class="text-xl font-semibold mb-2 text-gray-900">My Profile</h3>
+                    <p class="text-gray-700 text-center">Update your personal information and settings.</p>
                 </div>
                 <div class="mt-4">
-                    <a href="@Url.Action("Profile", "Account")" class="btn-purple block text-center py-2 px-4 rounded">
+                    <a href="@Url.Action("Profile", "Account")" class="luxury-button w-full block text-center py-2 px-4 rounded">
                         <i class="bi bi-pencil-square mr-1"></i> Edit Profile
                     </a>
                 </div>
@@ -138,15 +170,15 @@
         </div>
         
         <!-- Property Information Card -->
-        <div class="bg-white rounded-lg shadow-sm overflow-hidden card-hover">
+        <div class="card-hover rounded-lg shadow-sm overflow-hidden">
             <div class="p-6">
                 <div class="flex flex-col items-center mb-4">
-                    <i class="bi bi-house-door text-primary text-4xl mb-3"></i>
-                    <h3 class="text-xl font-semibold mb-2">My Property</h3>
-                    <p class="text-gray-600 text-center">View and manage your property information.</p>
+                    <i class="bi bi-house-door text-blue-600 text-4xl mb-3"></i>
+                    <h3 class="text-xl font-semibold mb-2 text-gray-900">My Property</h3>
+                    <p class="text-gray-700 text-center">View and manage your property information.</p>
                 </div>
                 <div class="mt-4">
-                    <a href="@Url.Action("MyProperty", "Home")" class="btn-primary block text-center py-2 px-4 rounded">
+                    <a href="@Url.Action("MyProperty", "Home")" class="luxury-button w-full block text-center py-2 px-4 rounded">
                         View Details
                     </a>
                 </div>
@@ -154,15 +186,15 @@
         </div>
 
         <!-- Maintenance Request Card -->
-        <div class="bg-white rounded-lg shadow-sm overflow-hidden card-hover">
+        <div class="card-hover rounded-lg shadow-sm overflow-hidden">
             <div class="p-6">
                 <div class="flex flex-col items-center mb-4">
-                    <i class="bi bi-tools text-warning text-4xl mb-3"></i>
-                    <h3 class="text-xl font-semibold mb-2">Maintenance</h3>
-                    <p class="text-gray-600 text-center">Submit and track maintenance requests.</p>
+                    <i class="bi bi-tools text-amber-500 text-4xl mb-3"></i>
+                    <h3 class="text-xl font-semibold mb-2 text-gray-900">Maintenance</h3>
+                    <p class="text-gray-700 text-center">Submit and track maintenance requests.</p>
                 </div>
                 <div class="mt-4">
-                    <a href="@Url.Action("RequestService", "Maintenance")" class="btn-warning block text-center py-2 px-4 rounded">
+                    <a href="@Url.Action("RequestService", "Maintenance")" class="luxury-button w-full block text-center py-2 px-4 rounded">
                         Request Service
                     </a>
                 </div>
@@ -170,16 +202,32 @@
         </div>
 
         <!-- Payments Card -->
-        <div class="bg-white rounded-lg shadow-sm overflow-hidden card-hover">
+        <div class="card-hover rounded-lg shadow-sm overflow-hidden">
             <div class="p-6">
                 <div class="flex flex-col items-center mb-4">
-                    <i class="bi bi-credit-card text-success text-4xl mb-3"></i>
-                    <h3 class="text-xl font-semibold mb-2">Payments</h3>
-                    <p class="text-gray-600 text-center">View payment history and make payments.</p>
+                    <i class="bi bi-credit-card text-emerald-600 text-4xl mb-3"></i>
+                    <h3 class="text-xl font-semibold mb-2 text-gray-900">Payments</h3>
+                    <p class="text-gray-700 text-center">View payment history and make payments.</p>
                 </div>
                 <div class="mt-4">
-                    <a href="@Url.Action("MyBills", "Billing")" class="btn-success block text-center py-2 px-4 rounded">
+                    <a href="@Url.Action("MyBills", "Billing")" class="luxury-button w-full block text-center py-2 px-4 rounded">
                         Manage Payments
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Feedback Card -->
+        <div class="card-hover rounded-lg shadow-sm overflow-hidden">
+            <div class="p-6">
+                <div class="flex flex-col items-center mb-4">
+                    <i class="bi bi-chat-dots text-indigo-600 text-4xl mb-3"></i>
+                    <h3 class="text-xl font-semibold mb-2 text-gray-900">Feedback</h3>
+                    <p class="text-gray-700 text-center">Submit feedback or report issues.</p>
+                </div>
+                <div class="mt-4">
+                    <a href="@Url.Action("Create", "Feedback")" class="luxury-button w-full block text-center py-2 px-4 rounded">
+                        Submit Feedback
                     </a>
                 </div>
             </div>

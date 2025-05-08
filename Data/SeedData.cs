@@ -263,44 +263,44 @@ namespace HomeownersSubdivision.Data
                 context.SaveChanges();
 
                 // Add maintenance requests
-                var maintenanceRequests = new List<MaintenanceRequest>
+                var maintenanceRequests = new List<ServiceRequest>
                 {
-                    new MaintenanceRequest
+                    new ServiceRequest
                     {
                         HomeownerId = homeowners[0].Id,
                         Title = "Street Light Out",
                         Description = "The street light in front of my house (123 Main St) is not working",
-                        Status = MaintenanceStatus.Completed,
+                        Status = ServiceRequestStatus.Completed,
                         Priority = Priority.Medium,
                         SubmissionDate = DateTime.Parse("2023-05-10"),
                         CompletionDate = DateTime.Parse("2023-05-15"),
                         AssignedToId = staffUser.Id
                     },
-                    new MaintenanceRequest
+                    new ServiceRequest
                     {
                         HomeownerId = homeowners[1].Id,
                         Title = "Pothole on Oak Ave",
                         Description = "There is a large pothole developing on Oak Ave near house #456",
-                        Status = MaintenanceStatus.InProgress,
+                        Status = ServiceRequestStatus.InProgress,
                         Priority = Priority.High,
                         SubmissionDate = DateTime.Parse("2023-06-01"),
                         AssignedToId = staffUser.Id
                     },
-                    new MaintenanceRequest
+                    new ServiceRequest
                     {
                         HomeownerId = homeowners[2].Id,
                         Title = "Playground Equipment Damage",
                         Description = "The slide at the community playground appears to be cracked",
-                        Status = MaintenanceStatus.New,
+                        Status = ServiceRequestStatus.New,
                         Priority = Priority.Medium,
                         SubmissionDate = DateTime.Parse("2023-06-05")
                     },
-                    new MaintenanceRequest
+                    new ServiceRequest
                     {
                         HomeownerId = homeowners[3].Id,
                         Title = "Fallen Tree Branch",
                         Description = "A large tree branch has fallen on the walking path behind Cedar Ln",
-                        Status = MaintenanceStatus.Completed,
+                        Status = ServiceRequestStatus.Completed,
                         Priority = Priority.Low,
                         SubmissionDate = DateTime.Parse("2023-05-20"),
                         CompletionDate = DateTime.Parse("2023-05-21"),
@@ -308,7 +308,7 @@ namespace HomeownersSubdivision.Data
                     }
                 };
 
-                context.MaintenanceRequests.AddRange(maintenanceRequests);
+                context.ServiceRequests.AddRange(maintenanceRequests);
                 context.SaveChanges();
             }
         }

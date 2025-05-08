@@ -6,32 +6,151 @@
                           Context.Session.GetString("UserRole") == "Staff";
 }
 
-<div class="container mx-auto px-4 py-8">
-    <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold text-gray-800">Announcements</h1>
+@await Html.PartialAsync("_LuxuryBackground")
+
+<style>
+    .main-heading {
+        display: flex;
+        align-items: center;
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(to right, #1a1a2e, #3366FF);
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        color: white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .main-heading i {
+        font-size: 1.75rem;
+        margin-right: 0.75rem;
+        color: #6889F7;
+    }
+    
+    .admin-card {
+        background-color: white;
+        border-radius: 0.5rem;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+    
+    .admin-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .admin-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.5rem 1rem;
+        border-radius: 0.375rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    
+    .admin-button-primary {
+        background: linear-gradient(to right, #3366FF, #4D76E1);
+        color: white;
+    }
+    
+    .admin-button-primary:hover {
+        background: linear-gradient(to right, #4D76E1, #6889F7);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .add-announcement-button {
+        background: linear-gradient(to right, #3366FF, #4D76E1);
+        color: white;
+        padding: 0.5rem 1.25rem;
+        border-radius: 0.5rem;
+        font-weight: 600;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+    
+    .add-announcement-button:hover {
+        background: linear-gradient(to right, #4D76E1, #6889F7);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+    }
+    
+    .announcement-card {
+        background-color: white;
+        border-radius: 0.5rem;
+        padding: 1.5rem;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+    
+    .announcement-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .announcement-title {
+        color: #1a1a2e;
+        font-weight: 700;
+        transition: all 0.2s ease;
+    }
+    
+    .announcement-title:hover {
+        color: #3366FF;
+    }
+    
+    .action-link {
+        color: #3366FF;
+        transition: all 0.2s ease;
+    }
+    
+    .action-link:hover {
+        color: #4D76E1;
+        text-decoration: underline;
+    }
+    
+    .delete-link {
+        color: #e53e3e;
+        transition: all 0.2s ease;
+    }
+    
+    .delete-link:hover {
+        color: #c53030;
+    }
+</style>
+
+<div class="container mx-auto px-4 py-8 luxury-page-container announcements-container">
+    <div class="main-heading">
+        <i class="fas fa-bullhorn"></i> Announcements
+    </div>
+
+    <div class="flex justify-end mb-6">
         @if (isAdminOrStaff)
         {
-            <a href="@Url.Action("Create")" class="btn-primary py-2 px-4 rounded">
-                <i class="bi bi-plus-circle mr-2"></i>New Announcement
+            <a href="@Url.Action("Create")" class="btn-luxury flex items-center">
+                <i class="fas fa-plus mr-2"></i> New Announcement
             </a>
         }
     </div>
 
     @if (TempData["SuccessMessage"] != null)
     {
-        <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4" role="alert">
+        <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6 rounded-lg shadow-md" role="alert">
             <p>@TempData["SuccessMessage"]</p>
         </div>
     }
 
     @if (!Model.Any())
     {
-        <div class="bg-gray-100 rounded-lg p-6 text-center">
+        <div class="admin-card p-8 text-center">
             <p class="text-gray-600 text-lg">No announcements available.</p>
             @if (isAdminOrStaff)
             {
-                <p class="mt-2">
-                    <a href="@Url.Action("Create")" class="text-blue-600 hover:underline">
+                <p class="mt-3">
+                    <a href="@Url.Action("Create")" class="action-link">
                         Create the first announcement
                     </a>
                 </p>
@@ -40,36 +159,35 @@
     }
     else
     {
-        <div class="grid grid-cols-1 gap-6">
+        <div class="grid grid-cols-1 gap-8">
             @foreach (var item in Model.OrderByDescending(a => a.PublishDate))
             {
-                <div class="bg-white shadow-md rounded-lg overflow-hidden border border-gray-200 transition-shadow hover:shadow-lg">
-                    <div class="p-6">
+                <div class="announcement-card">
                         <div class="flex justify-between items-start">
-                            <h2 class="text-xl font-semibold text-gray-800 mb-1">
-                                <a href="@Url.Action("Details", new { id = item.Id })" class="hover:text-blue-600">
+                        <h2 class="text-2xl font-semibold mb-2">
+                            <a href="@Url.Action("Details", new { id = item.Id })" class="announcement-title">
                                     @item.Title
                                 </a>
                             </h2>
                             
                             @if (!item.IsPublished)
                             {
-                                <span class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded">Draft</span>
+                            <span class="bg-yellow-100 text-yellow-800 text-xs font-medium px-3 py-1 rounded-full shadow-sm">Draft</span>
                             }
                             else if (item.ExpireDate != null && item.ExpireDate < DateTime.Today)
                             {
-                                <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded">Expired</span>
+                            <span class="bg-red-100 text-red-800 text-xs font-medium px-3 py-1 rounded-full shadow-sm">Expired</span>
                             }
                         </div>
                         
-                        <div class="text-sm text-gray-500 mb-3">
+                    <div class="text-sm text-gray-600 mb-4 pb-3 border-b border-gray-200">
                             <span>
-                                <i class="bi bi-calendar mr-1"></i>
+                            <i class="fas fa-calendar-alt mr-1"></i>
                                 @(item.PublishDate.ToString("MMMM d, yyyy"))
                             </span>
                             <span class="mx-2">•</span>
                             <span>
-                                <i class="bi bi-person mr-1"></i>
+                            <i class="fas fa-user mr-1"></i>
                                 @if (item.Creator != null)
                                 {
                                     @(item.Creator.FirstName + " " + item.Creator.LastName)
@@ -81,7 +199,7 @@
                             </span>
                         </div>
                         
-                        <div class="text-gray-700 mb-4">
+                    <div class="text-gray-700 mb-5">
                             @{
                                 var preview = item.Content.Length > 200 
                                     ? item.Content.Substring(0, 200) + "..." 
@@ -91,22 +209,21 @@
                         </div>
                         
                         <div class="flex justify-between items-center mt-4">
-                            <a href="@Url.Action("Details", new { id = item.Id })" class="text-blue-600 hover:underline">
-                                Read more <i class="bi bi-arrow-right ml-1"></i>
+                        <a href="@Url.Action("Details", new { id = item.Id })" class="action-link font-medium">
+                            Read more <i class="fas fa-arrow-right ml-1"></i>
                             </a>
                             
                             @if (isAdminOrStaff)
                             {
-                                <div class="flex items-center space-x-2">
-                                    <a href="@Url.Action("Edit", new { id = item.Id })" class="text-blue-600 hover:text-blue-800">
-                                        <i class="bi bi-pencil"></i>
+                            <div class="flex items-center space-x-3">
+                                <a href="@Url.Action("Edit", new { id = item.Id })" class="action-link" title="Edit">
+                                    <i class="fas fa-edit"></i>
                                     </a>
-                                    <a href="@Url.Action("Delete", new { id = item.Id })" class="text-red-600 hover:text-red-800">
-                                        <i class="bi bi-trash"></i>
+                                <a href="@Url.Action("Delete", new { id = item.Id })" class="delete-link" title="Delete">
+                                    <i class="fas fa-trash"></i>
                                     </a>
                                 </div>
                             }
-                        </div>
                     </div>
                 </div>
             }

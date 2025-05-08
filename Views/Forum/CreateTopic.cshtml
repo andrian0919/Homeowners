@@ -1,0 +1,96 @@
+@model HomeownersSubdivision.ViewModels.CreateTopicViewModel
+
+@{
+    ViewData["Title"] = "Create New Topic";
+}
+
+<div class="container mx-auto px-4 py-8">
+    <div class="mb-6">
+        <nav class="flex mb-3" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                <li class="inline-flex items-center">
+                    <a href="@Url.Action("Index", "Home")" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-indigo-600">
+                        <svg class="mr-2 w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+                        </svg>
+                        Home
+                    </a>
+                </li>
+                <li>
+                    <div class="flex items-center">
+                        <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <a href="@Url.Action("Index", "Forum")" class="ml-1 text-sm font-medium text-gray-700 hover:text-indigo-600 md:ml-2">
+                            Forum
+                        </a>
+                    </div>
+                </li>
+                <li>
+                    <div class="flex items-center">
+                        <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <a href="@Url.Action("Category", "Forum", new { id = Model.CategoryId })" class="ml-1 text-sm font-medium text-gray-700 hover:text-indigo-600 md:ml-2">
+                            @ViewBag.CategoryName
+                        </a>
+                    </div>
+                </li>
+                <li aria-current="page">
+                    <div class="flex items-center">
+                        <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2">Create New Topic</span>
+                    </div>
+                </li>
+            </ol>
+        </nav>
+
+        <h1 class="text-3xl font-bold text-gray-800 mb-2">Create New Topic</h1>
+        <p class="text-gray-600">in @ViewBag.CategoryName</p>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+        <form method="post" asp-controller="Forum" asp-action="CreateTopic" class="p-6">
+            <div asp-validation-summary="ModelOnly" class="text-red-500 mb-4"></div>
+            
+            <input type="hidden" asp-for="CategoryId" />
+            
+            <div class="mb-6">
+                <label asp-for="Title" class="block text-sm font-medium text-gray-700 mb-1">Topic Title</label>
+                <input asp-for="Title" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="Enter a descriptive title" />
+                <span asp-validation-for="Title" class="text-red-500 text-sm mt-1"></span>
+            </div>
+            
+            <div class="mb-6">
+                <label asp-for="Description" class="block text-sm font-medium text-gray-700 mb-1">Short Description (Optional)</label>
+                <input asp-for="Description" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="Enter a short description" />
+                <span asp-validation-for="Description" class="text-red-500 text-sm mt-1"></span>
+            </div>
+            
+            <div class="mb-6">
+                <label asp-for="Content" class="block text-sm font-medium text-gray-700 mb-1">Content</label>
+                <textarea asp-for="Content" rows="10" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="Enter your post content here..."></textarea>
+                <span asp-validation-for="Content" class="text-red-500 text-sm mt-1"></span>
+                <p class="mt-2 text-sm text-gray-500">You can use basic HTML formatting in your post.</p>
+            </div>
+            
+            <div class="flex items-center justify-between">
+                <a href="@Url.Action("Category", "Forum", new { id = Model.CategoryId })" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    Cancel
+                </a>
+                <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                    </svg>
+                    Create Topic
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+} 

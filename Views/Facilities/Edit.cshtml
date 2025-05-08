@@ -3,90 +3,78 @@
     ViewData["Title"] = "Edit Facility";
 }
 
-<div class="container mt-4">
-    <div class="row">
-        <div class="col-md-8 offset-md-2">
-            <div class="card">
-                <div class="card-header">
-                    <h3>Edit Facility</h3>
+<div class="max-w-3xl mx-auto px-4 py-8">
+    <div class="bg-white rounded-lg shadow-lg">
+        <div class="border-b px-6 py-4">
+            <h3 class="text-xl font-bold text-gray-800">Edit Facility</h3>
+        </div>
+        <div class="px-6 py-6">
+            <form asp-action="Edit" class="space-y-6">
+                <div asp-validation-summary="ModelOnly" class="text-red-500 mb-4"></div>
+                <input type="hidden" asp-for="Id" />
+
+                <div>
+                    <label asp-for="Name" class="block text-sm font-medium text-gray-700 mb-1">Facility Name</label>
+                    <input asp-for="Name" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
+                    <span asp-validation-for="Name" class="text-red-500 text-sm mt-1"></span>
                 </div>
-                <div class="card-body">
-                    <form asp-action="Edit">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <input type="hidden" asp-for="Id" />
-                        
-                        <div class="form-group mb-3">
-                            <label asp-for="Name" class="control-label">Facility Name</label>
-                            <input asp-for="Name" class="form-control" />
-                            <span asp-validation-for="Name" class="text-danger"></span>
-                        </div>
-                        
-                        <div class="form-group mb-3">
-                            <label asp-for="Type" class="control-label">Facility Type</label>
-                            <select asp-for="Type" class="form-control" asp-items="Html.GetEnumSelectList<HomeownersSubdivision.Models.FacilityType>()"></select>
-                            <span asp-validation-for="Type" class="text-danger"></span>
-                        </div>
-                        
-                        <div class="form-group mb-3">
-                            <label asp-for="Description" class="control-label">Description</label>
-                            <textarea asp-for="Description" class="form-control" rows="3"></textarea>
-                            <span asp-validation-for="Description" class="text-danger"></span>
-                        </div>
-                        
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label asp-for="MaxCapacity" class="control-label">Maximum Capacity</label>
-                                    <input asp-for="MaxCapacity" class="form-control" type="number" min="1" max="1000" />
-                                    <span asp-validation-for="MaxCapacity" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label asp-for="HourlyRate" class="control-label">Hourly Rate</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">$</span>
-                                        <input asp-for="HourlyRate" class="form-control" type="number" step="0.01" min="0" />
-                                    </div>
-                                    <span asp-validation-for="HourlyRate" class="text-danger"></span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label asp-for="OpeningTime" class="control-label">Opening Time</label>
-                                    <input asp-for="OpeningTime" class="form-control" type="time" />
-                                    <span asp-validation-for="OpeningTime" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label asp-for="ClosingTime" class="control-label">Closing Time</label>
-                                    <input asp-for="ClosingTime" class="form-control" type="time" />
-                                    <span asp-validation-for="ClosingTime" class="text-danger"></span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="form-check mb-3">
-                            <input asp-for="IsActive" class="form-check-input" />
-                            <label asp-for="IsActive" class="form-check-label">Is Active</label>
-                            <span asp-validation-for="IsActive" class="text-danger"></span>
-                        </div>
-                        
-                        <div class="form-group d-flex justify-content-between mt-4">
-                            <a asp-action="Index" class="btn btn-secondary">
-                                <i class="fas fa-arrow-left"></i> Back to List
-                            </a>
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-save"></i> Save Changes
-                            </button>
-                        </div>
-                    </form>
+
+                <div>
+                    <label asp-for="Type" class="block text-sm font-medium text-gray-700 mb-1">Facility Type</label>
+                    <select asp-for="Type" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" asp-items="Html.GetEnumSelectList<HomeownersSubdivision.Models.FacilityType>()"></select>
+                    <span asp-validation-for="Type" class="text-red-500 text-sm mt-1"></span>
                 </div>
-            </div>
+
+                <div>
+                    <label asp-for="Description" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                    <textarea asp-for="Description" rows="3" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></textarea>
+                    <span asp-validation-for="Description" class="text-red-500 text-sm mt-1"></span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label asp-for="MaxCapacity" class="block text-sm font-medium text-gray-700 mb-1">Maximum Capacity</label>
+                        <input asp-for="MaxCapacity" type="number" min="1" max="1000" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
+                        <span asp-validation-for="MaxCapacity" class="text-red-500 text-sm mt-1"></span>
+                    </div>
+                    <div>
+                        <label asp-for="HourlyRate" class="block text-sm font-medium text-gray-700 mb-1">Hourly Rate</label>
+                        <div class="flex rounded-md shadow-sm">
+                            <span class="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">$</span>
+                            <input asp-for="HourlyRate" type="number" step="0.01" min="0" class="block w-full rounded-none rounded-r-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
+                        </div>
+                        <span asp-validation-for="HourlyRate" class="text-red-500 text-sm mt-1"></span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label asp-for="OpeningTime" class="block text-sm font-medium text-gray-700 mb-1">Opening Time</label>
+                        <input asp-for="OpeningTime" type="time" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
+                        <span asp-validation-for="OpeningTime" class="text-red-500 text-sm mt-1"></span>
+                    </div>
+                    <div>
+                        <label asp-for="ClosingTime" class="block text-sm font-medium text-gray-700 mb-1">Closing Time</label>
+                        <input asp-for="ClosingTime" type="time" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
+                        <span asp-validation-for="ClosingTime" class="text-red-500 text-sm mt-1"></span>
+                    </div>
+                </div>
+
+                <div class="flex items-center">
+                    <input asp-for="IsActive" type="checkbox" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500" />
+                    <label asp-for="IsActive" class="ml-2 block text-sm text-gray-700">Is Active</label>
+                    <span asp-validation-for="IsActive" class="text-red-500 text-sm ml-2"></span>
+                </div>
+
+                <div class="flex justify-between mt-8">
+                    <a asp-action="Index" class="inline-flex items-center px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-md shadow-sm transition duration-200">
+                        <i class="fas fa-arrow-left mr-2"></i> Back to List
+                    </a>
+                    <button type="submit" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md shadow-sm transition duration-200">
+                        <i class="fas fa-save mr-2"></i> Save Changes
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

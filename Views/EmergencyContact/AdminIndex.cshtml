@@ -1,0 +1,198 @@
+@using System.Linq
+@model IEnumerable<HomeownersSubdivision.Models.EmergencyContact>
+@using System.Linq
+
+@await Html.PartialAsync("_LuxuryBackground")
+
+<style>
+    .main-heading {
+        display: flex;
+        align-items: center;
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(to right, #1a1a2e, #3366FF);
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        color: white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .main-heading i {
+        font-size: 1.75rem;
+        margin-right: 0.75rem;
+        color: #6889F7;
+    }
+    .luxury-page-container {
+        position: relative;
+        z-index: 1;
+    }
+    .admin-card {
+        background-color: white;
+        border-radius: 0.5rem;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+</style>
+
+<div class="container mx-auto px-4 py-8 luxury-page-container">
+    <div class="main-heading">
+        <i class="fas fa-address-book"></i> Manage Emergency Contacts
+    </div>
+    <p class="text-gray-200 mb-6">Review and manage emergency contacts for all homeowners</p>
+    <div class="flex flex-col md:flex-row justify-end mb-6 gap-3">
+        <select id="typeFilter" class="bg-white/80 border border-blue-200 rounded-md py-2 px-3 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 sm:text-sm text-gray-700">
+            <option value="all">All Types</option>
+            <option value="family">Family</option>
+            <option value="friend">Friend</option>
+            <option value="neighbor">Neighbor</option>
+            <option value="medical">Medical</option>
+            <option value="security">Security</option>
+            <option value="other">Other</option>
+        </select>
+        <select id="statusFilter" class="bg-white/80 border border-blue-200 rounded-md py-2 px-3 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 sm:text-sm text-gray-700">
+            <option value="all">All Status</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+        </select>
+        <a href="/EmergencyContact/Create" class="btn-luxury flex items-center">
+            <i class="fas fa-plus mr-2"></i> Add Emergency Contact
+        </a>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="mb-4 bg-green-50 border-l-4 border-green-400 p-4 rounded-md">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <svg class="h-5 w-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm text-green-700">@TempData["SuccessMessage"]</p>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null && !TempData["ErrorMessage"].ToString().Contains("homeowner profile"))
+    {
+        <div class="mb-4 bg-red-50 border-l-4 border-red-400 p-4 rounded-md">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm text-red-700">@TempData["ErrorMessage"]</p>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="admin-card p-6 mb-6 text-center">
+            <i class="fas fa-address-book text-4xl text-primary mb-2"></i>
+            <p class="text-lg text-blue-900">No emergency contacts found in the system.</p>
+        </div>
+    }
+    else
+    {
+        <div class="admin-card overflow-x-auto p-0">
+            <table class="min-w-full divide-y divide-blue-200">
+                <thead class="bg-blue-50/80">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">Homeowner</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">Name</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">Phone</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">Email</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">Type</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">Relationship</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">Status</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white/80 divide-y divide-blue-100">
+                    @foreach (var item in Model)
+                    {
+                        <tr class="hover:bg-blue-50/60 transition">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-blue-900">
+                                @item.Homeowner.FirstName @item.Homeowner.LastName
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-900 font-semibold">@item.Name</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-900">@item.PhoneNumber</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-900">@item.Email</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                @{
+                                    string badgeColor = item.Type switch
+                                    {
+                                        ContactType.Family => "bg-blue-100 text-blue-800",
+                                        ContactType.Friend => "bg-indigo-100 text-indigo-800",
+                                        ContactType.Neighbor => "bg-gray-100 text-gray-800",
+                                        ContactType.Medical => "bg-red-100 text-red-800",
+                                        ContactType.Security => "bg-yellow-100 text-yellow-800",
+                                        _ => "bg-purple-100 text-purple-800"
+                                    };
+                                }
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full @badgeColor">
+                                    @item.Type
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-blue-900">@item.Relationship</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                @if (item.IsActive)
+                                {
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                        Active
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                                        Inactive
+                                    </span>
+                                }
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                <div class="flex space-x-2">
+                                    <a href="/EmergencyContact/Edit/@item.Id" class="btn-outline-luxury flex items-center">
+                                        <i class="fas fa-edit mr-1"></i> Edit
+                                    </a>
+                                    <a href="/EmergencyContact/Details/@item.Id" class="btn-outline-luxury flex items-center">
+                                        <i class="fas fa-eye mr-1"></i> Details
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const typeFilter = document.getElementById('typeFilter');
+            const statusFilter = document.getElementById('statusFilter');
+            const rows = document.querySelectorAll('tbody tr');
+            function applyFilters() {
+                const typeValue = typeFilter.value;
+                const statusValue = statusFilter.value;
+                rows.forEach(row => {
+                    const rowType = row.getAttribute('data-type');
+                    const rowStatus = row.getAttribute('data-status');
+                    let typeMatch = typeValue === 'all' || rowType === typeValue;
+                    let statusMatch = statusValue === 'all' || rowStatus === statusValue;
+                    row.style.display = typeMatch && statusMatch ? '' : 'none';
+                });
+            }
+            typeFilter.addEventListener('change', applyFilters);
+            statusFilter.addEventListener('change', applyFilters);
+        });
+    </script>
+} 

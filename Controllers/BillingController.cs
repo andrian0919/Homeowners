@@ -9,6 +9,8 @@ using HomeownersSubdivision.Data;
 using HomeownersSubdivision.Models;
 using Microsoft.AspNetCore.Authorization;
 using HomeownersSubdivision.Services;
+using HomeownersSubdivision.ViewModels;
+using Microsoft.AspNetCore.Http;
 
 namespace HomeownersSubdivision.Controllers
 {
@@ -210,17 +212,11 @@ namespace HomeownersSubdivision.Controllers
         }
 
         // GET: Billing/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id, bool fromNotification = false)
         {
             if (id == null)
             {
                 return NotFound();
-            }
-
-            var currentUser = _userService.GetCurrentUser(HttpContext);
-            if (currentUser == null)
-            {
-                return RedirectToAction("Login", "Account");
             }
 
             var bill = await _context.Bills
@@ -234,21 +230,33 @@ namespace HomeownersSubdivision.Controllers
                 return NotFound();
             }
 
-            // Check if the user has permission to view this bill
-            if (!User.IsInRole("Administrator") && !User.IsInRole("Staff") && bill.UserId != currentUser.Id)
+            // If the user is a homeowner and this bill belongs to them
+            var currentUser = _userService.GetCurrentUser(HttpContext);
+            if (currentUser != null && currentUser.Role == UserRole.Homeowner)
+            {
+                // If this bill doesn't belong to the current homeowner, deny access
+                if (bill.UserId != currentUser.Id)
             {
                 return Forbid();
             }
 
-            // Get related payment methods for quick pay if homeowner
-            if (User.IsInRole("Homeowner") && bill.UserId == currentUser.Id)
-            {
-                ViewBag.PaymentMethods = await _context.PaymentMethods
-                    .Where(pm => pm.UserId == currentUser.Id)
-                    .OrderByDescending(pm => pm.IsDefault)
-                    .ThenByDescending(pm => pm.LastUsedDate)
-                    .ToListAsync();
+                // If coming from a notification, show payment options directly
+                if (fromNotification && bill.Status != "Paid")
+                {
+                    return RedirectToAction("Pay", new { id = bill.Id });
+                }
             }
+            
+            // Add payment methods for the dropdown
+                ViewBag.PaymentMethods = await _context.PaymentMethods
+                .Where(pm => pm.UserId == bill.UserId)
+                .Select(pm => new SelectListItem { 
+                    Value = pm.Id.ToString(), 
+                    Text = pm.Type == PaymentMethodType.CreditCard || pm.Type == PaymentMethodType.DebitCard ? 
+                           $"{pm.CardType} ending in {pm.LastFourDigits}" : 
+                           $"{pm.BankName} Account" 
+                })
+                    .ToListAsync();
 
             return View(bill);
         }
@@ -578,8 +586,18 @@ namespace HomeownersSubdivision.Controllers
 
         // GET: Billing/CreateBulk
         [Authorize(Roles = "Administrator,Staff")]
-        public IActionResult CreateBulk()
+        public async Task<IActionResult> CreateBulk()
         {
+            // Get all homeowners
+            var homeowners = await _context.Users
+                .Where(u => u.Role == UserRole.Homeowner)
+                .OrderBy(u => u.LastName)
+                .ThenBy(u => u.FirstName)
+                .ToListAsync();
+
+            ViewBag.Homeowners = homeowners;
+            ViewBag.BillTypes = new List<string> { "Association Dues", "Maintenance Fee", "Special Assessment", "Fine", "Other" };
+
             return View();
         }
 
@@ -591,6 +609,16 @@ namespace HomeownersSubdivision.Controllers
         {
             if (!ModelState.IsValid)
             {
+                // Reinitialize ViewBag properties for the view
+                var homeowners = await _context.Users
+                    .Where(u => u.Role == UserRole.Homeowner)
+                    .OrderBy(u => u.LastName)
+                    .ThenBy(u => u.FirstName)
+                    .ToListAsync();
+
+                ViewBag.Homeowners = homeowners;
+                ViewBag.BillTypes = new List<string> { "Association Dues", "Maintenance Fee", "Special Assessment", "Fine", "Other" };
+                
                 return View(model);
             }
 
@@ -608,7 +636,7 @@ namespace HomeownersSubdivision.Controllers
                         DueDate = model.DueDate,
                         Description = model.Description,
                         Type = model.BillType,
-                        Status = model.Status,
+                        Status = "Unpaid",
                         IssueDate = DateTime.Now
                     };
                     newBills.Add(bill);
@@ -624,6 +652,16 @@ namespace HomeownersSubdivision.Controllers
             }
             catch (Exception ex)
             {
+                // Reinitialize ViewBag properties for the view
+                var homeowners = await _context.Users
+                    .Where(u => u.Role == UserRole.Homeowner)
+                    .OrderBy(u => u.LastName)
+                    .ThenBy(u => u.FirstName)
+                    .ToListAsync();
+
+                ViewBag.Homeowners = homeowners;
+                ViewBag.BillTypes = new List<string> { "Association Dues", "Maintenance Fee", "Special Assessment", "Fine", "Other" };
+                
                 ModelState.AddModelError("", $"Error creating bills: {ex.Message}");
                 return View(model);
             }

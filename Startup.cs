@@ -32,6 +32,9 @@ namespace HomeownersSubdivision
 
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<INotificationService, NotificationService>();
+            services.AddScoped<IForumService, ForumService>();
+            services.AddScoped<IReportService, ReportService>();
+            services.AddScoped<DatabaseInitializer>();
 
             services.AddControllersWithViews();
 

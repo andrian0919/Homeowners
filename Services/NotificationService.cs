@@ -75,6 +75,61 @@ namespace HomeownersSubdivision.Services
             }
         }
 
+        public async Task<Notification> CreateNotificationWithLinkAsync(
+            int userId,
+            string title,
+            string message,
+            NotificationType type,
+            string link,
+            NotificationPriority priority = NotificationPriority.Normal,
+            DeliveryMethod deliveryMethod = DeliveryMethod.InApp,
+            int? relatedItemId = null)
+        {
+            try
+            {
+                // Create new notification
+                var notification = new Notification
+                {
+                    UserId = userId,
+                    Title = title,
+                    Message = message,
+                    Type = type,
+                    Priority = priority,
+                    DeliveryMethod = deliveryMethod,
+                    RelatedItemId = relatedItemId,
+                    Link = link,
+                    Status = NotificationStatus.Unread,
+                    CreatedAt = DateTime.Now
+                };
+
+                // Add to database
+                _context.Notifications.Add(notification);
+                await _context.SaveChangesAsync();
+
+                // If the notification should be sent immediately via email or SMS
+                if (deliveryMethod == DeliveryMethod.Email || deliveryMethod == DeliveryMethod.SMS || deliveryMethod == DeliveryMethod.All)
+                {
+                    // Process this notification immediately for email/SMS delivery
+                    if (deliveryMethod == DeliveryMethod.Email || deliveryMethod == DeliveryMethod.All)
+                    {
+                        await SendEmailNotificationAsync(notification);
+                    }
+
+                    if (deliveryMethod == DeliveryMethod.SMS || deliveryMethod == DeliveryMethod.All)
+                    {
+                        await SendSmsNotificationAsync(notification);
+                    }
+                }
+
+                return notification;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error creating notification with link for user {UserId}: {Message}", userId, ex.Message);
+                throw;
+            }
+        }
+
         public async Task<int> CreateNotificationsForRoleAsync(
             UserRole role,
             string title,

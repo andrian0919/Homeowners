@@ -515,7 +515,7 @@ namespace HomeownersSubdivision.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Homeowner")]
-        public async Task<IActionResult> AddPaymentMethod([Bind("Name,Type,LastFourDigits,CardType,ExpirationDate,BankName,AccountNumber,RoutingNumber,IsDefault")] PaymentMethod paymentMethod)
+        public async Task<IActionResult> AddPaymentMethod([Bind("Name,Type,CardNumber,CardType,ExpirationMonth,ExpirationYear,Cvv,BankName,AccountNumber,RoutingNumber,IsDefault,BillingAddress,BillingCity,BillingState,BillingZip,BillingCountry")] PaymentMethod paymentMethod)
         {
             var currentUser = _userService.GetCurrentUser(HttpContext);
             if (currentUser == null)
@@ -523,7 +523,51 @@ namespace HomeownersSubdivision.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
+            // Validate type-specific fields
+            if (paymentMethod.Type == PaymentMethodType.CreditCard || paymentMethod.Type == PaymentMethodType.DebitCard)
+            {
+                if (string.IsNullOrEmpty(paymentMethod.CardNumber))
+                    ModelState.AddModelError("CardNumber", "Card number is required");
+                if (string.IsNullOrEmpty(paymentMethod.CardType))
+                    ModelState.AddModelError("CardType", "Card type is required");
+                if (string.IsNullOrEmpty(paymentMethod.ExpirationMonth) || string.IsNullOrEmpty(paymentMethod.ExpirationYear))
+                    ModelState.AddModelError("ExpirationDate", "Expiration date is required");
+                if (string.IsNullOrEmpty(paymentMethod.Cvv))
+                    ModelState.AddModelError("Cvv", "CVV is required");
+
+                // Set expiration date from month and year
+                if (!string.IsNullOrEmpty(paymentMethod.ExpirationMonth) && !string.IsNullOrEmpty(paymentMethod.ExpirationYear))
+                {
+                    if (int.TryParse(paymentMethod.ExpirationMonth, out int month) && int.TryParse(paymentMethod.ExpirationYear, out int year))
+                    {
+                        paymentMethod.ExpirationDate = new DateTime(year, month, 1).AddMonths(1).AddDays(-1);
+                    }
+                }
+
+                // Set last four digits
+                if (!string.IsNullOrEmpty(paymentMethod.CardNumber) && paymentMethod.CardNumber.Length >= 4)
+                {
+                    paymentMethod.LastFourDigits = paymentMethod.CardNumber.Substring(paymentMethod.CardNumber.Length - 4);
+                }
+            }
+            else if (paymentMethod.Type == PaymentMethodType.BankAccount)
+            {
+                if (string.IsNullOrEmpty(paymentMethod.BankName))
+                    ModelState.AddModelError("BankName", "Bank name is required");
+                if (string.IsNullOrEmpty(paymentMethod.AccountNumber))
+                    ModelState.AddModelError("AccountNumber", "Account number is required");
+                if (string.IsNullOrEmpty(paymentMethod.RoutingNumber))
+                    ModelState.AddModelError("RoutingNumber", "Routing number is required");
+            }
+            else if (paymentMethod.Type == PaymentMethodType.GCash)
+            {
+                if (string.IsNullOrEmpty(paymentMethod.AccountNumber))
+                    ModelState.AddModelError("AccountNumber", "GCash account number is required");
+            }
+
             if (ModelState.IsValid)
+            {
+                try
             {
                 paymentMethod.UserId = currentUser.Id;
                 paymentMethod.CreatedDate = DateTime.Now;
@@ -542,12 +586,41 @@ namespace HomeownersSubdivision.Controllers
                     }
                 }
 
+                    // Clear sensitive data before saving
+                    var cardNumber = paymentMethod.CardNumber; // Store temporarily for last four digits
+                    paymentMethod.CardNumber = null;
+                    paymentMethod.Cvv = null;
+
+                    // Set last four digits if it's a card
+                    if ((paymentMethod.Type == PaymentMethodType.CreditCard || paymentMethod.Type == PaymentMethodType.DebitCard) 
+                        && !string.IsNullOrEmpty(cardNumber))
+                    {
+                        paymentMethod.LastFourDigits = cardNumber.Substring(Math.Max(0, cardNumber.Length - 4));
+                    }
+                    else if (paymentMethod.Type == PaymentMethodType.BankAccount && !string.IsNullOrEmpty(paymentMethod.AccountNumber))
+                    {
+                        paymentMethod.LastFourDigits = paymentMethod.AccountNumber.Substring(Math.Max(0, paymentMethod.AccountNumber.Length - 4));
+                    }
+                    else if (paymentMethod.Type == PaymentMethodType.GCash && !string.IsNullOrEmpty(paymentMethod.AccountNumber))
+                    {
+                        paymentMethod.LastFourDigits = paymentMethod.AccountNumber.Substring(Math.Max(0, paymentMethod.AccountNumber.Length - 4));
+                    }
+
                 _context.Add(paymentMethod);
                 await _context.SaveChangesAsync();
 
                 TempData["SuccessMessage"] = "Payment method added successfully.";
                 return RedirectToAction(nameof(PaymentMethods));
             }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", "An error occurred while saving the payment method. Please try again.");
+                    // Log the error
+                    Console.WriteLine($"Error adding payment method: {ex.Message}");
+                }
+            }
+
+            // If we got this far, something failed, redisplay form
             return View(paymentMethod);
         }
 

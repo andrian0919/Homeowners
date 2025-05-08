@@ -1,0 +1,20 @@
+@model IEnumerable<HomeownersSubdivision.ViewModels.StatViewModel>
+
+<div class="stats-luxury py-16">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold mb-2">@ViewData["StatsTitle"]</h2>
+            <p class="text-lg opacity-80">@ViewData["StatsSubtitle"]</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-@(Model.Count() > 3 ? "4" : Model.Count().ToString()) gap-8">
+            @foreach (var stat in Model)
+            {
+                <div class="stat-luxury">
+                    <i class="@stat.Icon text-5xl mb-4 opacity-80"></i>
+                    <div class="stat-luxury-value">@stat.Value</div>
+                    <div class="stat-luxury-label">@stat.Label</div>
+                </div>
+            }
+        </div>
+    </div>
+</div> 

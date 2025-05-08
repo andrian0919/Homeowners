@@ -26,16 +26,17 @@ namespace HomeownersSubdivision.Controllers
         }
 
         // GET: /Account/Login
-        public IActionResult Login(string returnUrl = null)
+        public IActionResult Login(string? returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
+            ViewData["UseAuthBackground"] = true;
             return View();
         }
 
         // POST: /Account/Login
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(string username, string password, string returnUrl = null)
+        public async Task<IActionResult> Login(string username, string password, string? returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
 
@@ -268,6 +269,7 @@ namespace HomeownersSubdivision.Controllers
         // GET: /Account/Register
         public IActionResult Register()
         {
+            ViewData["UseAuthBackground"] = true;
             return View();
         }
 
@@ -542,7 +544,7 @@ namespace HomeownersSubdivision.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdateAdminProfile(AdminProfileViewModel model, string returnUrl = null)
+        public async Task<IActionResult> UpdateAdminProfile(AdminProfileViewModel model, string? returnUrl = null)
         {
             if (!ModelState.IsValid)
             {
@@ -647,7 +649,7 @@ namespace HomeownersSubdivision.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdateStaffProfile(StaffProfileViewModel model, string returnUrl = null)
+        public async Task<IActionResult> UpdateStaffProfile(StaffProfileViewModel model, string? returnUrl = null)
         {
             if (!ModelState.IsValid)
             {

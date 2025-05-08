@@ -14,6 +14,17 @@ namespace HomeownersSubdivision.Services
             DeliveryMethod deliveryMethod = DeliveryMethod.InApp,
             int? relatedItemId = null);
             
+        // Create a notification for a specific user with a link
+        Task<Notification> CreateNotificationWithLinkAsync(
+            int userId, 
+            string title, 
+            string message, 
+            NotificationType type, 
+            string link,
+            NotificationPriority priority = NotificationPriority.Normal,
+            DeliveryMethod deliveryMethod = DeliveryMethod.InApp,
+            int? relatedItemId = null);
+            
         // Create notifications for all users with a specific role
         Task<int> CreateNotificationsForRoleAsync(
             UserRole role,

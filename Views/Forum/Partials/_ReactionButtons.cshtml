@@ -1,0 +1,82 @@
+@using HomeownersSubdivision.Models
+@model (int postId, int userId, Dictionary<ReactionType, int> reactionSummary, bool hasReacted)
+
+<div class="flex flex-wrap gap-2 mt-2 reaction-buttons" data-post-id="@Model.postId" data-user-id="@Model.userId">
+    <div class="text-sm text-gray-500 mr-2 flex items-center">
+        <span>React:</span>
+    </div>
+    
+    @foreach (ReactionType reaction in Enum.GetValues(typeof(ReactionType)))
+    {
+        string emoji = reaction switch
+        {
+            ReactionType.Like => "👍",
+            ReactionType.Dislike => "👎",
+            ReactionType.Laugh => "😂",
+            ReactionType.Love => "❤️",
+            ReactionType.Thanks => "🙏",
+            ReactionType.Angry => "😡",
+            ReactionType.Wow => "😮",
+            _ => "👍"
+        };
+        
+        string tooltip = reaction.ToString();
+        int count = Model.reactionSummary.ContainsKey(reaction) ? Model.reactionSummary[reaction] : 0;
+        bool active = Model.hasReacted && Model.reactionSummary.ContainsKey(reaction);
+        
+        <button 
+            class="reaction-btn inline-flex items-center px-2 py-1 rounded-full text-sm transition-colors duration-200 @(active ? "bg-blue-100 text-blue-600" : "bg-gray-100 hover:bg-gray-200")"
+            data-reaction-type="@((int)reaction)"
+            title="@tooltip">
+            <span class="mr-1">@emoji</span>
+            <span class="reaction-count">@count</span>
+        </button>
+    }
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const reactionButtons = document.querySelectorAll(".reaction-btn");
+        
+        reactionButtons.forEach(button => {
+            button.addEventListener("click", async function() {
+                const postId = this.closest(".reaction-buttons").dataset.postId;
+                const userId = this.closest(".reaction-buttons").dataset.userId;
+                const reactionType = this.dataset.reactionType;
+                
+                try {
+                    const response = await fetch("/Forum/ToggleReaction", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "RequestVerificationToken": document.querySelector('input[name="__RequestVerificationToken"]').value
+                        },
+                        body: JSON.stringify({ 
+                            postId: postId, 
+                            userId: userId, 
+                            reactionType: reactionType 
+                        })
+                    });
+                    
+                    if (response.ok) {
+                        const result = await response.json();
+                        
+                        // Update reaction count
+                        this.querySelector(".reaction-count").textContent = result.count;
+                        
+                        // Toggle active state
+                        if (result.added) {
+                            this.classList.remove("bg-gray-100", "hover:bg-gray-200");
+                            this.classList.add("bg-blue-100", "text-blue-600");
+                        } else {
+                            this.classList.remove("bg-blue-100", "text-blue-600");
+                            this.classList.add("bg-gray-100", "hover:bg-gray-200");
+                        }
+                    }
+                } catch (error) {
+                    console.error("Error toggling reaction:", error);
+                }
+            });
+        });
+    });
+</script> 

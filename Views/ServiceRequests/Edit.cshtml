@@ -1,0 +1,221 @@
+@model HomeownersSubdivision.ViewModels.EditServiceRequestViewModel
+
+@{
+    ViewData["Title"] = "Edit Service Request";
+}
+
+@await Html.PartialAsync("_LuxuryBackground")
+
+
+<div class="container mx-auto px-4 py-8 luxury-page-container">
+    <div class="mb-6">
+        <nav class="flex mb-3" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                <li class="inline-flex items-center">
+                    <a href="@Url.Action("Index", "Home")" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-indigo-600">
+                        <svg class="mr-2 w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+                        </svg>
+                        Home
+                    </a>
+                </li>
+                <li>
+                    <div class="flex items-center">
+                        <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <a href="@Url.Action("Index", "ServiceRequests")" class="ml-1 text-sm font-medium text-gray-700 hover:text-indigo-600 md:ml-2">
+                            Service Requests
+                        </a>
+                    </div>
+                </li>
+                <li>
+                    <div class="flex items-center">
+                        <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <a href="@Url.Action("Details", new { id = Model.Id })" class="ml-1 text-sm font-medium text-gray-700 hover:text-indigo-600 md:ml-2">
+                            Request #@Model.Id
+                        </a>
+                    </div>
+                </li>
+                <li aria-current="page">
+                    <div class="flex items-center">
+                        <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2">Edit</span>
+                    </div>
+                </li>
+            </ol>
+        </nav>
+
+        <h1 class="text-3xl font-bold text-gray-800 mb-2">Edit Service Request</h1>
+        <p class="text-gray-600">Update service request details and status</p>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+        <form method="post" asp-controller="ServiceRequests" asp-action="Edit" enctype="multipart/form-data" class="p-6">
+            <div asp-validation-summary="ModelOnly" class="text-red-500 mb-4"></div>
+            
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="ImageUrl" />
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label asp-for="Title" class="block text-sm font-medium text-gray-700 mb-1">Title</label>
+                    <input asp-for="Title" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="Enter a brief title describing the issue" />
+                    <span asp-validation-for="Title" class="text-red-500 text-sm mt-1"></span>
+                </div>
+                
+                <div>
+                    <label asp-for="Status" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                    <select asp-for="Status" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                        @foreach (var item in ViewBag.StatusSelectList)
+                        {
+                            <option value="@item.Value" selected="@item.Selected">@item.Text</option>
+                        }
+                    </select>
+                    <span asp-validation-for="Status" class="text-red-500 text-sm mt-1"></span>
+                </div>
+                
+                <div>
+                    <label asp-for="RequestType" class="block text-sm font-medium text-gray-700 mb-1">Request Type</label>
+                    <select asp-for="RequestType" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                        @foreach (var item in ViewBag.RequestTypeSelectList)
+                        {
+                            <option value="@item.Value" selected="@item.Selected">@item.Text</option>
+                        }
+                    </select>
+                    <span asp-validation-for="RequestType" class="text-red-500 text-sm mt-1"></span>
+                </div>
+                
+                <div>
+                    <label asp-for="Priority" class="block text-sm font-medium text-gray-700 mb-1">Priority</label>
+                    <select asp-for="Priority" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                        @foreach (var item in ViewBag.PrioritySelectList)
+                        {
+                            <option value="@item.Value" selected="@item.Selected">@item.Text</option>
+                        }
+                    </select>
+                    <span asp-validation-for="Priority" class="text-red-500 text-sm mt-1"></span>
+                </div>
+                
+                <div>
+                    <label asp-for="AssignedToId" class="block text-sm font-medium text-gray-700 mb-1">Assigned To</label>
+                    <select asp-for="AssignedToId" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                        <option value="">-- Unassigned --</option>
+                        @foreach (var item in Model.StaffMembers)
+                        {
+                            <option value="@item.Value" selected="@item.Selected">@item.Text</option>
+                        }
+                    </select>
+                    <span asp-validation-for="AssignedToId" class="text-red-500 text-sm mt-1"></span>
+                </div>
+            </div>
+            
+            <div class="mt-6">
+                <label asp-for="Description" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                <textarea asp-for="Description" rows="5" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="Please provide a detailed description of the issue..."></textarea>
+                <span asp-validation-for="Description" class="text-red-500 text-sm mt-1"></span>
+            </div>
+            
+            <div class="mt-6">
+                <label asp-for="StaffNotes" class="block text-sm font-medium text-gray-700 mb-1">Staff Notes</label>
+                <textarea asp-for="StaffNotes" rows="3" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="Add notes about actions taken or updates (will be added to the request history)"></textarea>
+                <span asp-validation-for="StaffNotes" class="text-red-500 text-sm mt-1"></span>
+            </div>
+            
+            <div class="mt-6">
+                <label asp-for="NewImage" class="block text-sm font-medium text-gray-700 mb-1">Update Image (Optional)</label>
+                
+                @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                {
+                    <div class="mb-3">
+                        <p class="text-sm text-gray-600 mb-2">Current Image:</p>
+                        <div class="overflow-hidden h-40 w-auto mr-3 bg-gray-100 rounded-md flex items-center justify-center">
+                            <img src="@Model.ImageUrl" alt="Current Image" class="h-full w-auto object-cover" />
+                        </div>
+                    </div>
+                }
+                
+                <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                    <div class="space-y-1 text-center">
+                        <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                            <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <div class="flex text-sm text-gray-600">
+                            <label for="file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                <span>Upload a file</span>
+                                <input id="file-upload" name="NewImage" type="file" class="sr-only" accept="image/*" />
+                            </label>
+                            <p class="pl-1">or drag and drop</p>
+                        </div>
+                        <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+                    </div>
+                </div>
+                <div id="file-preview" class="mt-3 hidden">
+                    <div class="flex items-center">
+                        <div class="overflow-hidden h-16 w-16 mr-3 bg-gray-100 rounded-md flex items-center justify-center">
+                            <img id="preview-image" src="#" alt="Preview" class="h-full w-full object-cover" />
+                        </div>
+                        <div>
+                            <p id="file-name" class="text-sm font-medium text-gray-900"></p>
+                            <button type="button" id="remove-file" class="text-xs text-red-600 hover:text-red-900">Remove</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex items-center justify-between mt-6">
+                <a href="@Url.Action("Details", new { id = Model.Id })" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    Cancel
+                </a>
+                <button type="submit" class="btn-luxury hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                    </svg>
+                    Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const fileUpload = document.getElementById('file-upload');
+            const filePreview = document.getElementById('file-preview');
+            const previewImage = document.getElementById('preview-image');
+            const fileName = document.getElementById('file-name');
+            const removeFile = document.getElementById('remove-file');
+
+            fileUpload.addEventListener('change', function (e) {
+                if (e.target.files.length > 0) {
+                    const file = e.target.files[0];
+                    fileName.textContent = file.name;
+                    
+                    // Show preview for image files
+                    if (file.type.match('image.*')) {
+                        const reader = new FileReader();
+                        reader.onload = function (e) {
+                            previewImage.src = e.target.result;
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                    
+                    filePreview.classList.remove('hidden');
+                }
+            });
+
+            removeFile.addEventListener('click', function () {
+                fileUpload.value = '';
+                filePreview.classList.add('hidden');
+                previewImage.src = '#';
+                fileName.textContent = '';
+            });
+        });
+    </script>
+} 

@@ -1,0 +1,46 @@
+@using HomeownersSubdivision.Models
+@model Dictionary<ReactionType, int>
+
+@{
+    // Helper method to convert reaction type to emoji
+    string GetReactionEmoji(ReactionType reactionType)
+    {
+        return reactionType switch
+        {
+            ReactionType.Like => "👍",
+            ReactionType.Dislike => "👎",
+            ReactionType.Laugh => "😂",
+            ReactionType.Love => "❤️",
+            ReactionType.Thanks => "🙏",
+            ReactionType.Angry => "😡",
+            ReactionType.Wow => "😮",
+            _ => "👍"
+        };
+    }
+
+    // Helper method to get tooltip text for reaction
+    string GetReactionTooltip(ReactionType reactionType)
+    {
+        return reactionType switch
+        {
+            ReactionType.Like => "Like",
+            ReactionType.Dislike => "Dislike",
+            ReactionType.Laugh => "Laugh",
+            ReactionType.Love => "Love",
+            ReactionType.Thanks => "Thanks",
+            ReactionType.Angry => "Angry",
+            ReactionType.Wow => "Wow",
+            _ => "Unknown"
+        };
+    }
+}
+
+<div class="flex flex-wrap gap-2 mt-2">
+    @foreach (var reaction in Model)
+    {
+        <div class="inline-flex items-center px-2 py-1 bg-gray-100 rounded-full text-sm">
+            <span class="mr-1" title="@GetReactionTooltip(reaction.Key)">@GetReactionEmoji(reaction.Key)</span>
+            <span class="text-gray-600">@reaction.Value</span>
+        </div>
+    }
+</div> 

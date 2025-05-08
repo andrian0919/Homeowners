@@ -1,228 +1,114 @@
 @{
     ViewData["Title"] = "Home";
-    var userId = Context.Session?.GetInt32("UserId");
-    var userRole = Context.Session?.GetString("UserRole");
-    var userName = Context.Session?.GetString("UserName");
-    var isHomeowner = userRole == UserRole.Homeowner.ToString();
-    var isAuthenticated = !string.IsNullOrEmpty(userRole);
 }
 
-<div class="container mx-auto px-4 py-8">
-    @if (isAuthenticated)
+@{
+    var heroModel = new HomeownersSubdivision.ViewModels.LuxuryHeroViewModel
     {
-        <!-- Homeowner Welcome -->
-        <div class="jumbotron homeowner-gradient mb-6">
-            <div class="container mx-auto">
-                <h1 class="text-3xl font-bold font-heading mb-2">Welcome, @userName!</h1>
-                <p class="text-white text-opacity-90">
-                    Access your homeowner dashboard and manage your property information.
-                </p>
-            </div>
-        </div>
-        
-        <!-- Homeowner Dashboard Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <!-- My Profile Card -->
-            <div class="bg-white rounded-lg shadow-sm overflow-hidden animate-fade-in-up card-delay-1 card-hover">
-                <div class="p-6">
-                    <div class="flex flex-col items-center mb-4">
-                        <i class="bi bi-person-circle dashboard-icon text-primary"></i>
-                        <h3 class="text-xl font-semibold mb-2">My Profile</h3>
-                        <p class="text-gray-600 text-center">View and update your personal information and contact details.</p>
-                    </div>
-                    <div class="mt-4">
-                        <a href="#" class="btn-primary block text-center">
-                            <i class="bi bi-pencil-square mr-1"></i> Update Profile
-                        </a>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Property Details Card -->
-            <div class="bg-white rounded-lg shadow-sm overflow-hidden animate-fade-in-up card-delay-2 card-hover">
-                <div class="p-6">
-                    <div class="flex flex-col items-center mb-4">
-                        <i class="bi bi-house-door dashboard-icon text-success"></i>
-                        <h3 class="text-xl font-semibold mb-2">Property Details</h3>
-                        <p class="text-gray-600 text-center">View information about your property, documents, and history.</p>
-                    </div>
-                    <div class="mt-4">
-                        <a href="#" class="btn-success block text-center">
-                            <i class="bi bi-house-door-fill mr-1"></i> View Property
-                        </a>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Payments Card -->
-            <div class="bg-white rounded-lg shadow-sm overflow-hidden animate-fade-in-up card-delay-3 card-hover">
-                <div class="p-6">
-                    <div class="flex flex-col items-center mb-4">
-                        <i class="bi bi-credit-card dashboard-icon text-info"></i>
-                        <h3 class="text-xl font-semibold mb-2">Payments</h3>
-                        <p class="text-gray-600 text-center">View your payment history and make new payments online.</p>
-                    </div>
-                    <div class="mt-4">
-                        <a href="#" class="btn-info block text-center">
-                            <i class="bi bi-wallet2 mr-1"></i> Make Payment
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <!-- Maintenance Card -->
-            <div class="bg-white rounded-lg shadow-sm overflow-hidden animate-fade-in-up card-delay-4 card-hover">
-                <div class="p-6">
-                    <div class="flex flex-col items-center mb-4">
-                        <i class="bi bi-tools dashboard-icon text-warning"></i>
-                        <h3 class="text-xl font-semibold mb-2">Maintenance</h3>
-                        <p class="text-gray-600 text-center">Submit maintenance requests and track their status.</p>
-                    </div>
-                    <div class="mt-4">
-                        <a href="#" class="btn-warning block text-center">
-                            <i class="bi bi-wrench mr-1"></i> Submit Request
-                        </a>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Community Card -->
-            <div class="bg-white rounded-lg shadow-sm overflow-hidden animate-fade-in-up card-delay-5 card-hover">
-                <div class="p-6">
-                    <div class="flex flex-col items-center mb-4">
-                        <i class="bi bi-people dashboard-icon text-dark"></i>
-                        <h3 class="text-xl font-semibold mb-2">Community</h3>
-                        <p class="text-gray-600 text-center">Access community information, events, and notices.</p>
-                    </div>
-                    <div class="mt-4">
-                        <a href="#" class="btn-dark block text-center">
-                            <i class="bi bi-calendar-event mr-1"></i> Community Events
-                        </a>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Messages Card -->
-            <div class="bg-white rounded-lg shadow-sm overflow-hidden animate-fade-in-up card-delay-6 card-hover">
-                <div class="p-6">
-                    <div class="flex flex-col items-center mb-4">
-                        <i class="bi bi-chat-dots dashboard-icon text-primary"></i>
-                        <h3 class="text-xl font-semibold mb-2">Messages</h3>
-                        <p class="text-gray-600 text-center">Communicate with management and receive updates.</p>
-                    </div>
-                    <div class="mt-4">
-                        <a href="#" class="btn-primary block text-center">
-                            <i class="bi bi-envelope mr-1"></i> Inbox <span class="badge bg-primary text-white rounded-full px-2">2</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    }
-    else
+        Title = "Welcome to NeighborHood",
+        Subtitle = "The premium solution for luxury neighborhood management. Experience the difference in community living.",
+        PrimaryButtonText = "Member Access",
+        PrimaryButtonUrl = Url.Action("Login", "Home"),
+        PrimaryButtonIcon = "bi bi-door-open",
+        SecondaryButtonText = "Learn More",
+        SecondaryButtonUrl = Url.Action("About", "Home"),
+        SecondaryButtonIcon = "bi bi-info-circle"
+    };
+}
+
+<partial name="_LuxuryHero" model="heroModel" />
+
+@{
+    var stats = new List<HomeownersSubdivision.ViewModels.StatViewModel>
     {
-        <!-- Guest Welcome -->
-        <div class="jumbotron guest-gradient mb-6">
-            <div class="container mx-auto">
-                <h1 class="text-3xl font-bold font-heading mb-2">Welcome to NeighborHood</h1>
-                <p class="text-white text-opacity-90">
-                    A premier residential community with exceptional amenities and quality living.
-                </p>
-                <div class="mt-4">
-                    <a href="/Home/Login" class="bg-white text-primary font-semibold px-4 py-2 rounded-lg shadow-sm hover:bg-gray-100 transition-colors duration-200 inline-block">
-                        <i class="bi bi-box-arrow-in-right mr-1"></i> Log In
-                    </a>
-                    <a href="/Home/Register" class="ml-2 bg-white bg-opacity-20 text-white font-semibold px-4 py-2 rounded-lg shadow-sm hover:bg-opacity-30 transition-colors duration-200 inline-block">
-                        <i class="bi bi-person-plus mr-1"></i> Register
-                    </a>
+        new HomeownersSubdivision.ViewModels.StatViewModel 
+        { 
+            Icon = "bi bi-people-fill", 
+            Value = "250+", 
+            Label = "Happy Homeowners" 
+        },
+        new HomeownersSubdivision.ViewModels.StatViewModel 
+        { 
+            Icon = "bi bi-calendar-check", 
+            Value = "98%", 
+            Label = "Service Satisfaction" 
+        },
+        new HomeownersSubdivision.ViewModels.StatViewModel 
+        { 
+            Icon = "bi bi-building", 
+            Value = "12+", 
+            Label = "Luxury Facilities" 
+        },
+        new HomeownersSubdivision.ViewModels.StatViewModel 
+        { 
+            Icon = "bi bi-trophy", 
+            Value = "15", 
+            Label = "Years of Excellence" 
+        }
+    };
+    
+    ViewData["StatsTitle"] = "Community Excellence";
+    ViewData["StatsSubtitle"] = "Our numbers speak for themselves";
+}
+
+<partial name="_LuxuryStats" model="stats" />
+
+<div class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row gap-12 items-center">
+            <div class="w-full md:w-1/2">
+                <img src="~/images/neighborhood.jpg" alt="Luxury Neighborhood" class="rounded-lg shadow-xl w-full h-auto" />
+            </div>
+            <div class="w-full md:w-1/2">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">Experience Premium Living</h2>
+                <p class="text-lg text-gray-600 mb-8">Our community provides an unparalleled living experience with meticulous attention to detail and quality in every aspect of neighborhood management.</p>
+                <div class="space-y-4">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 mt-1">
+                            <i class="bi bi-check-circle-fill text-blue-600 text-xl"></i>
+        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-semibold text-gray-800">24/7 Security Services</h3>
+                            <p class="text-gray-600">Round-the-clock security personnel and advanced monitoring systems.</p>
+                    </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 mt-1">
+                            <i class="bi bi-check-circle-fill text-blue-600 text-xl"></i>
+                </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-semibold text-gray-800">Exclusive Amenities</h3>
+                            <p class="text-gray-600">Access to premium facilities including pools, fitness centers, and entertainment areas.</p>
+            </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 mt-1">
+                            <i class="bi bi-check-circle-fill text-blue-600 text-xl"></i>
+                    </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-semibold text-gray-800">Professional Management</h3>
+                            <p class="text-gray-600">Dedicated staff ensuring pristine maintenance and prompt service resolution.</p>
+                    </div>
+                    </div>
+                </div>
+            </div>
                 </div>
             </div>
         </div>
         
-        <!-- Public Information Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <!-- About Card -->
-            <div class="bg-white rounded-lg shadow-sm overflow-hidden animate-fade-in-up card-delay-1 card-hover">
-                <div class="p-6">
-                    <div class="flex flex-col items-center mb-4">
-                        <i class="bi bi-info-circle dashboard-icon text-primary"></i>
-                        <h3 class="text-xl font-semibold mb-2">About Our Community</h3>
-                        <p class="text-gray-600 text-center">Learn about Homeowners Subdivision, our history, and our vision for the community.</p>
-                    </div>
-                    <div class="mt-4">
-                        <a href="#" class="btn-primary block text-center">
-                            <i class="bi bi-arrow-right-circle mr-1"></i> Learn More
-                        </a>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Amenities Card -->
-            <div class="bg-white rounded-lg shadow-sm overflow-hidden animate-fade-in-up card-delay-2 card-hover">
-                <div class="p-6">
-                    <div class="flex flex-col items-center mb-4">
-                        <i class="bi bi-tree dashboard-icon text-success"></i>
-                        <h3 class="text-xl font-semibold mb-2">Community Amenities</h3>
-                        <p class="text-gray-600 text-center">Explore the features and amenities available to our residents.</p>
-                    </div>
-                    <div class="mt-4">
-                        <a href="#" class="btn-success block text-center">
-                            <i class="bi bi-images mr-1"></i> See Amenities
-                        </a>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Contact Card -->
-            <div class="bg-white rounded-lg shadow-sm overflow-hidden animate-fade-in-up card-delay-3 card-hover">
-                <div class="p-6">
-                    <div class="flex flex-col items-center mb-4">
-                        <i class="bi bi-envelope dashboard-icon text-info"></i>
-                        <h3 class="text-xl font-semibold mb-2">Contact Us</h3>
-                        <p class="text-gray-600 text-center">Get in touch with our management team for inquiries and support.</p>
-                    </div>
-                    <div class="mt-4">
-                        <a href="#" class="btn-info block text-center">
-                            <i class="bi bi-chat-text mr-1"></i> Send Message
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Featured Content -->
-        <div class="bg-white rounded-lg shadow-sm overflow-hidden p-6 mb-8">
-            <h2 class="text-2xl font-bold font-heading text-center mb-6">Why Choose Homeowners Subdivision?</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="text-center">
-                    <div class="text-primary mb-3">
-                        <i class="bi bi-shield-check text-5xl"></i>
-                    </div>
-                    <h3 class="text-lg font-semibold mb-2">Safe Environment</h3>
-                    <p class="text-gray-600">24/7 security, gated entrances, and regular patrols to ensure resident safety.</p>
-                </div>
-                
-                <div class="text-center">
-                    <div class="text-success mb-3">
-                        <i class="bi bi-tree text-5xl"></i>
-                    </div>
-                    <h3 class="text-lg font-semibold mb-2">Beautiful Landscapes</h3>
-                    <p class="text-gray-600">Professionally maintained common areas, parks, and walking trails.</p>
-                </div>
-                
-                <div class="text-center">
-                    <div class="text-info mb-3">
-                        <i class="bi bi-people text-5xl"></i>
-                    </div>
-                    <h3 class="text-lg font-semibold mb-2">Vibrant Community</h3>
-                    <p class="text-gray-600">Regular social events, activities, and opportunities to connect with neighbors.</p>
-                </div>
-            </div>
-        </div>
-    }
-</div>
+@{
+    var finalHero = new HomeownersSubdivision.ViewModels.LuxuryHeroViewModel
+    {
+        Title = "Join Our Community Today",
+        Subtitle = "Experience the perfect blend of luxury, security, and community spirit in our exclusive neighborhood.",
+        BackgroundImage = "~/images/pexels-michael-tuszynski-1134777-2157401.jpg",
+        PrimaryButtonText = "Get in Touch",
+        PrimaryButtonUrl = Url.Action("Contact", "Home"),
+        PrimaryButtonIcon = "bi bi-envelope"
+    };
+}
+
+<partial name="_LuxuryHero" model="finalHero" />
 
 @section Scripts {
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>

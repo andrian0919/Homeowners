@@ -1,0 +1,16 @@
+@{
+    var currentController = ViewContext?.RouteData?.Values["Controller"]?.ToString();
+    var currentAction = ViewContext?.RouteData?.Values["Action"]?.ToString();
+}
+
+<a asp-controller="Home" asp-action="Index" class="nav-link @(currentController == "Home" && currentAction == "Index" ? "active" : "")">
+    <i class="fas fa-home me-2"></i> Home
+</a>
+
+<a asp-controller="My" asp-action="Bills" class="nav-link @(currentController == "My" && currentAction == "Bills" ? "active" : "")">
+    <i class="fas fa-file-invoice-dollar me-2"></i> My Bills
+</a>
+
+<a asp-controller="Forum" asp-action="Index" class="nav-link @(currentController == "Forum" ? "active" : "")">
+    <i class="fas fa-comments me-2"></i> Forum
+</a> 

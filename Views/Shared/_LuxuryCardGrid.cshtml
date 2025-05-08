@@ -1,0 +1,10 @@
+@model IEnumerable<HomeownersSubdivision.ViewModels.LuxuryCardViewModel>
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-@(Model.Count() > 2 ? "3" : Model.Count().ToString()) gap-8">
+    @foreach (var card in Model)
+    {
+        <div class="h-full">
+            <partial name="_LuxuryCard" model="card" />
+        </div>
+    }
+</div> 

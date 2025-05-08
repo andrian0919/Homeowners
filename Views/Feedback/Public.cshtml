@@ -1,0 +1,95 @@
+@model IEnumerable<HomeownersSubdivision.Models.Feedback>
+
+@{
+    ViewData["Title"] = "Public Feedback";
+}
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="mb-6">
+        <h1 class="text-2xl font-semibold text-gray-800">Public Feedback</h1>
+        <p class="text-gray-600 mt-1">See resolved feedback and suggestions from the community</p>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="bg-blue-50 border-l-4 border-blue-400 p-4 mb-6 rounded-md">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <svg class="h-5 w-5 text-blue-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm text-blue-700">
+                        No public feedback is available yet. When homeowners submit feedback and mark it as public, it will appear here once resolved.
+                    </p>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="space-y-6">
+            @foreach (var item in Model)
+            {
+                <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                    <div class="px-6 py-5 border-b border-gray-200">
+                        <div class="flex justify-between items-center">
+                            <h2 class="text-xl font-medium text-gray-800 leading-tight">@item.Subject</h2>
+                            <div class="flex space-x-2">
+                                @{
+                                    string typeBadgeColor = item.Type switch
+                                    {
+                                        FeedbackType.Feedback => "bg-blue-100 text-blue-800",
+                                        FeedbackType.Complaint => "bg-red-100 text-red-800",
+                                        FeedbackType.Suggestion => "bg-green-100 text-green-800",
+                                        _ => "bg-gray-100 text-gray-800"
+                                    };
+                                }
+                                <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full @typeBadgeColor">
+                                    @item.Type
+                                </span>
+                                @if (!string.IsNullOrEmpty(item.Category))
+                                {
+                                    <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                                        @item.Category
+                                    </span>
+                                }
+                            </div>
+                        </div>
+                        <div class="text-sm text-gray-500 mt-1">
+                            <span>Date: @item.CreatedAt.ToString("MMM dd, yyyy")</span>
+                            @if (item.ResolvedAt.HasValue)
+                            {
+                                <span class="ml-4">Resolved: @item.ResolvedAt.Value.ToString("MMM dd, yyyy")</span>
+                            }
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="mb-6">
+                            <h3 class="text-lg font-medium text-gray-800 mb-2">Description</h3>
+                            <div class="bg-gray-50 p-4 rounded-md text-gray-800 whitespace-pre-line">@item.Description</div>
+                        </div>
+
+                        @if (!string.IsNullOrEmpty(item.AdminResponse))
+                        {
+                            <div class="mb-6">
+                                <h3 class="text-lg font-medium text-gray-800 mb-2">Response</h3>
+                                <div class="bg-blue-50 p-4 rounded-md text-gray-800 whitespace-pre-line">@item.AdminResponse</div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="mt-8">
+            <a asp-action="Index" class="text-primary hover:text-blue-700 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Back to My Feedback
+            </a>
+        </div>
+    }
+</div> 

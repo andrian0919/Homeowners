@@ -1,0 +1,145 @@
+@model HomeownersSubdivision.Models.VehicleRegistration
+
+@{
+    ViewData["Title"] = "Register Vehicle";
+}
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Display success message if available -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="bg-green-50 border-l-4 border-green-400 p-4 mb-6 rounded-md">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <svg class="h-5 w-5 text-green-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm text-green-700">
+                        @TempData["SuccessMessage"]
+                    </p>
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- Display error message if available -->
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="bg-red-50 border-l-4 border-red-400 p-4 mb-6 rounded-md">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <svg class="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm text-red-700">
+                        @TempData["ErrorMessage"]
+                    </p>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="md:grid md:grid-cols-3 md:gap-6">
+        <div class="md:col-span-1">
+            <div class="px-4 sm:px-0">
+                <h3 class="text-lg font-medium leading-6 text-gray-900">Register Vehicle</h3>
+                <p class="mt-1 text-sm text-gray-600">
+                    Register your vehicle with the homeowners association.
+                    This information helps us maintain security and manage parking.
+                </p>
+                <div class="mt-4 p-4 bg-blue-50 rounded-md">
+                    <h4 class="text-sm font-semibold text-blue-800">Important Information:</h4>
+                    <ul class="mt-2 list-disc list-inside text-xs text-blue-700">
+                        <li>All vehicles must be registered</li>
+                        <li>Update your registration if your vehicle changes</li>
+                        <li>Keep your license plate information current</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="mt-5 md:mt-0 md:col-span-2">
+            <form asp-action="Create" method="post">
+                <div class="shadow overflow-hidden sm:rounded-md">
+                    <div class="px-4 py-5 bg-white sm:p-6">
+                        <div asp-validation-summary="ModelOnly" class="mb-4 rounded-md bg-red-50 p-4 text-sm text-red-700"></div>
+                        
+                        <div class="grid grid-cols-6 gap-6">
+                            <div class="col-span-6">
+                                <label asp-for="LicensePlate" class="block text-sm font-medium text-gray-700">License Plate <span class="text-red-600">*</span></label>
+                                <input asp-for="LicensePlate" class="mt-1 focus:ring-primary focus:border-primary block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+                                <span asp-validation-for="LicensePlate" class="text-xs text-red-600"></span>
+                            </div>
+                            
+                            <div class="col-span-6 sm:col-span-3">
+                                <label asp-for="Make" class="block text-sm font-medium text-gray-700">Make <span class="text-red-600">*</span></label>
+                                <input asp-for="Make" class="mt-1 focus:ring-primary focus:border-primary block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+                                <span asp-validation-for="Make" class="text-xs text-red-600"></span>
+                            </div>
+                            
+                            <div class="col-span-6 sm:col-span-3">
+                                <label asp-for="Model" class="block text-sm font-medium text-gray-700">Model <span class="text-red-600">*</span></label>
+                                <input asp-for="Model" class="mt-1 focus:ring-primary focus:border-primary block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+                                <span asp-validation-for="Model" class="text-xs text-red-600"></span>
+                            </div>
+                            
+                            <div class="col-span-6 sm:col-span-3">
+                                <label asp-for="Type" class="block text-sm font-medium text-gray-700">Vehicle Type <span class="text-red-600">*</span></label>
+                                <select asp-for="Type" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm" asp-items="Html.GetEnumSelectList<HomeownersSubdivision.Models.VehicleType>()">
+                                    <option value="">-- Select Type --</option>
+                                </select>
+                                <span asp-validation-for="Type" class="text-xs text-red-600"></span>
+                            </div>
+                            
+                            <div class="col-span-6 sm:col-span-3">
+                                <label asp-for="Color" class="block text-sm font-medium text-gray-700">Color <span class="text-red-600">*</span></label>
+                                <input asp-for="Color" class="mt-1 focus:ring-primary focus:border-primary block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+                                <span asp-validation-for="Color" class="text-xs text-red-600"></span>
+                            </div>
+                            
+                            <div class="col-span-6">
+                                <label asp-for="ExpiryDate" class="block text-sm font-medium text-gray-700">Expiry Date (Optional)</label>
+                                <input asp-for="ExpiryDate" type="date" class="mt-1 focus:ring-primary focus:border-primary block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+                                <span asp-validation-for="ExpiryDate" class="text-xs text-red-600"></span>
+                            </div>
+                            
+                            <div class="col-span-6">
+                                <label asp-for="Notes" class="block text-sm font-medium text-gray-700">Notes</label>
+                                <textarea asp-for="Notes" rows="3" class="mt-1 focus:ring-primary focus:border-primary block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" placeholder="Additional information about your vehicle"></textarea>
+                                <span asp-validation-for="Notes" class="text-xs text-red-600"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="px-4 py-3 bg-gray-50 text-right sm:px-6 flex justify-between">
+                        <a asp-action="Index" class="inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                            Back to List
+                        </a>
+                        <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                            Register Vehicle
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        // Add client-side validation for dates
+        document.addEventListener('DOMContentLoaded', function() {
+            const expiryDateInput = document.getElementById('@Html.IdFor(m => m.ExpiryDate)');
+            
+            // Set min dates
+            const today = new Date().toISOString().split('T')[0];
+            if (expiryDateInput) {
+                expiryDateInput.min = today;
+            }
+        });
+    </script>
+} 

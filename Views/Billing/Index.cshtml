@@ -3,43 +3,81 @@
     ViewData["Title"] = "Billing Management";
 }
 
-<div class="container py-5">
-    <div class="row mb-4">
-        <div class="col-md-8">
-            <h1 class="fw-bold text-primary">Billing Management</h1>
-            <p class="text-muted lead">View and manage bills for all homeowners</p>
-        </div>
-        <div class="col-md-4 d-flex justify-content-end align-items-center">
-            <a href="@Url.Action("Create")" class="btn btn-primary me-2">
-                <i class="bi bi-plus-circle me-2"></i> Create Bill
+@await Html.PartialAsync("_LuxuryBackground")
+
+<style>
+    .main-heading {
+        display: flex;
+        align-items: center;
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(to right, #1a1a2e, #3366FF);
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        color: white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .main-heading i {
+        font-size: 1.75rem;
+        margin-right: 0.75rem;
+        color: #6889F7;
+    }
+    .luxury-page-container {
+        position: relative;
+        z-index: 1;
+    }
+</style>
+
+<div class="container mx-auto px-4 py-8 luxury-page-container">
+    <div class="main-heading mb-4">
+        <i class="bi bi-receipt"></i> Billing Management
+    </div>
+    <p class="text-gray-200 mb-6">View and manage bills for all homeowners</p>
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+        <div class="mb-4 md:mb-0"></div>
+        <div class="flex flex-wrap gap-2">
+            <a href="@Url.Action("Create")" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-sm transition duration-200">
+                <i class="bi bi-plus-circle mr-2"></i> Create Bill
             </a>
-            <a href="@Url.Action("CreateBulk")" class="btn btn-outline-primary me-2">
-                <i class="bi bi-people me-2"></i> Bulk Create
+            <a href="@Url.Action("CreateBulk")" class="inline-flex items-center px-4 py-2 border border-blue-600 text-blue-600 bg-white rounded-lg shadow-sm hover:bg-blue-50 transition duration-200">
+                <i class="bi bi-people mr-2"></i> Bulk Create
             </a>
-            <div class="dropdown">
-                <button class="btn btn-outline-primary dropdown-toggle" type="button" id="billActions" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="bi bi-gear me-2"></i> Actions
+            <div class="relative inline-block text-left">
+                <button type="button" id="billActionsButton" class="inline-flex items-center px-4 py-2 border border-gray-300 text-gray-700 bg-white rounded-lg shadow-sm hover:bg-gray-50 transition duration-200" 
+                        onclick="toggleDropdown()">
+                    <i class="bi bi-gear mr-2"></i> Actions
+                    <i class="bi bi-chevron-down ml-2"></i>
                 </button>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="billActions">
-                    <li><a class="dropdown-item" href="@Url.Action("GenerateReport")"><i class="bi bi-file-earmark-text me-2"></i> Generate Report</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="@Url.Action("Index", "Payments")"><i class="bi bi-credit-card me-2"></i> View Payments</a></li>
-                </ul>
+                <div id="billActionsDropdown" class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 hidden z-10">
+                    <div class="py-1">
+                        <a href="@Url.Action("GenerateReport")" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            <i class="bi bi-file-earmark-text mr-2"></i> Generate Report
+                        </a>
+                    </div>
+                    <div class="py-1">
+                        <a href="@Url.Action("Index", "Payments")" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            <i class="bi bi-credit-card mr-2"></i> View Payments
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Filters and search -->
-    <div class="card shadow-sm mb-4">
-        <div class="card-body">
-            <form method="get" class="row g-3">
-                <div class="col-md-4">
-                    <label for="search" class="form-label">Search</label>
-                    <input type="text" class="form-control" id="search" name="searchString" value="@ViewBag.CurrentFilter" placeholder="Search by description or homeowner name">
+    <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 mb-6">
+        <div class="p-6">
+            <form method="get" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div>
+                    <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Search</label>
+                    <input type="text" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-gray-700" 
+                           id="search" name="searchString" value="@ViewBag.CurrentFilter" 
+                           placeholder="Search by description or homeowner name">
                 </div>
-                <div class="col-md-3">
-                    <label for="status" class="form-label">Status</label>
-                    <select name="status" id="status" class="form-select">
+                <div>
+                    <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                    <select name="status" id="status" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-gray-700">
                         <option value="">All Statuses</option>
                         @foreach (var status in ViewBag.StatusOptions ?? new List<string>())
                         {
@@ -47,14 +85,14 @@
                         }
                     </select>
                 </div>
-                <div class="col-md-3 d-flex align-items-end">
-                    <button type="submit" class="btn btn-primary w-100">
-                        <i class="bi bi-search me-2"></i> Filter
+                <div class="flex items-end">
+                    <button type="submit" class="w-full inline-flex justify-center items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-sm transition duration-200">
+                        <i class="bi bi-search mr-2"></i> Filter
                     </button>
                 </div>
-                <div class="col-md-2 d-flex align-items-end">
-                    <a href="@Url.Action("Index")" class="btn btn-outline-secondary w-100">
-                        <i class="bi bi-x-circle me-2"></i> Clear
+                <div class="flex items-end">
+                    <a href="@Url.Action("Index")" class="w-full inline-flex justify-center items-center px-4 py-2 border border-gray-300 text-gray-700 bg-white rounded-lg shadow-sm hover:bg-gray-50 transition duration-200">
+                        <i class="bi bi-x-circle mr-2"></i> Clear
                     </a>
                 </div>
             </form>
@@ -64,159 +102,186 @@
     <!-- Success/Error Messages -->
     @if (TempData["SuccessMessage"] != null)
     {
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <i class="bi bi-check-circle me-2"></i> @TempData["SuccessMessage"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6 rounded-lg shadow-sm" role="alert">
+            <div class="flex items-center">
+                <i class="bi bi-check-circle mr-2"></i>
+                <span>@TempData["SuccessMessage"]</span>
+            </div>
+            <button type="button" class="float-right text-green-500 hover:text-green-700" onclick="this.parentElement.style.display='none'">
+                <i class="bi bi-x"></i>
+            </button>
         </div>
     }
     @if (TempData["ErrorMessage"] != null)
     {
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <i class="bi bi-exclamation-circle me-2"></i> @TempData["ErrorMessage"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded-lg shadow-sm" role="alert">
+            <div class="flex items-center">
+                <i class="bi bi-exclamation-circle mr-2"></i>
+                <span>@TempData["ErrorMessage"]</span>
+            </div>
+            <button type="button" class="float-right text-red-500 hover:text-red-700" onclick="this.parentElement.style.display='none'">
+                <i class="bi bi-x"></i>
+            </button>
         </div>
     }
 
     <!-- Bills Table -->
-    <div class="card shadow-sm">
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-hover mb-0">
-                    <thead class="table-light">
-                        <tr>
-                            <th>ID</th>
-                            <th>Homeowner</th>
-                            <th>Description</th>
-                            <th>Issue Date</th>
-                            <th>Due Date</th>
-                            <th>Amount</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (Model != null && Model.Any())
+    <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 mb-6">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Homeowner</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Issue Date</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Due Date</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var bill in Model)
                         {
-                            foreach (var bill in Model)
-                            {
-                                <tr>
-                                    <td><span class="badge bg-secondary">#@bill.Id</span></td>
-                                    <td>@bill.User?.FullName</td>
-                                    <td>
-                                        <span class="d-block fw-bold">@bill.Description</span>
-                                        <span class="badge bg-info text-dark">@bill.Type</span>
-                                    </td>
-                                    <td>@bill.IssueDate.ToString("MM/dd/yyyy")</td>
-                                    <td>
-                                        @{
-                                            string dueDateClass = bill.IsOverdue ? "text-danger fw-bold" : "";
-                                        }
-                                        <span class="@dueDateClass">@bill.DueDate.ToString("MM/dd/yyyy")</span>
-                                        @if (bill.IsOverdue)
+                            <tr class="hover:bg-gray-50 transition">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 py-1 inline-flex text-xs leading-4 font-semibold rounded-full bg-gray-100 text-gray-800">#@bill.Id</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900">@bill.User?.FullName</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm font-medium text-gray-900 mb-1">@bill.Description</div>
+                                    <span class="px-2 py-1 inline-flex text-xs leading-4 font-semibold rounded-full bg-blue-100 text-blue-800">@bill.Type</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-500">@bill.IssueDate.ToString("MM/dd/yyyy")</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm @(bill.IsOverdue ? "text-red-600 font-bold" : "text-gray-500")">
+                                        @bill.DueDate.ToString("MM/dd/yyyy")
+                                    </div>
+                                    @if (bill.IsOverdue)
+                                    {
+                                        <span class="px-2 py-1 inline-flex text-xs leading-4 font-semibold rounded-full bg-red-100 text-red-800">Overdue</span>
+                                    }
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm font-bold text-gray-900">$@bill.Amount.ToString("N2")</div>
+                                    @if (bill.PaidAmount > 0 && bill.PaidAmount < bill.Amount)
+                                    {
+                                        <div class="text-xs text-green-600">
+                                            Paid: $@bill.PaidAmount.ToString("N2")
+                                        </div>
+                                        <div class="text-xs text-red-600">
+                                            Due: $@bill.RemainingAmount.ToString("N2")
+                                        </div>
+                                    }
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    @{
+                                        string badgeClass = "";
+                                        
+                                        switch (bill.Status)
                                         {
-                                            <span class="badge bg-danger">Overdue</span>
+                                            case "Unpaid":
+                                                badgeClass = "bg-yellow-100 text-yellow-800";
+                                                break;
+                                            case "Paid":
+                                                badgeClass = "bg-green-100 text-green-800";
+                                                break;
+                                            case "Overdue":
+                                                badgeClass = "bg-red-100 text-red-800";
+                                                break;
+                                            case "Cancelled":
+                                                badgeClass = "bg-gray-100 text-gray-800";
+                                                break;
+                                            default:
+                                                badgeClass = "bg-gray-100 text-gray-800";
+                                                break;
                                         }
-                                    </td>
-                                    <td>
-                                        <span class="fw-bold">$@bill.Amount.ToString("N2")</span>
-                                        @if (bill.PaidAmount > 0 && bill.PaidAmount < bill.Amount)
-                                        {
-                                            <div class="small text-muted">
-                                                Paid: $@bill.PaidAmount.ToString("N2")
+                                    }
+                                    <span class="px-2 py-1 inline-flex text-xs leading-4 font-semibold rounded-full @badgeClass">
+                                        @bill.Status
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <div class="relative">
+                                        <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none dropdown-trigger" 
+                                                onclick="toggleActionMenu(@bill.Id)">
+                                            <i class="bi bi-three-dots-vertical"></i>
+                                        </button>
+                                        <div id="dropdown-@bill.Id" class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 z-10 hidden">
+                                            <div class="py-1">
+                                                <a href="@Url.Action("Details", new { id = bill.Id })" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                                    <i class="bi bi-eye mr-2"></i> View Details
+                                                </a>
+                                                <a href="@Url.Action("Edit", new { id = bill.Id })" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                                    <i class="bi bi-pencil mr-2"></i> Edit
+                                                </a>
                                             </div>
-                                            <div class="small text-muted">
-                                                Due: $@bill.RemainingAmount.ToString("N2")
-                                            </div>
-                                        }
-                                    </td>
-                                    <td>
-                                        @{
-                                            string badgeClass = "bg-secondary";
-                                            
-                                            switch (bill.Status)
-                                            {
-                                                case "Unpaid":
-                                                    badgeClass = "bg-warning text-dark";
-                                                    break;
-                                                case "Paid":
-                                                    badgeClass = "bg-success";
-                                                    break;
-                                                case "Overdue":
-                                                    badgeClass = "bg-danger";
-                                                    break;
-                                                case "Cancelled":
-                                                    badgeClass = "bg-secondary";
-                                                    break;
-                                            }
-                                        }
-                                        <span class="badge @badgeClass">@bill.Status</span>
-                                    </td>
-                                    <td>
-                                        <div class="dropdown">
-                                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="bi bi-three-dots"></i>
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-end">
-                                                <li><a class="dropdown-item" href="@Url.Action("Details", new { id = bill.Id })"><i class="bi bi-eye me-2"></i> View Details</a></li>
-                                                <li><a class="dropdown-item" href="@Url.Action("Edit", new { id = bill.Id })"><i class="bi bi-pencil me-2"></i> Edit</a></li>
-                                                <li><hr class="dropdown-divider"></li>
+                                            <div class="py-1">
                                                 @if (bill.Status != "Paid" && bill.DueDate < DateTime.Now.AddDays(7))
                                                 {
-                                                    <li>
-                                                        <form asp-action="SendReminder" asp-route-id="@bill.Id" method="post" class="d-inline">
-                                                            <button type="submit" class="dropdown-item text-warning">
-                                                                <i class="bi bi-bell me-2"></i> Send Reminder
-                                                            </button>
-                                                        </form>
-                                                    </li>
+                                                    <form asp-action="SendReminder" asp-route-id="@bill.Id" method="post" class="block">
+                                                        <button type="submit" class="flex w-full items-center px-4 py-2 text-sm text-yellow-600 hover:bg-gray-100">
+                                                            <i class="bi bi-bell mr-2"></i> Send Reminder
+                                                        </button>
+                                                    </form>
                                                 }
-                                                <li><a class="dropdown-item text-danger" href="@Url.Action("Delete", new { id = bill.Id })"><i class="bi bi-trash me-2"></i> Delete</a></li>
-                                            </ul>
+                                                <a href="@Url.Action("Delete", new { id = bill.Id })" class="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
+                                                    <i class="bi bi-trash mr-2"></i> Delete
+                                                </a>
+                                            </div>
                                         </div>
-                                    </td>
-                                </tr>
-                            }
-                        }
-                        else
-                        {
-                            <tr>
-                                <td colspan="8" class="text-center py-4">
-                                    <div class="d-flex flex-column align-items-center">
-                                        <i class="bi bi-search fa-3x text-muted mb-3"></i>
-                                        <p class="text-muted mb-0">No bills found matching your criteria.</p>
                                     </div>
                                 </td>
                             </tr>
                         }
-                    </tbody>
-                </table>
-            </div>
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="8" class="px-6 py-16 text-center">
+                                <div class="flex flex-col items-center">
+                                    <i class="bi bi-search text-gray-400 text-5xl mb-4"></i>
+                                    <p class="text-gray-500">No bills found matching your criteria.</p>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
     </div>
 
     <!-- Pagination -->
     @if (ViewBag.TotalPages > 1)
     {
-        <div class="d-flex justify-content-center mt-4">
-            <nav aria-label="Bills pagination">
-                <ul class="pagination">
-                    <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
-                        <a class="page-link" href="@Url.Action("Index", new { page = ViewBag.CurrentPage - 1, searchString = ViewBag.CurrentFilter, status = ViewBag.CurrentStatus })" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                    @for (int i = 1; i <= ViewBag.TotalPages; i++)
-                    {
-                        <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
-                            <a class="page-link" href="@Url.Action("Index", new { page = i, searchString = ViewBag.CurrentFilter, status = ViewBag.CurrentStatus })">@i</a>
-                        </li>
-                    }
-                    <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
-                        <a class="page-link" href="@Url.Action("Index", new { page = ViewBag.CurrentPage + 1, searchString = ViewBag.CurrentFilter, status = ViewBag.CurrentStatus })" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                </ul>
+        <div class="flex justify-center mt-6">
+            <nav class="inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                <a href="@Url.Action("Index", new { page = ViewBag.CurrentPage - 1, searchString = ViewBag.CurrentFilter, status = ViewBag.CurrentStatus })"
+                   class="@(ViewBag.CurrentPage == 1 ? "opacity-50 cursor-not-allowed" : "") relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                    <span class="sr-only">Previous</span>
+                    <i class="bi bi-chevron-left h-5 w-5"></i>
+                </a>
+                
+                @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                {
+                    <a href="@Url.Action("Index", new { page = i, searchString = ViewBag.CurrentFilter, status = ViewBag.CurrentStatus })"
+                       class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium @(ViewBag.CurrentPage == i ? "text-blue-600 bg-blue-50" : "text-gray-700 hover:bg-gray-50")">
+                        @i
+                    </a>
+                }
+                
+                <a href="@Url.Action("Index", new { page = ViewBag.CurrentPage + 1, searchString = ViewBag.CurrentFilter, status = ViewBag.CurrentStatus })"
+                   class="@(ViewBag.CurrentPage == ViewBag.TotalPages ? "opacity-50 cursor-not-allowed" : "") relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                    <span class="sr-only">Next</span>
+                    <i class="bi bi-chevron-right h-5 w-5"></i>
+                </a>
             </nav>
         </div>
     }
@@ -224,11 +289,47 @@
 
 @section Scripts {
     <script>
-        $(function() {
-            // Auto-submit form when changing select fields
-            $('#status').change(function() {
-                $(this).closest('form').submit();
+        // Toggle main dropdown
+        function toggleDropdown() {
+            const dropdown = document.getElementById('billActionsDropdown');
+            dropdown.classList.toggle('hidden');
+        }
+
+        // Close main dropdown when clicking outside
+        window.addEventListener('click', function(e) {
+            const dropdown = document.getElementById('billActionsDropdown');
+            const button = document.getElementById('billActionsButton');
+            if (dropdown && button && !dropdown.contains(e.target) && !button.contains(e.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
+
+        // Toggle action menus
+        function toggleActionMenu(billId) {
+            // Close all other dropdowns first
+            document.querySelectorAll('.origin-top-right').forEach(dropdown => {
+                if (dropdown.id !== `dropdown-${billId}`) {
+                    dropdown.classList.add('hidden');
+                }
             });
+            
+            // Toggle the current dropdown
+            const dropdown = document.getElementById(`dropdown-${billId}`);
+            dropdown.classList.toggle('hidden');
+        }
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.dropdown-trigger')) {
+                document.querySelectorAll('[id^="dropdown-"]').forEach(dropdown => {
+                    dropdown.classList.add('hidden');
+                });
+            }
+        });
+
+        // Auto-submit form when changing select fields
+        document.getElementById('status').addEventListener('change', function() {
+            this.closest('form').submit();
         });
     </script>
 } 

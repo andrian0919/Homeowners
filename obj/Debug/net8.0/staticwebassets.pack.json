@@ -1,8 +1,16 @@
 {
   "Files": [
     {
+      "Id": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\css\\luxury.css",
+      "PackagePath": "staticwebassets\\css\\luxury.css"
+    },
+    {
       "Id": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\css\\site.css",
       "PackagePath": "staticwebassets\\css\\site.css"
+    },
+    {
+      "Id": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\4770380-hd_1920_1080_30fps.mp4",
+      "PackagePath": "staticwebassets\\images\\4770380-hd_1920_1080_30fps.mp4"
     },
     {
       "Id": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\Novocaine 2025 1080p WEB h264-ETHEL.Hi.srt",
@@ -11,6 +19,26 @@
     {
       "Id": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\neighborhood.jpg",
       "PackagePath": "staticwebassets\\images\\neighborhood.jpg"
+    },
+    {
+      "Id": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\pexels-hussein-altameemi-782843-1764506.jpg",
+      "PackagePath": "staticwebassets\\images\\pexels-hussein-altameemi-782843-1764506.jpg"
+    },
+    {
+      "Id": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\pexels-leofallflat-1557549.jpg",
+      "PackagePath": "staticwebassets\\images\\pexels-leofallflat-1557549.jpg"
+    },
+    {
+      "Id": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\pexels-michael-tuszynski-1134777-2157401.jpg",
+      "PackagePath": "staticwebassets\\images\\pexels-michael-tuszynski-1134777-2157401.jpg"
+    },
+    {
+      "Id": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\pexels-pixabay-280221.jpg",
+      "PackagePath": "staticwebassets\\images\\pexels-pixabay-280221.jpg"
+    },
+    {
+      "Id": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\pexels-wanderbug-3094423.jpg",
+      "PackagePath": "staticwebassets\\images\\pexels-wanderbug-3094423.jpg"
     },
     {
       "Id": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\sit_in_records.xls",

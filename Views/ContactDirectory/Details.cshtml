@@ -1,0 +1,222 @@
+@model HomeownersSubdivision.Models.ContactDirectory
+@using HomeownersSubdivision.Models
+
+@{
+    ViewData["Title"] = "Contact Details";
+    var userRoleString = Context.Session.GetString("UserRole");
+    var userRole = UserRole.Homeowner; // Default
+    
+    if (!string.IsNullOrEmpty(userRoleString))
+    {
+        Enum.TryParse(userRoleString, out userRole);
+    }
+    
+    var isAdmin = userRole == UserRole.Administrator;
+}
+
+<div class="bg-white p-6 rounded-lg shadow-md">
+    <div class="mb-6 flex justify-between items-center">
+        <h1 class="text-2xl font-bold text-gray-800">Contact Details</h1>
+        
+        <div class="flex space-x-2">
+            <a asp-action="Index" class="btn-secondary">
+                <i class="bi bi-arrow-left me-1"></i> Back to Directory
+            </a>
+            
+            @if (isAdmin)
+            {
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn-primary">
+                    <i class="bi bi-pencil me-1"></i> Edit
+                </a>
+            }
+        </div>
+    </div>
+
+    <div class="bg-gray-50 rounded-lg p-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <div class="mb-4">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-1">@Model.Name</h2>
+                    <p class="text-gray-600">@Model.Title</p>
+                    @if (!string.IsNullOrEmpty(Model.Department))
+                    {
+                        <p class="text-gray-600">@Model.Department</p>
+                    }
+                </div>
+                
+                <div class="mb-4">
+                    <h3 class="text-sm font-medium text-gray-500 uppercase mb-2">Contact Information</h3>
+                    
+                    <div class="space-y-2">
+                        @if (!string.IsNullOrEmpty(Model.PhoneNumber))
+                        {
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                                    <i class="bi bi-telephone text-blue-500"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500">Phone</p>
+                                    <a href="tel:@Model.PhoneNumber" class="text-primary hover:text-primary-dark">
+                                        @Model.PhoneNumber
+                                    </a>
+                                </div>
+                            </div>
+                        }
+                        
+                        @if (!string.IsNullOrEmpty(Model.Email))
+                        {
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center mr-3">
+                                    <i class="bi bi-envelope text-green-500"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500">Email</p>
+                                    <a href="mailto:@Model.Email" class="text-primary hover:text-primary-dark">
+                                        @Model.Email
+                                    </a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            
+            <div>
+                @if (!string.IsNullOrEmpty(Model.Office) || !string.IsNullOrEmpty(Model.Address))
+                {
+                    <div class="mb-4">
+                        <h3 class="text-sm font-medium text-gray-500 uppercase mb-2">Location</h3>
+                        
+                        <div class="space-y-2">
+                            @if (!string.IsNullOrEmpty(Model.Office))
+                            {
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center mr-3">
+                                        <i class="bi bi-building text-purple-500"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-500">Office</p>
+                                        <p class="text-gray-700">@Model.Office</p>
+                                    </div>
+                                </div>
+                            }
+                            
+                            @if (!string.IsNullOrEmpty(Model.Address))
+                            {
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 rounded-full bg-yellow-100 flex items-center justify-center mr-3">
+                                        <i class="bi bi-geo-alt text-yellow-500"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-500">Address</p>
+                                        <p class="text-gray-700">@Model.Address</p>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+                
+                @if (!string.IsNullOrEmpty(Model.WorkingHours))
+                {
+                    <div class="mb-4">
+                        <h3 class="text-sm font-medium text-gray-500 uppercase mb-2">Working Hours</h3>
+                        
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center mr-3">
+                                <i class="bi bi-clock text-red-500"></i>
+                            </div>
+                            <div>
+                                <p class="text-gray-700">@Model.WorkingHours</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        
+        @if (!string.IsNullOrEmpty(Model.Notes))
+        {
+            <div class="mt-6 pt-6 border-t">
+                <h3 class="text-sm font-medium text-gray-500 uppercase mb-2">Additional Information</h3>
+                <div class="bg-white p-4 rounded-lg border">
+                    <p class="text-gray-700 whitespace-pre-line">@Model.Notes</p>
+                </div>
+            </div>
+        }
+    </div>
+    
+    @if (isAdmin)
+    {
+        <div class="mt-6 pt-6 border-t">
+            <h3 class="text-sm font-medium text-gray-500 uppercase mb-2">Administrative Information</h3>
+            
+            <div class="bg-gray-50 p-4 rounded-lg text-sm">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <p class="text-gray-500">Category</p>
+                        <p class="font-medium">@Model.Category</p>
+                    </div>
+                    <div>
+                        <p class="text-gray-500">Sort Order</p>
+                        <p class="font-medium">@Model.SortOrder</p>
+                    </div>
+                    <div>
+                        <p class="text-gray-500">Status</p>
+                        <p class="font-medium">
+                            @if (Model.IsActive)
+                            {
+                                <span class="text-green-500"><i class="bi bi-check-circle"></i> Active</span>
+                            }
+                            else
+                            {
+                                <span class="text-red-500"><i class="bi bi-x-circle"></i> Inactive</span>
+                            }
+                        </p>
+                    </div>
+                    <div>
+                        <p class="text-gray-500">Created</p>
+                        <p class="font-medium">@Model.CreatedAt.ToString("MMM d, yyyy h:mm tt")</p>
+                    </div>
+                    @if (Model.UpdatedAt.HasValue)
+                    {
+                        <div>
+                            <p class="text-gray-500">Last Updated</p>
+                            <p class="font-medium">@Model.UpdatedAt.Value.ToString("MMM d, yyyy h:mm tt")</p>
+                        </div>
+                    }
+                    <div>
+                        <p class="text-gray-500">Visible To</p>
+                        <p class="font-medium">
+                            @{
+                                var visibleTo = new List<string>();
+                                if (Model.IsVisibleToRole(UserRole.Administrator)) visibleTo.Add("Admins");
+                                if (Model.IsVisibleToRole(UserRole.Staff)) visibleTo.Add("Staff");
+                                if (Model.IsVisibleToRole(UserRole.Homeowner)) visibleTo.Add("Homeowners");
+                            }
+                            @string.Join(", ", visibleTo)
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex justify-end mt-4">
+                <a asp-action="Delete" asp-route-id="@Model.Id" class="text-red-500 hover:text-red-700">
+                    <i class="bi bi-trash"></i> Delete
+                </a>
+            </div>
+        </div>
+    }
+</div>
+
+@section Styles {
+    <style>
+        .btn-primary {
+            @(isAdmin ? "bg-adminPrimary hover:bg-adminSecondary" : userRole == UserRole.Staff ? "bg-staffPrimary hover:bg-staffSecondary" : "bg-homeownerPrimary hover:bg-homeownerSecondary") text-white font-medium py-2 px-4 rounded inline-flex items-center transition-colors;
+        }
+        
+        .btn-secondary {
+            bg-white text-gray-700 border border-gray-300 font-medium py-2 px-4 rounded inline-flex items-center hover:bg-gray-50 transition-colors;
+        }
+    </style>
+} 

@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "x05+IexSi1gKVuXScomI+4nnpGOZPR6fvrXrWnh3Qio=",
+  "Hash": "3/WCv2U0evOiFX/mhv5h2BNeQIQouEmmQdUY2kfU1Mw=",
   "Source": "HomeownersSubdivision",
   "BasePath": "_content/HomeownersSubdivision",
   "Mode": "Default",
@@ -17,6 +17,27 @@
   ],
   "Assets": [
     {
+      "Identity": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\css\\luxury.css",
+      "SourceId": "HomeownersSubdivision",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\",
+      "BasePath": "_content/HomeownersSubdivision",
+      "RelativePath": "css/luxury#[.{fingerprint}]?.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "st9b0mqinh",
+      "Integrity": "gMEKPFOHspe1FU/RwUmyR1D/QW1IKGffqxMEPC8PFIA=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\luxury.css"
+    },
+    {
       "Identity": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\css\\site.css",
       "SourceId": "HomeownersSubdivision",
       "SourceType": "Discovered",
@@ -31,11 +52,32 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "vnc0xqxtaz",
-      "Integrity": "5Qa59wO3H4vkDmeX1uCiYxfTlP6vK4vou2Vw/xVlubk=",
+      "Fingerprint": "t5r83hb8v7",
+      "Integrity": "gbLKKd/x7vNwFIrflC4NS0dZW1tzypweQdt0K2g5b5I=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\site.css"
+    },
+    {
+      "Identity": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\4770380-hd_1920_1080_30fps.mp4",
+      "SourceId": "HomeownersSubdivision",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\",
+      "BasePath": "_content/HomeownersSubdivision",
+      "RelativePath": "images/4770380-hd_1920_1080_30fps#[.{fingerprint}]?.mp4",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "2wnfqm2wf6",
+      "Integrity": "sriMCDLHNSU4f4kUj55X9XN1+qnY9feX3FKjI/NK34Y=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\4770380-hd_1920_1080_30fps.mp4"
     },
     {
       "Identity": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\neighborhood.jpg",
@@ -78,6 +120,111 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\images\\Novocaine 2025 1080p WEB h264-ETHEL.Hi.srt"
+    },
+    {
+      "Identity": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\pexels-hussein-altameemi-782843-1764506.jpg",
+      "SourceId": "HomeownersSubdivision",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\",
+      "BasePath": "_content/HomeownersSubdivision",
+      "RelativePath": "images/pexels-hussein-altameemi-782843-1764506#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "t7sd53vezu",
+      "Integrity": "GVHfKKGKML5ETPzhXHH2yr6+T9d+Rqg0LHbkhaGj1aw=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\pexels-hussein-altameemi-782843-1764506.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\pexels-leofallflat-1557549.jpg",
+      "SourceId": "HomeownersSubdivision",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\",
+      "BasePath": "_content/HomeownersSubdivision",
+      "RelativePath": "images/pexels-leofallflat-1557549#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "rks75kuf6t",
+      "Integrity": "ld5he4psFbHNyb6KlRL9Im7ECP0Z/YIcLxOPmrsDmjo=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\pexels-leofallflat-1557549.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\pexels-michael-tuszynski-1134777-2157401.jpg",
+      "SourceId": "HomeownersSubdivision",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\",
+      "BasePath": "_content/HomeownersSubdivision",
+      "RelativePath": "images/pexels-michael-tuszynski-1134777-2157401#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "c7kinbp74g",
+      "Integrity": "yAlwcrG+Fr5ae2Rk6nkBOmuQggL6PWEiTOsJq4MslLc=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\pexels-michael-tuszynski-1134777-2157401.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\pexels-pixabay-280221.jpg",
+      "SourceId": "HomeownersSubdivision",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\",
+      "BasePath": "_content/HomeownersSubdivision",
+      "RelativePath": "images/pexels-pixabay-280221#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "onchebefws",
+      "Integrity": "rCsvq4J/bXr0suZH0NegcMjG5Z9i7TqOR8aXuUHHw2s=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\pexels-pixabay-280221.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\pexels-wanderbug-3094423.jpg",
+      "SourceId": "HomeownersSubdivision",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\",
+      "BasePath": "_content/HomeownersSubdivision",
+      "RelativePath": "images/pexels-wanderbug-3094423#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "qeo4ymbjgt",
+      "Integrity": "kj69AaCcAuIycRdDxlxVtp/jLPZVy6YzHUkBJgZmaHo=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\pexels-wanderbug-3094423.jpg"
     },
     {
       "Identity": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\sit_in_records.xls",
@@ -166,6 +313,88 @@
   ],
   "Endpoints": [
     {
+      "Route": "css/luxury.css",
+      "AssetFile": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\css\\luxury.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "12105"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"gMEKPFOHspe1FU/RwUmyR1D/QW1IKGffqxMEPC8PFIA=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 06 May 2025 09:03:33 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-gMEKPFOHspe1FU/RwUmyR1D/QW1IKGffqxMEPC8PFIA="
+        }
+      ]
+    },
+    {
+      "Route": "css/luxury.st9b0mqinh.css",
+      "AssetFile": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\css\\luxury.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "12105"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"gMEKPFOHspe1FU/RwUmyR1D/QW1IKGffqxMEPC8PFIA=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 06 May 2025 09:03:33 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "st9b0mqinh"
+        },
+        {
+          "Name": "label",
+          "Value": "css/luxury.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-gMEKPFOHspe1FU/RwUmyR1D/QW1IKGffqxMEPC8PFIA="
+        }
+      ]
+    },
+    {
       "Route": "css/site.css",
       "AssetFile": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\css\\site.css",
       "Selectors": [],
@@ -176,7 +405,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "8565"
+          "Value": "8144"
         },
         {
           "Name": "Content-Type",
@@ -184,11 +413,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"5Qa59wO3H4vkDmeX1uCiYxfTlP6vK4vou2Vw/xVlubk=\""
+          "Value": "\"gbLKKd/x7vNwFIrflC4NS0dZW1tzypweQdt0K2g5b5I=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 24 Apr 2025 11:01:23 GMT"
+          "Value": "Thu, 01 May 2025 03:05:06 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -198,12 +427,12 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-5Qa59wO3H4vkDmeX1uCiYxfTlP6vK4vou2Vw/xVlubk="
+          "Value": "sha256-gbLKKd/x7vNwFIrflC4NS0dZW1tzypweQdt0K2g5b5I="
         }
       ]
     },
     {
-      "Route": "css/site.vnc0xqxtaz.css",
+      "Route": "css/site.t5r83hb8v7.css",
       "AssetFile": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\css\\site.css",
       "Selectors": [],
       "ResponseHeaders": [
@@ -213,7 +442,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "8565"
+          "Value": "8144"
         },
         {
           "Name": "Content-Type",
@@ -221,11 +450,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"5Qa59wO3H4vkDmeX1uCiYxfTlP6vK4vou2Vw/xVlubk=\""
+          "Value": "\"gbLKKd/x7vNwFIrflC4NS0dZW1tzypweQdt0K2g5b5I=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 24 Apr 2025 11:01:23 GMT"
+          "Value": "Thu, 01 May 2025 03:05:06 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -235,7 +464,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "vnc0xqxtaz"
+          "Value": "t5r83hb8v7"
         },
         {
           "Name": "label",
@@ -243,7 +472,89 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-5Qa59wO3H4vkDmeX1uCiYxfTlP6vK4vou2Vw/xVlubk="
+          "Value": "sha256-gbLKKd/x7vNwFIrflC4NS0dZW1tzypweQdt0K2g5b5I="
+        }
+      ]
+    },
+    {
+      "Route": "images/4770380-hd_1920_1080_30fps.2wnfqm2wf6.mp4",
+      "AssetFile": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\4770380-hd_1920_1080_30fps.mp4",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "36385638"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "video/mp4"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"sriMCDLHNSU4f4kUj55X9XN1+qnY9feX3FKjI/NK34Y=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 06 May 2025 02:42:54 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "2wnfqm2wf6"
+        },
+        {
+          "Name": "label",
+          "Value": "images/4770380-hd_1920_1080_30fps.mp4"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-sriMCDLHNSU4f4kUj55X9XN1+qnY9feX3FKjI/NK34Y="
+        }
+      ]
+    },
+    {
+      "Route": "images/4770380-hd_1920_1080_30fps.mp4",
+      "AssetFile": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\4770380-hd_1920_1080_30fps.mp4",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "36385638"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "video/mp4"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"sriMCDLHNSU4f4kUj55X9XN1+qnY9feX3FKjI/NK34Y=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 06 May 2025 02:42:54 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-sriMCDLHNSU4f4kUj55X9XN1+qnY9feX3FKjI/NK34Y="
         }
       ]
     },
@@ -408,6 +719,416 @@
         {
           "Name": "integrity",
           "Value": "sha256-AvG/nMSKPParmpUdZMkgswUdBSa8qAckmfTAiRhc7YM="
+        }
+      ]
+    },
+    {
+      "Route": "images/pexels-hussein-altameemi-782843-1764506.jpg",
+      "AssetFile": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\pexels-hussein-altameemi-782843-1764506.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "687899"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"GVHfKKGKML5ETPzhXHH2yr6+T9d+Rqg0LHbkhaGj1aw=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 06 May 2025 02:42:57 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-GVHfKKGKML5ETPzhXHH2yr6+T9d+Rqg0LHbkhaGj1aw="
+        }
+      ]
+    },
+    {
+      "Route": "images/pexels-hussein-altameemi-782843-1764506.t7sd53vezu.jpg",
+      "AssetFile": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\pexels-hussein-altameemi-782843-1764506.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "687899"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"GVHfKKGKML5ETPzhXHH2yr6+T9d+Rqg0LHbkhaGj1aw=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 06 May 2025 02:42:57 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "t7sd53vezu"
+        },
+        {
+          "Name": "label",
+          "Value": "images/pexels-hussein-altameemi-782843-1764506.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-GVHfKKGKML5ETPzhXHH2yr6+T9d+Rqg0LHbkhaGj1aw="
+        }
+      ]
+    },
+    {
+      "Route": "images/pexels-leofallflat-1557549.jpg",
+      "AssetFile": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\pexels-leofallflat-1557549.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1058420"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"ld5he4psFbHNyb6KlRL9Im7ECP0Z/YIcLxOPmrsDmjo=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 06 May 2025 02:42:58 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-ld5he4psFbHNyb6KlRL9Im7ECP0Z/YIcLxOPmrsDmjo="
+        }
+      ]
+    },
+    {
+      "Route": "images/pexels-leofallflat-1557549.rks75kuf6t.jpg",
+      "AssetFile": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\pexels-leofallflat-1557549.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1058420"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"ld5he4psFbHNyb6KlRL9Im7ECP0Z/YIcLxOPmrsDmjo=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 06 May 2025 02:42:58 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "rks75kuf6t"
+        },
+        {
+          "Name": "label",
+          "Value": "images/pexels-leofallflat-1557549.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-ld5he4psFbHNyb6KlRL9Im7ECP0Z/YIcLxOPmrsDmjo="
+        }
+      ]
+    },
+    {
+      "Route": "images/pexels-michael-tuszynski-1134777-2157401.c7kinbp74g.jpg",
+      "AssetFile": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\pexels-michael-tuszynski-1134777-2157401.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "4424417"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"yAlwcrG+Fr5ae2Rk6nkBOmuQggL6PWEiTOsJq4MslLc=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 06 May 2025 02:43:00 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "c7kinbp74g"
+        },
+        {
+          "Name": "label",
+          "Value": "images/pexels-michael-tuszynski-1134777-2157401.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-yAlwcrG+Fr5ae2Rk6nkBOmuQggL6PWEiTOsJq4MslLc="
+        }
+      ]
+    },
+    {
+      "Route": "images/pexels-michael-tuszynski-1134777-2157401.jpg",
+      "AssetFile": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\pexels-michael-tuszynski-1134777-2157401.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "4424417"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"yAlwcrG+Fr5ae2Rk6nkBOmuQggL6PWEiTOsJq4MslLc=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 06 May 2025 02:43:00 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-yAlwcrG+Fr5ae2Rk6nkBOmuQggL6PWEiTOsJq4MslLc="
+        }
+      ]
+    },
+    {
+      "Route": "images/pexels-pixabay-280221.jpg",
+      "AssetFile": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\pexels-pixabay-280221.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2957862"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"rCsvq4J/bXr0suZH0NegcMjG5Z9i7TqOR8aXuUHHw2s=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 06 May 2025 02:42:59 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-rCsvq4J/bXr0suZH0NegcMjG5Z9i7TqOR8aXuUHHw2s="
+        }
+      ]
+    },
+    {
+      "Route": "images/pexels-pixabay-280221.onchebefws.jpg",
+      "AssetFile": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\pexels-pixabay-280221.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2957862"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"rCsvq4J/bXr0suZH0NegcMjG5Z9i7TqOR8aXuUHHw2s=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 06 May 2025 02:42:59 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "onchebefws"
+        },
+        {
+          "Name": "label",
+          "Value": "images/pexels-pixabay-280221.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-rCsvq4J/bXr0suZH0NegcMjG5Z9i7TqOR8aXuUHHw2s="
+        }
+      ]
+    },
+    {
+      "Route": "images/pexels-wanderbug-3094423.jpg",
+      "AssetFile": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\pexels-wanderbug-3094423.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "611058"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"kj69AaCcAuIycRdDxlxVtp/jLPZVy6YzHUkBJgZmaHo=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 06 May 2025 02:42:56 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-kj69AaCcAuIycRdDxlxVtp/jLPZVy6YzHUkBJgZmaHo="
+        }
+      ]
+    },
+    {
+      "Route": "images/pexels-wanderbug-3094423.qeo4ymbjgt.jpg",
+      "AssetFile": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\pexels-wanderbug-3094423.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "611058"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"kj69AaCcAuIycRdDxlxVtp/jLPZVy6YzHUkBJgZmaHo=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 06 May 2025 02:42:56 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "qeo4ymbjgt"
+        },
+        {
+          "Name": "label",
+          "Value": "images/pexels-wanderbug-3094423.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-kj69AaCcAuIycRdDxlxVtp/jLPZVy6YzHUkBJgZmaHo="
         }
       ]
     },

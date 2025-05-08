@@ -1,0 +1,160 @@
+@model IEnumerable<HomeownersSubdivision.Models.ContactDirectory>
+@using HomeownersSubdivision.Models
+
+@{
+    ViewData["Title"] = "Contact Directory";
+    var userRole = ViewBag.UserRole as UserRole? ?? UserRole.Homeowner;
+    var isAdmin = userRole == UserRole.Administrator;
+}
+
+@await Html.PartialAsync("_LuxuryBackground")
+
+<style>
+    .main-heading {
+        display: flex;
+        align-items: center;
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(to right, #1a1a2e, #3366FF);
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        color: white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .main-heading i {
+        font-size: 1.75rem;
+        margin-right: 0.75rem;
+        color: #6889F7;
+    }
+    .luxury-page-container {
+        position: relative;
+        z-index: 1;
+    }
+</style>
+
+<div class="container mx-auto px-4 py-8 luxury-page-container">
+    <div class="main-heading mb-4">
+        <i class="bi bi-journal-bookmark"></i> Contact Directory
+    </div>
+    <p class="text-gray-200 mb-6">
+        Important subdivision contacts such as the homeowners' association, security office, and maintenance team.
+    </p>
+    <div class="mb-6 flex justify-between items-center">
+        <div></div>
+        @if (isAdmin)
+        {
+            <div class="flex space-x-2">
+                <a asp-action="Create" class="btn-primary">
+                    <i class="bi bi-plus-circle me-1"></i> Add New Contact
+                </a>
+                <a asp-action="Manage" class="btn-primary">
+                    <i class="bi bi-gear me-1"></i> Manage All Contacts
+                </a>
+            </div>
+        }
+    </div>
+    @if (!Model.Any())
+    {
+        <div class="bg-gray-100 p-6 rounded-lg text-center">
+            <p class="text-gray-600">No contacts are available at this time.</p>
+            @if (isAdmin)
+            {
+                <p class="mt-2">
+                    <a asp-action="Create" class="text-primary hover:text-primary-dark">
+                        <i class="bi bi-plus-circle"></i> Add a new contact
+                    </a>
+                </p>
+            }
+        </div>
+    }
+    else
+    {
+        <div>
+            @{
+                var groupedContacts = Model.GroupBy(c => c.Category).OrderBy(g => g.Key.ToString());
+            }
+            @foreach (var group in groupedContacts)
+            {
+                <div class="mb-8">
+                    <h2 class="text-xl font-semibold text-white mb-3 pb-2 border-b" style="text-shadow: 0 2px 8px rgba(0,0,0,0.25);">
+                        @group.Key.ToString()
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        @foreach (var contact in group.OrderBy(c => c.SortOrder).ThenBy(c => c.Name))
+                        {
+                            <div class="bg-white rounded-lg border hover:shadow-md transition-shadow duration-200 p-4">
+                                <div class="flex justify-between">
+                                    <h3 class="text-lg font-semibold text-gray-800">@contact.Name</h3>
+                                    @if (isAdmin)
+                                    {
+                                        <div class="flex space-x-1">
+                                            <a asp-action="Edit" asp-route-id="@contact.Id" class="text-primary hover:text-primary-dark">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                        </div>
+                                    }
+                                </div>
+                                <p class="text-gray-600 text-sm mb-2">@contact.Title</p>
+                                @if (!string.IsNullOrEmpty(contact.Department))
+                                {
+                                    <p class="text-gray-600 text-sm mb-2">@contact.Department</p>
+                                }
+                                <div class="mt-3 pt-2 border-t border-gray-100">
+                                    @if (!string.IsNullOrEmpty(contact.PhoneNumber))
+                                    {
+                                        <div class="flex items-center mb-1">
+                                            <i class="bi bi-telephone text-gray-500 mr-2"></i>
+                                            <a href="tel:@contact.PhoneNumber" class="text-primary hover:text-primary-dark">
+                                                @contact.PhoneNumber
+                                            </a>
+                                        </div>
+                                    }
+                                    @if (!string.IsNullOrEmpty(contact.Email))
+                                    {
+                                        <div class="flex items-center mb-1">
+                                            <i class="bi bi-envelope text-gray-500 mr-2"></i>
+                                            <a href="mailto:@contact.Email" class="text-primary hover:text-primary-dark">
+                                                @contact.Email
+                                            </a>
+                                        </div>
+                                    }
+                                    @if (!string.IsNullOrEmpty(contact.Office))
+                                    {
+                                        <div class="flex items-center mb-1">
+                                            <i class="bi bi-building text-gray-500 mr-2"></i>
+                                            <span class="text-gray-700">@contact.Office</span>
+                                        </div>
+                                    }
+                                    @if (!string.IsNullOrEmpty(contact.WorkingHours))
+                                    {
+                                        <div class="flex items-center mb-1">
+                                            <i class="bi bi-clock text-gray-500 mr-2"></i>
+                                            <span class="text-gray-700">@contact.WorkingHours</span>
+                                        </div>
+                                    }
+                                </div>
+                                <div class="mt-3 text-right">
+                                    <a asp-action="Details" asp-route-id="@contact.Id" class="text-sm text-primary hover:text-primary-dark">
+                                        View Details <i class="bi bi-arrow-right"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@section Styles {
+    <style>
+        .btn-primary {
+            @(isAdmin ? "bg-adminPrimary hover:bg-adminSecondary" : userRole == UserRole.Staff ? "bg-staffPrimary hover:bg-staffSecondary" : "bg-homeownerPrimary hover:bg-homeownerSecondary") text-white font-medium py-2 px-4 rounded inline-flex items-center transition-colors;
+        }
+        .btn-secondary {
+            bg-white text-gray-700 border border-gray-300 font-medium py-2 px-4 rounded inline-flex items-center hover:bg-gray-50 transition-colors;
+        }
+    </style>
+} 

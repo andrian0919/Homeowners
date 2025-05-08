@@ -1,0 +1,394 @@
+@model IEnumerable<HomeownersSubdivision.Models.Analytics.DashboardWidget>
+@using Microsoft.AspNetCore.Html
+@using Microsoft.AspNetCore.Mvc.Rendering
+@using System.Dynamic
+
+@{
+    ViewData["Title"] = "Analytics Dashboard";
+    var financialData = ViewBag.FinancialData as Dictionary<string, object>;
+    var serviceRequestData = ViewBag.ServiceRequestData as Dictionary<string, object>;
+    var communityData = ViewBag.CommunityData as Dictionary<string, object>;
+}
+
+@if (ViewData["UseAdminBackground"] != null && (bool)ViewData["UseAdminBackground"])
+{
+    <partial name="_AdminBackground" />
+}
+
+<div class="container mx-auto px-4 py-8">
+    <div class="admin-hero-section mb-8">
+        <div class="admin-hero-particle" id="particles">
+            <!-- Particles will be added by JavaScript -->
+        </div>
+        <div class="container mx-auto relative z-10">
+            <div class="flex justify-between items-center">
+                <h1 class="text-3xl font-bold text-white">Analytics Dashboard</h1>
+                <div class="flex space-x-2">
+                    <a href="@Url.Action("Index")" class="btn-luxury btn-sm">
+                        <i class="bi bi-file-earmark-bar-graph mr-1"></i> Available Reports
+                    </a>
+                    <a href="@Url.Action("SavedReports")" class="btn-outline-luxury btn-sm">
+                        <i class="bi bi-save mr-1"></i> Saved Reports
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Financial Summary Widget -->
+        <div class="col-span-1 admin-dashboard-card animate-luxury card-delay-1">
+            <div class="p-4 bg-gradient-to-r from-indigo-700 to-blue-600 border-b border-blue-800 rounded-t-lg">
+                <h2 class="text-lg font-semibold text-white">Monthly Revenue</h2>
+                <p class="text-sm text-blue-100">Financial summary for current month</p>
+            </div>
+            <div class="p-4">
+                <div class="text-center">
+                    <div class="text-4xl font-bold mb-2 text-indigo-600">
+                        @(financialData != null && financialData.ContainsKey("TotalPaymentsAmount") ? $"${financialData["TotalPaymentsAmount"]:N2}" : "--")
+                    </div>
+                    <div class="text-sm text-gray-600 mb-3">Total Revenue</div>
+                    <div class="flex justify-between text-sm mb-1">
+                        <span>Dues Collected:</span>
+                        <span class="font-semibold">
+                            @{
+                                var billsByType = financialData?["BillsByType"] as IEnumerable<dynamic>;
+                                var duesAmount = billsByType?.FirstOrDefault(x => x.Type == "Dues")?.Amount ?? 0;
+                                @($"${duesAmount:N2}")
+                            }
+                        </span>
+                    </div>
+                    <div class="flex justify-between text-sm mb-1">
+                        <span>Facility Rentals:</span>
+                        <span class="font-semibold">
+                            @{
+                                var facilityAmount = billsByType?.FirstOrDefault(x => x.Type == "FacilityRental")?.Amount ?? 0;
+                                @($"${facilityAmount:N2}")
+                            }
+                        </span>
+                    </div>
+                    <div class="flex justify-between text-sm mb-3">
+                        <span>Other Income:</span>
+                        <span class="font-semibold">
+                            @{
+                                var otherAmount = billsByType?.FirstOrDefault(x => x.Type == "Other")?.Amount ?? 0;
+                                @($"${otherAmount:N2}")
+                            }
+                        </span>
+                    </div>
+                    <a href="@Url.Action("FinancialSummary")" class="btn-sm btn-luxury w-full text-center">
+                        View Details
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Service Requests Widget -->
+        <div class="col-span-1 admin-dashboard-card animate-luxury card-delay-2">
+            <div class="p-4 bg-gradient-to-r from-amber-600 to-orange-500 border-b border-amber-700 rounded-t-lg">
+                <h2 class="text-lg font-semibold text-white">Service Requests</h2>
+                <p class="text-sm text-amber-100">Last 30 days activity</p>
+            </div>
+            <div class="p-4">
+                <div class="text-center">
+                    <div class="text-4xl font-bold mb-2 text-amber-600">
+                        @(serviceRequestData != null && serviceRequestData.ContainsKey("TotalRequests") ? serviceRequestData["TotalRequests"] : "--")
+                    </div>
+                    <div class="text-sm text-gray-600 mb-3">Total Requests</div>
+                    <div class="grid grid-cols-3 gap-2 mb-3">
+                        @{
+                            var countByStatus = serviceRequestData?["CountByStatus"] as IEnumerable<dynamic>;
+                            var completedCount = countByStatus?.FirstOrDefault(x => x.Status == "Completed")?.Count ?? 0;
+                            var inProgressCount = countByStatus?.FirstOrDefault(x => x.Status == "InProgress")?.Count ?? 0;
+                            var pendingCount = countByStatus?.FirstOrDefault(x => x.Status == "Pending")?.Count ?? 0;
+                        }
+                        <div class="bg-green-100 rounded p-2">
+                            <div class="font-bold text-green-600">@completedCount</div>
+                            <div class="text-xs">Completed</div>
+                        </div>
+                        <div class="bg-blue-100 rounded p-2">
+                            <div class="font-bold text-blue-600">@inProgressCount</div>
+                            <div class="text-xs">In Progress</div>
+                        </div>
+                        <div class="bg-red-100 rounded p-2">
+                            <div class="font-bold text-red-600">@pendingCount</div>
+                            <div class="text-xs">Pending</div>
+                        </div>
+                    </div>
+                    <a href="@Url.Action("ServiceRequestsSummary")" class="btn-sm btn-luxury w-full text-center">
+                        View Details
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Homeowner Activity Widget -->
+        <div class="col-span-1 admin-dashboard-card animate-luxury card-delay-3">
+            <div class="p-4 bg-gradient-to-r from-emerald-600 to-teal-500 border-b border-emerald-700 rounded-t-lg">
+                <h2 class="text-lg font-semibold text-white">Homeowner Activity</h2>
+                <p class="text-sm text-emerald-100">Community engagement metrics</p>
+            </div>
+            <div class="p-4">
+                <div class="text-center">
+                    <div class="flex justify-between items-end mb-4">
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-emerald-600">
+                                @(communityData != null && communityData.ContainsKey("TotalForumPosts") ? communityData["TotalForumPosts"] : "--")
+                            </div>
+                            <div class="text-xs text-gray-600">Forum Posts</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-emerald-600">
+                                @(communityData != null && communityData.ContainsKey("TotalForumTopics") ? communityData["TotalForumTopics"] : "--")
+                            </div>
+                            <div class="text-xs text-gray-600">Topics</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-emerald-600">
+                                @(communityData != null && communityData.ContainsKey("TotalEvents") ? communityData["TotalEvents"] : "--")
+                            </div>
+                            <div class="text-xs text-gray-600">Events</div>
+                        </div>
+                    </div>
+                    <div class="h-2 bg-gray-200 rounded-full mb-4">
+                        @{
+                            var totalPosts = communityData != null && communityData.ContainsKey("TotalForumPosts") ? Convert.ToInt32(communityData["TotalForumPosts"]) : 0;
+                            var totalTopics = communityData != null && communityData.ContainsKey("TotalForumTopics") ? Convert.ToInt32(communityData["TotalForumTopics"]) : 1;
+                            var percentage = totalTopics > 0 ? (totalPosts * 100.0 / totalTopics) : 0;
+                        }
+                        <div class="h-2 bg-emerald-500 rounded-full" style="width: @percentage%"></div>
+                    </div>
+                    <a href="@Url.Action("CommunityEngagementSummary")" class="btn-sm btn-luxury w-full text-center">
+                        View Details
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Facility Usage Widget -->
+        <div class="col-span-1 admin-dashboard-card animate-luxury card-delay-4">
+            <div class="p-4 bg-gradient-to-r from-purple-700 to-violet-600 border-b border-purple-800 rounded-t-lg">
+                <h2 class="text-lg font-semibold text-white">Facility Usage</h2>
+                <p class="text-sm text-purple-100">Reservation statistics</p>
+            </div>
+            <div class="p-4">
+                <div class="text-center">
+                    <div class="text-4xl font-bold mb-2 text-purple-600">
+                        @(ViewBag.TotalReservations ?? "--")
+                    </div>
+                    <div class="text-sm text-gray-600 mb-3">Reservations This Month</div>
+                    <div class="space-y-2 mb-3">
+                        @if (ViewBag.FacilityUsage != null)
+                        {
+                            foreach (var facility in ViewBag.FacilityUsage)
+                            {
+                        <div class="flex justify-between items-center">
+                                    <span class="text-sm">@facility.Name</span>
+                            <div class="w-2/3 bg-gray-200 rounded-full h-2">
+                                        <div class="bg-purple-500 h-2 rounded-full" style="width: @(facility.UsagePercentage)%"></div>
+                            </div>
+                                    <span class="text-sm font-semibold">@facility.Count</span>
+                        </div>
+                            }
+                        }
+                    </div>
+                    <a href="@Url.Action("Index", "Reservations")" class="btn-sm btn-luxury w-full text-center">
+                        View Details
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payments Overview Widget (Larger) -->
+        <div class="col-span-1 md:col-span-2 admin-dashboard-card animate-luxury card-delay-5">
+            <div class="p-4 bg-gradient-to-r from-blue-800 to-indigo-800 border-b border-blue-900 rounded-t-lg">
+                <h2 class="text-lg font-semibold text-white">Payments Overview</h2>
+                <p class="text-sm text-blue-100">Last 6 months payment tracking</p>
+            </div>
+            <div class="p-4">
+                <div class="relative h-80">
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="w-full">
+                            @if (financialData != null && financialData.ContainsKey("MonthlyTrend"))
+                            {
+                                var monthlyTrend = financialData["MonthlyTrend"] as IEnumerable<dynamic>;
+                                if (monthlyTrend != null && monthlyTrend.Any())
+                                {
+                                    var maxAmount = monthlyTrend.Max(x => x.Amount ?? 0);
+                            <div class="flex items-end h-60 justify-between px-4 space-x-2">
+                                        @foreach (var month in monthlyTrend)
+                                        {
+                                            var amount = month.Amount ?? 0;
+                                            var height = maxAmount > 0 ? (amount / maxAmount * 100) : 0;
+                                <div class="flex flex-col items-center">
+                                                <div class="w-12 bg-blue-500 rounded-t" style="height: @(height)%"></div>
+                                                <div class="text-xs mt-2 text-gray-600">@(month.Period ?? "--")</div>
+                                </div>
+                                        }
+                                </div>
+                                }
+                                else
+                                {
+                                    <div class="text-center text-gray-500">
+                                        <i class="bi bi-graph-up text-5xl mb-2"></i>
+                                        <p>No payment data available</p>
+                                </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="text-center text-gray-500">
+                                    <i class="bi bi-graph-up text-5xl mb-2"></i>
+                                    <p>No payment data available</p>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@functions {
+    private string GetWidgetSizeClass(HomeownersSubdivision.Models.Analytics.WidgetSize size)
+    {
+        return size switch
+        {
+            HomeownersSubdivision.Models.Analytics.WidgetSize.Small => "col-span-1",
+            HomeownersSubdivision.Models.Analytics.WidgetSize.Medium => "col-span-1 md:col-span-2",
+            HomeownersSubdivision.Models.Analytics.WidgetSize.Large => "col-span-1 md:col-span-3",
+            HomeownersSubdivision.Models.Analytics.WidgetSize.ExtraLarge => "col-span-1 md:col-span-4",
+            _ => "col-span-1 md:col-span-2"
+        };
+    }
+
+    private async Task<IHtmlContent> RenderWidgetContentAsync(HomeownersSubdivision.Models.Analytics.DashboardWidget widget)
+    {
+        if (widget.ReportDefinition != null)
+        {
+            // For widgets based on reports, render a summary based on type
+            return await Html.PartialAsync("_WidgetContent", widget);
+        }
+        else
+        {
+            // For custom widgets, render based on configuration
+            var contentHtml = new HtmlContentBuilder();
+            
+            switch (widget.Type)
+            {
+                case HomeownersSubdivision.Models.Analytics.WidgetType.Counter:
+                    contentHtml.AppendHtml("<div class=\"text-center\">");
+                    contentHtml.AppendHtml("<div class=\"text-4xl font-bold mb-2\">0</div>");
+                    contentHtml.AppendHtml("<div class=\"text-sm text-gray-600\">No data available</div>");
+                    contentHtml.AppendHtml("</div>");
+                    break;
+                    
+                case HomeownersSubdivision.Models.Analytics.WidgetType.LineChart:
+                case HomeownersSubdivision.Models.Analytics.WidgetType.BarChart:
+                case HomeownersSubdivision.Models.Analytics.WidgetType.PieChart:
+                    contentHtml.AppendHtml("<div class=\"text-center p-6\">");
+                    contentHtml.AppendHtml("<i class=\"bi bi-graph-up text-5xl text-gray-300\"></i>");
+                    contentHtml.AppendHtml("<p class=\"mt-3 text-gray-500\">Chart data not available</p>");
+                    contentHtml.AppendHtml("</div>");
+                    break;
+                    
+                case HomeownersSubdivision.Models.Analytics.WidgetType.Table:
+                    contentHtml.AppendHtml("<div class=\"text-center p-4\">");
+                    contentHtml.AppendHtml("<i class=\"bi bi-table text-5xl text-gray-300\"></i>");
+                    contentHtml.AppendHtml("<p class=\"mt-3 text-gray-500\">Table data not available</p>");
+                    contentHtml.AppendHtml("</div>");
+                    break;
+                    
+                case HomeownersSubdivision.Models.Analytics.WidgetType.CustomHtml:
+                    if (!string.IsNullOrEmpty(widget.Configuration))
+                    {
+                        contentHtml.AppendHtml(widget.Configuration);
+                    }
+                    else
+                    {
+                        contentHtml.AppendHtml("<div class=\"text-center p-4\">");
+                        contentHtml.AppendHtml("<p class=\"text-gray-500\">Custom content not configured</p>");
+                        contentHtml.AppendHtml("</div>");
+                    }
+                    break;
+                    
+                default:
+                    contentHtml.AppendHtml("<div class=\"text-center p-4\">");
+                    contentHtml.AppendHtml("<p class=\"text-gray-500\">Widget content not available</p>");
+                    contentHtml.AppendHtml("</div>");
+                    break;
+            }
+            
+            return contentHtml;
+        }
+    }
+}
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Create particle effects for the hero section
+            const particlesContainer = document.getElementById('particles');
+            if (particlesContainer) {
+                const particleCount = 15;
+                
+                for (let i = 0; i < particleCount; i++) {
+                    const particle = document.createElement('span');
+                    const size = Math.random() * 5 + 2; // Random size between 2-7px
+                    
+                    // Set random position
+                    const posX = Math.random() * 100;
+                    const posY = Math.random() * 100;
+                    
+                    // Set random animation duration and delay
+                    const duration = Math.random() * 8 + 4; // 4-12 seconds
+                    const delay = Math.random() * 3; // 0-3 seconds
+                    
+                    // Apply styles
+                    particle.style.width = `${size}px`;
+                    particle.style.height = `${size}px`;
+                    particle.style.left = `${posX}%`;
+                    particle.style.top = `${posY}%`;
+                    particle.style.position = 'absolute';
+                    particle.style.backgroundColor = 'rgba(255, 255, 255, 0.5)';
+                    particle.style.borderRadius = '50%';
+                    particle.style.animation = `float ${duration}s linear infinite`;
+                    particle.style.animationDelay = `${delay}s`;
+                    
+                    particlesContainer.appendChild(particle);
+                }
+            }
+            
+            // Initialize animations for dashboard widgets
+            const widgets = document.querySelectorAll('.admin-dashboard-card');
+            widgets.forEach((widget, index) => {
+                setTimeout(() => {
+                    widget.classList.add('animate-fade-in');
+                }, index * 100);
+            });
+        });
+        
+        // Add animation keyframe
+        if (!document.getElementById('float-animation')) {
+            const style = document.createElement('style');
+            style.id = 'float-animation';
+            style.textContent = `
+                @@keyframes float {
+                    0% {
+                        transform: translateY(0) translateX(0);
+                        opacity: 0;
+                    }
+                    50% {
+                        opacity: 0.8;
+                    }
+                    100% {
+                        transform: translateY(-20px) translateX(10px);
+                        opacity: 0;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+    </script>
+} 

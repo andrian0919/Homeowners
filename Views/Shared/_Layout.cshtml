@@ -1,4 +1,5 @@
 @using HomeownersSubdivision.Models
+@inject IHttpContextAccessor HttpContextAccessor
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,7 +8,9 @@
     <title>@ViewData["Title"] - Homeowners Subdivision</title>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/luxury.css" asp-append-version="true" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -44,9 +47,10 @@
             position: relative;
             font-weight: 500;
             font-size: 0.875rem;
-            padding: 0.75rem 1rem;
+            padding: 0.75rem 0.5rem;
             transition-property: color;
             transition-duration: 150ms;
+            white-space: nowrap;
         }
         
         .nav-link:hover {
@@ -67,6 +71,103 @@
             height: 2px;
             background-color: #3498db;
         }
+
+        /* Special styling for Facilities nav link */
+        .nav-link[asp-controller="Facilities"] {
+            color: #9c59b6;
+            font-weight: 600;
+        }
+        
+        .nav-link[asp-controller="Facilities"]:hover {
+            color: #8e44ad;
+        }
+        
+        .nav-link[asp-controller="Facilities"].active {
+            color: #9c59b6;
+        }
+        
+        .nav-link[asp-controller="Facilities"].active:after {
+            background-color: #9c59b6;
+        }
+        
+        /* Admin dashboard styling for consistent theme */
+        .nav-link[asp-action="AdminDashboard"],
+        .nav-link[asp-controller="Announcements"],
+        .nav-link[asp-controller="ServiceRequests"],
+        .nav-link[asp-controller="Reservations"],
+        .nav-link[asp-controller="VisitorPass"],
+        .nav-link[asp-controller="VehicleRegistration"],
+        .nav-link[asp-controller="EmergencyContact"],
+        .nav-link[asp-controller="ContactDirectory"],
+        .nav-link[asp-action="ManageUsers"],
+        .nav-link[asp-controller="Billing"],
+        .nav-link[asp-controller="Forum"],
+        .nav-link[asp-controller="Feedback"],
+        .nav-link[asp-controller="Reports"] {
+            color: #4D76E1;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link[asp-action="AdminDashboard"]:hover,
+        .nav-link[asp-controller="Announcements"]:hover,
+        .nav-link[asp-controller="ServiceRequests"]:hover,
+        .nav-link[asp-controller="Reservations"]:hover,
+        .nav-link[asp-controller="VisitorPass"]:hover,
+        .nav-link[asp-controller="VehicleRegistration"]:hover,
+        .nav-link[asp-controller="EmergencyContact"]:hover,
+        .nav-link[asp-controller="ContactDirectory"]:hover,
+        .nav-link[asp-action="ManageUsers"]:hover,
+        .nav-link[asp-controller="Billing"]:hover,
+        .nav-link[asp-controller="Forum"]:hover,
+        .nav-link[asp-controller="Feedback"]:hover,
+        .nav-link[asp-controller="Reports"]:hover {
+            color: #6889F7;
+            transform: translateY(-1px);
+            text-shadow: 0 1px 3px rgba(26, 26, 46, 0.2);
+        }
+        
+        .nav-link[asp-action="AdminDashboard"].active,
+        .nav-link[asp-controller="Announcements"].active,
+        .nav-link[asp-controller="ServiceRequests"].active,
+        .nav-link[asp-controller="Reservations"].active,
+        .nav-link[asp-controller="VisitorPass"].active,
+        .nav-link[asp-controller="VehicleRegistration"].active,
+        .nav-link[asp-controller="EmergencyContact"].active,
+        .nav-link[asp-controller="ContactDirectory"].active,
+        .nav-link[asp-action="ManageUsers"].active,
+        .nav-link[asp-controller="Billing"].active,
+        .nav-link[asp-controller="Forum"].active,
+        .nav-link[asp-controller="Feedback"].active,
+        .nav-link[asp-controller="Reports"].active {
+            color: #3366FF;
+            font-weight: 700;
+        }
+        
+        .nav-link[asp-action="AdminDashboard"].active:after,
+        .nav-link[asp-controller="Announcements"].active:after,
+        .nav-link[asp-controller="ServiceRequests"].active:after,
+        .nav-link[asp-controller="Reservations"].active:after,
+        .nav-link[asp-controller="VisitorPass"].active:after,
+        .nav-link[asp-controller="VehicleRegistration"].active:after,
+        .nav-link[asp-controller="EmergencyContact"].active:after,
+        .nav-link[asp-controller="ContactDirectory"].active:after,
+        .nav-link[asp-action="ManageUsers"].active:after,
+        .nav-link[asp-controller="Billing"].active:after,
+        .nav-link[asp-controller="Forum"].active:after,
+        .nav-link[asp-controller="Feedback"].active:after,
+        .nav-link[asp-controller="Reports"].active:after {
+            background-color: #3366FF;
+            height: 3px;
+            box-shadow: 0 1px 2px rgba(26, 26, 46, 0.3);
+        }
+
+        @@media (max-width: 1280px) {
+            .nav-link {
+                padding: 0.75rem 0.4rem;
+                font-size: 0.8rem;
+            }
+        }
     </style>
 </head>
 @{
@@ -76,23 +177,38 @@
     
     if (userRole == UserRole.Administrator.ToString())
     {
-        headerClasses = "admin-gradient";
+        headerClasses = "admin-luxury-gradient";
     }
     else if (userRole == UserRole.Staff.ToString())
     {
-        headerClasses = "staff-gradient";
+        headerClasses = "staff-luxury-gradient";
     }
     else if (userRole == UserRole.Homeowner.ToString())
     {
-        headerClasses = "homeowner-gradient";
+        headerClasses = "homeowner-luxury-gradient";
     }
     else
     {
-        headerClasses = "guest-gradient";
+        headerClasses = "guest-luxury-gradient";
     }
+
+    string controller = HttpContextAccessor.HttpContext.Request.RouteValues["controller"]?.ToString();
+    string action = HttpContextAccessor.HttpContext.Request.RouteValues["action"]?.ToString();
+    bool isLoginPage = controller == "Account" && action == "Login";
 }
 <body class="min-h-screen flex flex-col bg-gray-50">
-    <header class="@headerClasses text-white shadow">
+    @{
+        bool isHomePage = HttpContextAccessor.HttpContext.Request.Path.Value.Trim('/').ToLower() == "home" || 
+                        HttpContextAccessor.HttpContext.Request.Path.Value.Trim('/').ToLower() == "";
+    }
+    
+    @if (isHomePage)
+    {
+        <!-- Include video background partial view for home page -->
+        <partial name="_VideoBackground" />
+    }
+
+    <header class="@headerClasses luxury-header text-white shadow">
         <div class="container mx-auto px-4 py-2 flex justify-between items-center">
             <div class="flex items-center space-x-6">
                 <a class="text-xl font-bold text-white flex items-center" asp-area="" asp-controller="Home" asp-action="Index">
@@ -160,10 +276,11 @@
                         
                         <!-- Notifications dropdown -->
                         <div x-show="open" x-on:click.away="open = false" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="transform opacity-0 scale-95" x-transition:enter-end="transform opacity-100 scale-100" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="transform opacity-100 scale-100" x-transition:leave-end="transform opacity-0 scale-95" class="absolute right-0 z-10 mt-2 w-96 max-w-[90vw] origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" tabindex="-1">
-                            <div class="px-4 py-3 border-b">
+                            <div class="px-4 py-3 border-b flex justify-between items-center">
                                 <h3 class="text-sm font-semibold text-gray-900">Notifications</h3>
+                                <a href="@Url.Action("Index", "Notifications")" class="text-xs text-primary hover:text-primary-dark">View All</a>
                             </div>
-                            <div x-ref="notificationsContainer">
+                            <div x-ref="notificationsContainer" class="max-h-[60vh] overflow-y-auto">
                                 <div class="p-4 text-center">
                                     <i class="bi bi-hourglass-split animate-spin mr-2"></i> Loading...
                                 </div>
@@ -215,7 +332,7 @@
                         </button>
                     </div>
                     
-                    <div class="hidden md:flex" x-bind:class="{ 'block': mobileMenuOpen, 'hidden': !mobileMenuOpen }">
+                    <div class="hidden md:flex flex-wrap space-x-1" x-bind:class="{ 'block': mobileMenuOpen, 'hidden': !mobileMenuOpen }">
                         <a class="nav-link @(ViewContext?.RouteData?.Values["Action"]?.ToString() == "Index" ? "active" : "")" 
                            asp-area="" asp-controller="Home" asp-action="Index">
                             <i class="bi bi-house mr-1"></i> Home
@@ -231,21 +348,53 @@
                                asp-area="" asp-controller="Announcements" asp-action="Index">
                                 <i class="bi bi-megaphone mr-1"></i> Announcements
                             </a>
+                            <a class="nav-link @(ViewContext?.RouteData?.Values["Controller"]?.ToString() == "ServiceRequests" ? "active" : "")" 
+                               asp-area="" asp-controller="ServiceRequests" asp-action="Index">
+                                <i class="bi bi-tools mr-1"></i> Service Requests
+                            </a>
                             <a class="nav-link @(ViewContext?.RouteData?.Values["Controller"]?.ToString() == "Facilities" ? "active" : "")" 
                                asp-area="" asp-controller="Facilities" asp-action="Index">
                                 <i class="bi bi-building mr-1"></i> Facilities
                             </a>
-                            <a class="nav-link @(ViewContext?.RouteData?.Values["Controller"]?.ToString() == "Reservations" ? "active" : "")" 
-                               asp-area="" asp-controller="Reservations" asp-action="Index">
-                                <i class="bi bi-calendar-check mr-1"></i> Reservations
+                            <a class="nav-link @(ViewContext?.RouteData?.Values["Controller"]?.ToString() == "VisitorPass" ? "active" : "")" 
+                               asp-area="" asp-controller="VisitorPass" asp-action="Index">
+                                <i class="bi bi-person-badge mr-1"></i> Visitor Passes
                             </a>
-                            <a class="nav-link @(ViewContext?.RouteData?.Values["Action"]?.ToString() == "ManageUsers" ? "active" : "")" 
-                               asp-area="" asp-controller="Home" asp-action="ManageUsers">
+                            <a class="nav-link @(ViewContext?.RouteData?.Values["Controller"]?.ToString() == "VehicleRegistration" ? "active" : "")" 
+                               asp-area="" asp-controller="VehicleRegistration" asp-action="Index">
+                                <i class="bi bi-car-front mr-1"></i> Vehicle Registry
+                            </a>
+                            <a class="nav-link @(ViewContext?.RouteData?.Values["Controller"]?.ToString() == "EmergencyContact" ? "active" : "")" 
+                               asp-area="" asp-controller="EmergencyContact" asp-action="Index">
+                                <i class="bi bi-exclamation-triangle mr-1"></i> Emergency Contacts
+                            </a>
+                            <a class="nav-link @(ViewContext?.RouteData?.Values["Controller"]?.ToString() == "ContactDirectory" ? "active" : "")" 
+                               asp-area="" asp-controller="ContactDirectory" asp-action="Index">
+                                <i class="bi bi-journal-text mr-1"></i> Contact Directory
+                            </a>
+                            <a class="nav-link @(ViewContext?.RouteData?.Values["Controller"]?.ToString() == "Reservations" && ViewContext?.RouteData?.Values["Action"]?.ToString() == "AdminIndex" ? "active" : "")" 
+                               asp-area="" asp-controller="Reservations" asp-action="AdminIndex">
+                                <i class="bi bi-calendar-week mr-1"></i> Manage Reservations
+                            </a>
+                            <a class="nav-link @(ViewContext?.RouteData?.Values["Controller"]?.ToString() == "Users" ? "active" : "")" 
+                               asp-area="" asp-controller="Users" asp-action="Index">
                                 <i class="bi bi-people mr-1"></i> Manage Users
                             </a>
                             <a class="nav-link @(ViewContext?.RouteData?.Values["Action"]?.ToString() == "Index" && ViewContext?.RouteData?.Values["Controller"]?.ToString() == "Billing" ? "active" : "")" 
                                asp-area="" asp-controller="Billing" asp-action="Index">
                                 <i class="bi bi-receipt-cutoff mr-1"></i> Manage Bills
+                            </a>
+                            <a class="nav-link @(ViewContext?.RouteData?.Values["Controller"]?.ToString() == "Forum" ? "active" : "")" 
+                               asp-area="" asp-controller="Forum" asp-action="ManageCategories">
+                                <i class="bi bi-chat-square-text mr-1"></i> Manage Forum
+                            </a>
+                            <a class="nav-link @(ViewContext?.RouteData?.Values["Controller"]?.ToString() == "Feedback" ? "active" : "")" 
+                               asp-area="" asp-controller="Feedback" asp-action="Index">
+                                <i class="bi bi-chat-dots mr-1"></i> Feedback
+                            </a>
+                            <a class="nav-link @(ViewContext?.RouteData?.Values["Controller"]?.ToString() == "Reports" ? "active" : "")" 
+                               asp-area="" asp-controller="Reports" asp-action="Index">
+                                <i class="bi bi-graph-up mr-1"></i> Reports
                             </a>
                         }
                         
@@ -259,6 +408,10 @@
                                asp-area="" asp-controller="Announcements" asp-action="Index">
                                 <i class="bi bi-megaphone mr-1"></i> Announcements
                             </a>
+                            <a class="nav-link @(ViewContext?.RouteData?.Values["Controller"]?.ToString() == "ServiceRequests" ? "active" : "")" 
+                               asp-area="" asp-controller="ServiceRequests" asp-action="AssignedToMe">
+                                <i class="bi bi-tools mr-1"></i> Service Requests
+                            </a>
                             <a class="nav-link @(ViewContext?.RouteData?.Values["Controller"]?.ToString() == "Facilities" ? "active" : "")" 
                                asp-area="" asp-controller="Facilities" asp-action="Index">
                                 <i class="bi bi-building mr-1"></i> Facilities
@@ -267,9 +420,33 @@
                                asp-area="" asp-controller="Reservations" asp-action="Index">
                                 <i class="bi bi-calendar-check mr-1"></i> Reservations
                             </a>
+                            <a class="nav-link @(ViewContext?.RouteData?.Values["Controller"]?.ToString() == "VisitorPass" ? "active" : "")" 
+                               asp-area="" asp-controller="VisitorPass" asp-action="Index">
+                                <i class="bi bi-person-badge mr-1"></i> Visitor Passes
+                            </a>
+                            <a class="nav-link @(ViewContext?.RouteData?.Values["Controller"]?.ToString() == "VehicleRegistration" ? "active" : "")" 
+                               asp-area="" asp-controller="VehicleRegistration" asp-action="Index">
+                                <i class="bi bi-car-front mr-1"></i> Vehicle Registry
+                            </a>
+                            <a class="nav-link @(ViewContext?.RouteData?.Values["Controller"]?.ToString() == "EmergencyContact" ? "active" : "")" 
+                               asp-area="" asp-controller="EmergencyContact" asp-action="Index">
+                                <i class="bi bi-exclamation-triangle mr-1"></i> Emergency Contacts
+                            </a>
+                            <a class="nav-link @(ViewContext?.RouteData?.Values["Controller"]?.ToString() == "ContactDirectory" ? "active" : "")" 
+                               asp-area="" asp-controller="ContactDirectory" asp-action="Index">
+                                <i class="bi bi-journal-text mr-1"></i> Contact Directory
+                            </a>
                             <a class="nav-link @(ViewContext?.RouteData?.Values["Action"]?.ToString() == "ManageHomeowners" ? "active" : "")" 
                                asp-area="" asp-controller="Home" asp-action="ManageHomeowners">
                                 <i class="bi bi-people mr-1"></i> Homeowners
+                            </a>
+                            <a class="nav-link @(ViewContext?.RouteData?.Values["Controller"]?.ToString() == "Forum" ? "active" : "")" 
+                               asp-area="" asp-controller="Forum" asp-action="Index">
+                                <i class="bi bi-chat-square mr-1"></i> Forum
+                            </a>
+                            <a class="nav-link @(ViewContext?.RouteData?.Values["Controller"]?.ToString() == "Feedback" ? "active" : "")" 
+                               asp-area="" asp-controller="Feedback" asp-action="Index">
+                                <i class="bi bi-chat-dots mr-1"></i> Feedback
                             </a>
                         }
                         
@@ -283,6 +460,10 @@
                                asp-area="" asp-controller="Announcements" asp-action="Index">
                                 <i class="bi bi-megaphone mr-1"></i> Announcements
                             </a>
+                            <a class="nav-link @(ViewContext?.RouteData?.Values["Controller"]?.ToString() == "ServiceRequests" ? "active" : "")" 
+                               asp-area="" asp-controller="ServiceRequests" asp-action="MyRequests">
+                                <i class="bi bi-tools mr-1"></i> Service Requests
+                            </a>
                             <a class="nav-link @(ViewContext?.RouteData?.Values["Controller"]?.ToString() == "Facilities" ? "active" : "")" 
                                asp-area="" asp-controller="Facilities" asp-action="Index">
                                 <i class="bi bi-building mr-1"></i> Facilities
@@ -290,6 +471,22 @@
                             <a class="nav-link @(ViewContext?.RouteData?.Values["Controller"]?.ToString() == "Reservations" ? "active" : "")" 
                                asp-area="" asp-controller="Reservations" asp-action="Index">
                                 <i class="bi bi-calendar-check mr-1"></i> My Reservations
+                            </a>
+                            <a class="nav-link @(ViewContext?.RouteData?.Values["Controller"]?.ToString() == "VisitorPass" ? "active" : "")" 
+                               asp-area="" asp-controller="VisitorPass" asp-action="Index">
+                                <i class="bi bi-person-badge mr-1"></i> Visitor Passes
+                            </a>
+                            <a class="nav-link @(ViewContext?.RouteData?.Values["Controller"]?.ToString() == "VehicleRegistration" ? "active" : "")" 
+                               asp-area="" asp-controller="VehicleRegistration" asp-action="Index">
+                                <i class="bi bi-car-front mr-1"></i> My Vehicles
+                            </a>
+                            <a class="nav-link @(ViewContext?.RouteData?.Values["Controller"]?.ToString() == "EmergencyContact" ? "active" : "")" 
+                               asp-area="" asp-controller="EmergencyContact" asp-action="Index">
+                                <i class="bi bi-exclamation-triangle mr-1"></i> Emergency Contacts
+                            </a>
+                            <a class="nav-link @(ViewContext?.RouteData?.Values["Controller"]?.ToString() == "ContactDirectory" ? "active" : "")" 
+                               asp-area="" asp-controller="ContactDirectory" asp-action="Index">
+                                <i class="bi bi-journal-text mr-1"></i> Contact Directory
                             </a>
                             <a class="nav-link @(ViewContext?.RouteData?.Values["Action"]?.ToString() == "MyProperty" ? "active" : "")" 
                                asp-area="" asp-controller="Home" asp-action="MyProperty">
@@ -303,17 +500,27 @@
                                asp-area="" asp-controller="Payments" asp-action="PaymentHistory">
                                 <i class="bi bi-credit-card mr-1"></i> Payment History
                             </a>
+                            <a class="nav-link @(ViewContext?.RouteData?.Values["Controller"]?.ToString() == "Forum" ? "active" : "")" 
+                               asp-area="" asp-controller="Forum" asp-action="Index">
+                                <i class="bi bi-chat mr-1"></i> Community Forum
+                            </a>
+                            <a class="nav-link @(ViewContext?.RouteData?.Values["Controller"]?.ToString() == "Feedback" ? "active" : "")" 
+                               asp-area="" asp-controller="Feedback" asp-action="Index">
+                                <i class="bi bi-chat-dots mr-1"></i> Feedback
+                            </a>
                         }
                         
                         <a class="nav-link @(ViewContext?.RouteData?.Values["Action"]?.ToString() == "About" ? "active" : "")" 
                            asp-area="" asp-controller="Home" asp-action="About">
                             <i class="bi bi-info-circle mr-1"></i> About
                         </a>
-                        
+                        @if (userRole != UserRole.Administrator.ToString())
+                        {
                         <a class="nav-link @(ViewContext?.RouteData?.Values["Action"]?.ToString() == "Contact" ? "active" : "")" 
                            asp-area="" asp-controller="Home" asp-action="Contact">
                             <i class="bi bi-envelope mr-1"></i> Contact
                         </a>
+                        }
                     </div>
                 </div>
             </div>
@@ -324,28 +531,28 @@
         @RenderBody()
     </main>
 
-    <footer class="bg-gray-800 text-white py-6">
+    <footer class="footer-luxury">
         <div class="container mx-auto px-4">
             <div class="flex flex-col md:flex-row justify-between items-center">
                 <div class="mb-4 md:mb-0">
                     <p class="text-center md:text-left mb-2">
                         &copy; @DateTime.Now.Year - Homeowners Subdivision
                     </p>
-                    <p class="text-sm text-gray-400 text-center md:text-left">
-                        Providing community management solutions
+                    <p class="text-sm text-gray-200 text-center md:text-left">
+                        Providing luxury community management solutions
                     </p>
                 </div>
                 <div class="flex space-x-4">
-                    <a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">
+                    <a href="#" class="text-gray-300 hover:text-white transition-colors duration-200">
                         <i class="bi bi-facebook"></i>
                     </a>
-                    <a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">
+                    <a href="#" class="text-gray-300 hover:text-white transition-colors duration-200">
                         <i class="bi bi-twitter"></i>
                     </a>
-                    <a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">
+                    <a href="#" class="text-gray-300 hover:text-white transition-colors duration-200">
                         <i class="bi bi-instagram"></i>
                     </a>
-                    <a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">
+                    <a href="#" class="text-gray-300 hover:text-white transition-colors duration-200">
                         <i class="bi bi-linkedin"></i>
                     </a>
                 </div>
@@ -383,5 +590,6 @@
     </script>
     
     @await RenderSectionAsync("Scripts", required: false)
+    <partial name="_AlertDismissal" />
 </body>
 </html> 

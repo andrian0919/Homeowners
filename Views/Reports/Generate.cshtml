@@ -1,0 +1,183 @@
+@model IEnumerable<HomeownersSubdivision.Models.Analytics.ReportParameter>
+
+@{
+    ViewData["Title"] = "Generate Report";
+    var reportDefinition = ViewBag.ReportDefinition;
+}
+
+<div class="container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-6">
+        <div>
+            <h1 class="text-3xl font-bold">Generate Report</h1>
+            @if (reportDefinition != null)
+            {
+                <p class="text-gray-600">@reportDefinition.Name</p>
+            }
+        </div>
+        <div class="flex space-x-2">
+            <a href="@Url.Action("Index")" class="btn-outline-dark">
+                <i class="bi bi-arrow-left mr-1"></i> Back to Reports
+            </a>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+        @if (reportDefinition != null)
+        {
+            <div class="p-4 bg-blue-50 border-b border-blue-100">
+                <h2 class="text-lg font-semibold text-blue-700">@reportDefinition.Name</h2>
+                <p class="text-sm text-blue-600">@reportDefinition.Description</p>
+                <div class="mt-2">
+                    <span class="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800">
+                        @reportDefinition.Category
+                    </span>
+                </div>
+            </div>
+            
+            <div class="p-6">
+                @if (ViewData.ModelState.Any(x => x.Value.Errors.Any()))
+                {
+                    <div class="bg-red-50 border-l-4 border-red-400 p-4 mb-6 rounded-md">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <i class="bi bi-exclamation-triangle text-red-400"></i>
+                            </div>
+                            <div class="ml-3">
+                                <div asp-validation-summary="All" class="text-sm text-red-700"></div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                <form asp-action="Generate" asp-route-id="@reportDefinition.Id" method="post">
+                    <input type="hidden" name="id" value="@reportDefinition.Id" />
+                    
+                    @if (Model == null || !Model.Any())
+                    {
+                        <div class="mb-6">
+                            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4">
+                                <div class="flex">
+                                    <div class="flex-shrink-0">
+                                        <i class="bi bi-info-circle text-yellow-400"></i>
+                                    </div>
+                                    <div class="ml-3">
+                                        <p class="text-sm text-yellow-700">
+                                            This report doesn't require any parameters. Click "Generate Report" to continue.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="mb-6">
+                            <h3 class="text-lg font-semibold mb-4">Report Parameters</h3>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                @foreach (var parameter in Model.OrderBy(p => p.SortOrder))
+                                {
+                                    <div class="mb-4">
+                                        <label for="@parameter.Name" class="block text-sm font-medium text-gray-700 mb-2">
+                                            @parameter.Label @(parameter.IsRequired ? "*" : "")
+                                        </label>
+                                        
+                                        @switch (parameter.Type)
+                                        {
+                                            case HomeownersSubdivision.Models.Analytics.ParameterType.String:
+                                                <input type="text" id="@parameter.Name" name="@parameter.Name" 
+                                                    value="@parameter.DefaultValue" 
+                                                    class="form-input w-full rounded-md"
+                                                    @(parameter.IsRequired ? "required" : "") />
+                                                break;
+                                                
+                                            case HomeownersSubdivision.Models.Analytics.ParameterType.DateTime:
+                                                <input type="date" id="@parameter.Name" name="@parameter.Name" 
+                                                    value="@parameter.DefaultValue" 
+                                                    class="form-input w-full rounded-md"
+                                                    @(parameter.IsRequired ? "required" : "") />
+                                                break;
+                                                
+                                            case HomeownersSubdivision.Models.Analytics.ParameterType.Integer:
+                                                <input type="number" id="@parameter.Name" name="@parameter.Name" 
+                                                    value="@parameter.DefaultValue" 
+                                                    class="form-input w-full rounded-md"
+                                                    @(parameter.IsRequired ? "required" : "") />
+                                                break;
+                                                
+                                            case HomeownersSubdivision.Models.Analytics.ParameterType.Decimal:
+                                                <input type="number" id="@parameter.Name" name="@parameter.Name" 
+                                                    value="@parameter.DefaultValue" step="0.01"
+                                                    class="form-input w-full rounded-md"
+                                                    @(parameter.IsRequired ? "required" : "") />
+                                                break;
+                                                
+                                            case HomeownersSubdivision.Models.Analytics.ParameterType.Boolean:
+                                                <div class="flex items-center">
+                                                    <input type="checkbox" id="@parameter.Name" name="@parameter.Name" 
+                                                        value="true" 
+                                                        @(parameter.DefaultValue == "true" ? "checked" : "")
+                                                        class="form-checkbox h-4 w-4 text-blue-600" />
+                                                    <label for="@parameter.Name" class="ml-2 block text-sm text-gray-900">
+                                                        Yes
+                                                    </label>
+                                                </div>
+                                                break;
+                                                
+                                            case HomeownersSubdivision.Models.Analytics.ParameterType.Enum:
+                                                <select id="@parameter.Name" name="@parameter.Name" 
+                                                    class="form-select w-full rounded-md"
+                                                    @(parameter.IsRequired ? "required" : "")>
+                                                    <option value="">Select...</option>
+                                                    @if (!string.IsNullOrEmpty(parameter.Options))
+                                                    {
+                                                        var options = parameter.Options.Split(',').Select(o => o.Trim());
+                                                        foreach (var option in options)
+                                                        {
+                                                            if (parameter.DefaultValue == option)
+                                                            {
+                                                                <option value="@option" selected>@option</option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@option">@option</option>
+                                                            }
+                                                        }
+                                                    }
+                                                </select>
+                                                break;
+                                                
+                                            default:
+                                                <input type="text" id="@parameter.Name" name="@parameter.Name" 
+                                                    value="@parameter.DefaultValue" 
+                                                    class="form-input w-full rounded-md"
+                                                    @(parameter.IsRequired ? "required" : "") />
+                                                break;
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                    
+                    <div class="flex justify-end">
+                        <button type="submit" class="btn-primary">
+                            <i class="bi bi-file-earmark-bar-graph mr-1"></i> Generate Report
+                        </button>
+                    </div>
+                </form>
+            </div>
+        }
+        else
+        {
+            <div class="p-6 text-center">
+                <i class="bi bi-exclamation-circle text-4xl text-gray-400 mb-3"></i>
+                <h3 class="text-xl font-semibold text-gray-700 mb-2">Report Not Found</h3>
+                <p class="text-gray-600 mb-4">The requested report definition could not be found.</p>
+                <a href="@Url.Action("Index")" class="btn-primary">
+                    <i class="bi bi-arrow-left mr-1"></i> Back to Reports
+                </a>
+            </div>
+        }
+    </div>
+</div> 

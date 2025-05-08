@@ -1,0 +1,230 @@
+@model IEnumerable<HomeownersSubdivision.Models.ContactDirectory>
+@using HomeownersSubdivision.Models
+
+@{
+    ViewData["Title"] = "Manage Contacts";
+}
+
+<div class="bg-white p-6 rounded-lg shadow-md">
+    <div class="mb-6 flex justify-between items-center">
+        <h1 class="text-2xl font-bold text-gray-800">Manage Contacts</h1>
+        
+        <div class="flex space-x-2">
+            <a asp-action="Index" class="btn-secondary">
+                <i class="bi bi-arrow-left me-1"></i> View Directory
+            </a>
+            <a asp-action="Create" class="btn-primary">
+                <i class="bi bi-plus-circle me-1"></i> Add New Contact
+            </a>
+        </div>
+    </div>
+
+    <div class="mb-6">
+        <p class="text-gray-600">
+            Manage all directory contacts for the subdivision. Use this page to add, edit, or remove contacts.
+        </p>
+    </div>
+    
+    <div class="flex justify-between items-center mb-4">
+        <div>
+            <div class="relative">
+                <input type="text" id="contact-search" placeholder="Search contacts..." class="w-64 pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" onkeyup="filterContacts()">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <i class="bi bi-search text-gray-400"></i>
+                </div>
+            </div>
+        </div>
+        <div>
+            <select id="status-filter" class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" onchange="filterContacts()">
+                <option value="all">All Statuses</option>
+                <option value="active">Active Only</option>
+                <option value="inactive">Inactive Only</option>
+            </select>
+            <select id="category-filter" class="ml-2 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" onchange="filterContacts()">
+                <option value="all">All Categories</option>
+                @foreach (var category in Enum.GetValues(typeof(ContactCategory)))
+                {
+                    <option value="@category">@category</option>
+                }
+            </select>
+        </div>
+    </div>
+
+    <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Name / Title
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Category
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Contact Info
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Order
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Visibility
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Status
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Actions
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200" id="contacts-table-body">
+                @foreach (var item in Model)
+                {
+                    <tr class="contact-row @(item.IsActive ? "active" : "inactive")" data-category="@item.Category" data-name="@item.Name" data-department="@item.Department" data-phone="@item.PhoneNumber" data-email="@(item.Email ?? "")">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-medium text-gray-900">@item.Name</div>
+                            <div class="text-sm text-gray-500">@item.Title</div>
+                            @if (!string.IsNullOrEmpty(item.Department))
+                            {
+                                <div class="text-xs text-gray-500">@item.Department</div>
+                            }
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                @item.Category
+                            </span>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="text-sm text-gray-900">
+                                @if (!string.IsNullOrEmpty(item.PhoneNumber))
+                                {
+                                    <div class="mb-1">
+                                        <i class="bi bi-telephone text-gray-400 mr-1"></i> @item.PhoneNumber
+                                    </div>
+                                }
+                                @if (!string.IsNullOrEmpty(item.Email))
+                                {
+                                    <div class="mb-1">
+                                        <i class="bi bi-envelope text-gray-400 mr-1"></i> @item.Email
+                                    </div>
+                                }
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            @item.SortOrder
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            @{
+                                var visibleTo = new List<string>();
+                                if (item.IsVisibleToRole(UserRole.Administrator)) visibleTo.Add("A");
+                                if (item.IsVisibleToRole(UserRole.Staff)) visibleTo.Add("S");
+                                if (item.IsVisibleToRole(UserRole.Homeowner)) visibleTo.Add("H");
+                            }
+                            <div class="flex space-x-1">
+                                @foreach (var role in visibleTo)
+                                {
+                                    var bgColor = role == "A" ? "bg-gray-100" : role == "S" ? "bg-blue-100" : "bg-green-100";
+                                    var textColor = role == "A" ? "text-gray-800" : role == "S" ? "text-blue-800" : "text-green-800";
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full @bgColor @textColor">
+                                        @role
+                                    </span>
+                                }
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            @if (item.IsActive)
+                            {
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                    Active
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                    Inactive
+                                </span>
+                            }
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <div class="flex space-x-2">
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="text-indigo-600 hover:text-indigo-900" title="Edit">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <a asp-action="Details" asp-route-id="@item.Id" class="text-blue-600 hover:text-blue-900" title="Details">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="text-red-600 hover:text-red-900" title="Delete">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    
+    <div id="no-results" class="hidden py-8 text-center">
+        <p class="text-gray-500">No contacts match your search criteria.</p>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function filterContacts() {
+            const searchText = document.getElementById('contact-search').value.toLowerCase();
+            const statusFilter = document.getElementById('status-filter').value;
+            const categoryFilter = document.getElementById('category-filter').value;
+            
+            const rows = document.querySelectorAll('.contact-row');
+            let visibleCount = 0;
+            
+            rows.forEach(row => {
+                const name = row.getAttribute('data-name').toLowerCase();
+                const department = row.getAttribute('data-department').toLowerCase();
+                const phone = row.getAttribute('data-phone').toLowerCase();
+                const email = row.getAttribute('data-email').toLowerCase();
+                const category = row.getAttribute('data-category');
+                const isActive = row.classList.contains('active');
+                
+                const matchesSearch = name.includes(searchText) || 
+                                    department.includes(searchText) || 
+                                    phone.includes(searchText) || 
+                                    email.includes(searchText);
+                                    
+                const matchesStatus = statusFilter === 'all' || 
+                                    (statusFilter === 'active' && isActive) || 
+                                    (statusFilter === 'inactive' && !isActive);
+                                    
+                const matchesCategory = categoryFilter === 'all' || 
+                                       category === categoryFilter;
+                
+                if (matchesSearch && matchesStatus && matchesCategory) {
+                    row.classList.remove('hidden');
+                    visibleCount++;
+                } else {
+                    row.classList.add('hidden');
+                }
+            });
+            
+            const noResults = document.getElementById('no-results');
+            if (visibleCount === 0) {
+                noResults.classList.remove('hidden');
+            } else {
+                noResults.classList.add('hidden');
+            }
+        }
+    </script>
+}
+
+@section Styles {
+    <style>
+        .btn-primary {
+            bg-adminPrimary hover:bg-adminSecondary text-white font-medium py-2 px-4 rounded inline-flex items-center transition-colors;
+        }
+        
+        .btn-secondary {
+            bg-white text-gray-700 border border-gray-300 font-medium py-2 px-4 rounded inline-flex items-center hover:bg-gray-50 transition-colors;
+        }
+    </style>
+} 

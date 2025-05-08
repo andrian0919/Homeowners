@@ -53,6 +53,9 @@ namespace HomeownersSubdivision.Controllers
                 return RedirectToAction("AccessDenied", "Account");
             }
             
+            // Set luxury background
+            ViewData["UseLuxuryBackground"] = true;
+            
             // Get recent announcements for the homeowner dashboard
             var today = DateTime.Today;
             var announcements = await _context.Announcements
@@ -76,16 +79,16 @@ namespace HomeownersSubdivision.Controllers
                 return RedirectToAction("AccessDenied", "Account");
             }
             
+            // Set viewdata for dynamic admin background
+            ViewData["UseAdminBackground"] = true;
+            
             // Get statistics for admin dashboard
             ViewBag.TotalHomeowners = await _context.Homeowners.CountAsync();
-            ViewBag.TotalUsers = await _context.Users.CountAsync();
-            ViewBag.ActiveUsers = await _context.Users.Where(u => u.IsActive).CountAsync();
-            
-            // Get new homeowners this month
-            var startOfMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-            ViewBag.NewHomeowners = await _context.Homeowners
-                .Where(h => h.JoinDate >= startOfMonth)
-                .CountAsync();
+            ViewBag.StaffMembers = await _context.Users.CountAsync(u => u.Role == UserRole.Staff);
+            ViewBag.MonthlyRevenue = await _context.Payments
+                .Where(p => p.PaymentDate.Month == DateTime.Now.Month && p.PaymentDate.Year == DateTime.Now.Year)
+                .SumAsync(p => (decimal?)p.Amount) ?? 0;
+            ViewBag.PendingRequests = await _context.ServiceRequests.CountAsync(r => r.Status == ServiceRequestStatus.New);
             
             return View();
         }
@@ -248,6 +251,41 @@ namespace HomeownersSubdivision.Controllers
 
         public IActionResult Privacy()
         {
+            return View();
+        }
+
+        public IActionResult About()
+        {
+            // Set luxury background
+            ViewData["UseLuxuryBackground"] = true;
+            
+            // Populate the About page with system info
+            ViewBag.SystemName = "NeighborHood Subdivision Management System";
+            ViewBag.Version = "2.0";
+            ViewBag.DeveloperName = "HomeownersSubdivision Development Team";
+            ViewBag.EstablishmentYear = "2023";
+            
+            // Company information
+            ViewBag.CompanyName = "NeighborHood Subdivision";
+            ViewBag.CompanyAddress = "123 Community Drive, Subdivision City";
+            ViewBag.CompanyPhone = "(555) 123-4567";
+            ViewBag.CompanyEmail = "info@neighborhoodsub.com";
+            
+            // Set features
+            ViewBag.Features = new List<string>
+            {
+                "Homeowner Management",
+                "Billing and Payments",
+                "Facility Reservations",
+                "Service Requests",
+                "Community Forum",
+                "Visitor Passes",
+                "Vehicle Registration",
+                "Announcements",
+                "Emergency Contacts",
+                "Reports and Analytics"
+            };
+            
             return View();
         }
 

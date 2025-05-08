@@ -1,2 +1,85 @@
 <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script> 
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+<script>
+    // Custom validation methods
+    $.validator.addMethod('creditcard', function (value, element) {
+        if (this.optional(element)) {
+            return true;
+        }
+        
+        // Remove any spaces and dashes
+        value = value.replace(/\s+/g, '').replace(/-/g, '');
+        
+        // Check if the number is valid using the Luhn algorithm
+        if (!/^\d+$/.test(value)) return false;
+        
+        var sum = 0;
+        var digit;
+        var tmpNum;
+        var shouldDouble = false;
+        
+        for (var i = value.length - 1; i >= 0; i--) {
+            digit = value.substring(i, (i + 1));
+            tmpNum = parseInt(digit, 10);
+            if (shouldDouble) {
+                tmpNum *= 2;
+                if (tmpNum >= 10) {
+                    sum += ((tmpNum % 10) + 1);
+                } else {
+                    sum += tmpNum;
+                }
+            } else {
+                sum += tmpNum;
+            }
+            shouldDouble = !shouldDouble;
+        }
+        
+        return (sum % 10) === 0;
+    }, 'Please enter a valid credit card number.');
+
+    // Custom validation for expiration date
+    $.validator.addMethod('expirationdate', function (value, element) {
+        if (this.optional(element)) {
+            return true;
+        }
+        
+        var today = new Date();
+        var month = parseInt($('#ExpirationMonth').val());
+        var year = parseInt($('#ExpirationYear').val());
+        
+        if (isNaN(month) || isNaN(year)) {
+            return false;
+        }
+        
+        var expiry = new Date(year, month - 1);
+        return expiry > today;
+    }, 'Please enter a valid expiration date.');
+
+    // Custom validation for CVV
+    $.validator.addMethod('cvv', function (value, element) {
+        if (this.optional(element)) {
+            return true;
+        }
+        
+        return /^\d{3,4}$/.test(value);
+    }, 'Please enter a valid CVV (3-4 digits).');
+
+    // Custom validation for routing number
+    $.validator.addMethod('routingnumber', function (value, element) {
+        if (this.optional(element)) {
+            return true;
+        }
+        
+        return /^\d{9}$/.test(value);
+    }, 'Please enter a valid 9-digit routing number.');
+
+    // Custom validation for GCash number
+    $.validator.addMethod('gcashnumber', function (value, element) {
+        if (this.optional(element)) {
+            return true;
+        }
+        
+        return /^09\d{9}$/.test(value);
+    }, 'Please enter a valid GCash number (11 digits starting with 09).');
+</script> 

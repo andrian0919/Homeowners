@@ -6,6 +6,10 @@ namespace HomeownersSubdivision.Models
     {
         Announcement,
         MaintenanceRequest,
+        ServiceRequest,
+        Request,
+        Assignment,
+        Update,
         Event,
         Payment,
         System

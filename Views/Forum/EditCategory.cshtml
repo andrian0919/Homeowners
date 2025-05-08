@@ -1,0 +1,114 @@
+@model HomeownersSubdivision.Models.ForumCategory
+
+@{
+    ViewData["Title"] = "Edit Forum Category";
+}
+
+<div class="container mx-auto px-4 py-8">
+    <div class="mb-6">
+        <nav class="flex mb-3" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                <li class="inline-flex items-center">
+                    <a href="@Url.Action("Index", "Home")" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-indigo-600">
+                        <svg class="mr-2 w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+                        </svg>
+                        Home
+                    </a>
+                </li>
+                <li>
+                    <div class="flex items-center">
+                        <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <a href="@Url.Action("Index", "Forum")" class="ml-1 text-sm font-medium text-gray-700 hover:text-indigo-600 md:ml-2">
+                            Forum
+                        </a>
+                    </div>
+                </li>
+                <li>
+                    <div class="flex items-center">
+                        <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <a href="@Url.Action("ManageCategories", "Forum")" class="ml-1 text-sm font-medium text-gray-700 hover:text-indigo-600 md:ml-2">
+                            Manage Categories
+                        </a>
+                    </div>
+                </li>
+                <li aria-current="page">
+                    <div class="flex items-center">
+                        <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2">Edit Category</span>
+                    </div>
+                </li>
+            </ol>
+        </nav>
+
+        <h1 class="text-3xl font-bold text-gray-800 mb-2">Edit Forum Category</h1>
+        <p class="text-gray-600">Edit existing forum category details</p>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+        <form method="post" action="@Url.Action("EditCategory", "Forum", new { id = Model.Id })" class="p-6">
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "", new { @class = "text-red-500 mb-4" })
+            
+            <input type="hidden" asp-for="Id" value="@Model.Id" />
+            <input type="hidden" asp-for="CreatedAt" value="@Model.CreatedAt" />
+            
+            <div class="mb-6">
+                <label for="Name" class="block text-sm font-medium text-gray-700 mb-1">Category Name</label>
+                @Html.TextBoxFor(m => m.Name, new { @class = "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm", placeholder = "Enter category name" })
+                @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-red-500 text-sm mt-1" })
+            </div>
+            
+            <div class="mb-6">
+                <label for="Description" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                @Html.TextAreaFor(m => m.Description, new { rows = 3, @class = "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm", placeholder = "Enter category description" })
+                @Html.ValidationMessageFor(m => m.Description, "", new { @class = "text-red-500 text-sm mt-1" })
+            </div>
+            
+            <div class="mb-6">
+                <label for="DisplayOrder" class="block text-sm font-medium text-gray-700 mb-1">Display Order</label>
+                @Html.TextBoxFor(m => m.DisplayOrder, new { type = "number", @class = "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm", placeholder = "Enter display order (lower numbers appear first)" })
+                @Html.ValidationMessageFor(m => m.DisplayOrder, "", new { @class = "text-red-500 text-sm mt-1" })
+                <p class="mt-1 text-sm text-gray-500">Lower numbers will appear first in the category list</p>
+            </div>
+            
+            <div class="mb-6">
+                <div class="flex items-center">
+                    @Html.CheckBoxFor(m => m.IsActive, new { @class = "h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" })
+                    <label for="IsActive" class="ml-2 block text-sm text-gray-700">Active</label>
+                </div>
+                <p class="mt-1 text-sm text-gray-500">Inactive categories will not be visible to regular users</p>
+                
+                <div class="mt-3 text-sm text-gray-500">
+                    <span class="font-medium">Created:</span> @Model.CreatedAt.ToString("MMM dd, yyyy HH:mm")
+                    @if (Model.UpdatedAt.HasValue)
+                    {
+                        <span class="ml-4 font-medium">Last Updated:</span> <span>@Model.UpdatedAt.Value.ToString("MMM dd, yyyy HH:mm")</span>
+                    }
+                </div>
+            </div>
+            
+            <div class="flex items-center justify-between">
+                <a href="@Url.Action("ManageCategories", "Forum")" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    Cancel
+                </a>
+                <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                    </svg>
+                    Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+} 

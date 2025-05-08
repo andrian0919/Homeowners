@@ -2,10 +2,18 @@
     ViewData["Title"] = "Admin Dashboard";
 }
 
-<div class="container mx-auto px-4 py-8">
-    <div class="jumbotron admin-gradient mb-6">
-        <div class="container mx-auto">
-            <h1 class="text-3xl font-bold font-heading mb-2">Administrator Dashboard</h1>
+@if (ViewData["UseAdminBackground"] != null && (bool)ViewData["UseAdminBackground"])
+{
+    <partial name="_AdminBackground" />
+}
+
+<div class="container mx-auto px-4 py-8 admin-dashboard-container">
+    <div class="admin-hero-section">
+        <div class="admin-hero-particle" id="particles">
+            <!-- Particles will be added by JavaScript -->
+        </div>
+        <div class="container mx-auto relative z-10">
+            <h1 class="text-3xl font-bold font-heading mb-2 text-white">Administrator Dashboard</h1>
             <p class="text-white text-opacity-90">
                 Welcome to the administrative control panel. Manage users, view reports, and oversee community operations.
             </p>
@@ -14,50 +22,52 @@
     
     <!-- Quick Stats -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-        <div class="stat-card animate-fade-in-up card-delay-1">
-            <div class="flex justify-between">
+        <div class="admin-stats-card admin-stats-card-animated animate-luxury card-delay-1">
+            <div class="flex justify-between p-4 relative z-10">
                 <div>
-                    <div class="stat-value text-primary">86</div>
+                    <div class="stat-value text-primary">@ViewBag.TotalHomeowners</div>
                     <div class="stat-label">Total Homeowners</div>
                 </div>
-                <div class="text-primary text-opacity-25">
-                    <i class="bi bi-people-fill text-4xl"></i>
+                <div class="text-primary text-opacity-50">
+                    <i class="fas fa-users text-4xl"></i>
                 </div>
             </div>
         </div>
         
-        <div class="stat-card animate-fade-in-up card-delay-2">
-            <div class="flex justify-between">
+        <div class="admin-stats-card admin-stats-card-animated animate-luxury card-delay-2">
+            <div class="flex justify-between p-4 relative z-10">
                 <div>
-                    <div class="stat-value text-info">12</div>
+                    <div class="stat-value text-info">@ViewBag.StaffMembers</div>
                     <div class="stat-label">Staff Members</div>
                 </div>
-                <div class="text-info text-opacity-25">
-                    <i class="bi bi-person-badge text-4xl"></i>
+                <div class="text-info text-opacity-50">
+                    <i class="fas fa-id-badge text-4xl"></i>
                 </div>
             </div>
         </div>
         
-        <div class="stat-card animate-fade-in-up card-delay-3">
-            <div class="flex justify-between">
+        <div class="admin-stats-card admin-stats-card-animated animate-luxury card-delay-3">
+            <div class="flex justify-between p-4 relative z-10">
                 <div>
-                    <div class="stat-value text-success">$24.5k</div>
+                    <div class="stat-value text-success">
+                        @String.Format("${0:N1}k", (decimal)ViewBag.MonthlyRevenue / 1000)
+                    </div>
                     <div class="stat-label">Monthly Revenue</div>
                 </div>
-                <div class="text-success text-opacity-25">
-                    <i class="bi bi-cash-stack text-4xl"></i>
+                <div class="text-success text-opacity-50">
+                    <i class="fas fa-money-bill-wave text-4xl"></i>
                 </div>
             </div>
         </div>
         
-        <div class="stat-card animate-fade-in-up card-delay-4">
-            <div class="flex justify-between">
+        <div class="admin-stats-card admin-stats-card-animated animate-luxury card-delay-4">
+            <div class="flex justify-between p-4 relative z-10">
                 <div>
-                    <div class="stat-value text-warning">8</div>
+                    <div class="stat-value text-warning">@ViewBag.PendingRequests</div>
                     <div class="stat-label">Pending Requests</div>
                 </div>
-                <div class="text-warning text-opacity-25">
-                    <i class="bi bi-clock-history text-4xl"></i>
+                <div class="text-warning text-opacity-50">
+                    <i class="fas fa-clock text-4xl"></i>
                 </div>
             </div>
         </div>
@@ -66,114 +76,133 @@
     <!-- Dashboard Cards -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <!-- User Management Card -->
-        <div class="bg-white rounded-lg shadow-sm overflow-hidden animate-fade-in-up card-delay-1 card-hover">
+        <div class="admin-dashboard-card overflow-hidden animate-luxury card-delay-1">
             <div class="p-6">
                 <div class="flex flex-col items-center mb-4">
-                    <i class="bi bi-people-fill dashboard-icon text-primary"></i>
+                    <i class="fas fa-users dashboard-icon text-primary"></i>
                     <h3 class="text-xl font-semibold mb-2">User Management</h3>
                     <p class="text-gray-600 text-center">Manage user accounts, permissions, and roles.</p>
                 </div>
                 <div class="mt-4 space-y-2">
-                    <a href="#" class="btn-primary block text-center">
-                        <i class="bi bi-person-plus-fill mr-1"></i> Add New User
+                    <a href="@Url.Action("Create", "Users")" class="btn-luxury block text-center">
+                        <i class="fas fa-user-plus mr-1"></i> Add New User
                     </a>
-                    <a href="#" class="btn-outline-primary block text-center">
-                        <i class="bi bi-list-check mr-1"></i> View All Users
+                    <a href="@Url.Action("Index", "Users")" class="btn-outline-luxury block text-center">
+                        <i class="fas fa-list-check mr-1"></i> View All Users
                     </a>
                 </div>
             </div>
         </div>
         
         <!-- Homeowners Management Card -->
-        <div class="bg-white rounded-lg shadow-sm overflow-hidden animate-fade-in-up card-delay-2 card-hover">
+        <div class="admin-dashboard-card overflow-hidden animate-luxury card-delay-2">
             <div class="p-6">
                 <div class="flex flex-col items-center mb-4">
-                    <i class="bi bi-houses-fill dashboard-icon text-success"></i>
+                    <i class="fas fa-house-user dashboard-icon text-success"></i>
                     <h3 class="text-xl font-semibold mb-2">Homeowners Management</h3>
                     <p class="text-gray-600 text-center">Manage homeowner records, properties, and dues.</p>
                 </div>
                 <div class="mt-4 space-y-2">
-                    <a href="#" class="btn-success block text-center">
-                        <i class="bi bi-plus-square-fill mr-1"></i> Add Homeowner
+                    <a href="@Url.Action("Create", "Homeowners")" class="btn-luxury block text-center">
+                        <i class="fas fa-plus-square mr-1"></i> Add Homeowner
                     </a>
-                    <a href="#" class="btn-outline-success block text-center">
-                        <i class="bi bi-clipboard-check mr-1"></i> View All Homeowners
+                    <a href="@Url.Action("Index", "Homeowners")" class="btn-outline-luxury block text-center">
+                        <i class="fas fa-clipboard-check mr-1"></i> View All Homeowners
                     </a>
                 </div>
             </div>
         </div>
         
         <!-- Reports Card -->
-        <div class="bg-white rounded-lg shadow-sm overflow-hidden animate-fade-in-up card-delay-3 card-hover">
+        <div class="admin-dashboard-card overflow-hidden animate-luxury card-delay-3">
             <div class="p-6">
                 <div class="flex flex-col items-center mb-4">
-                    <i class="bi bi-bar-chart-line-fill dashboard-icon text-info"></i>
+                    <i class="fas fa-chart-line dashboard-icon text-info"></i>
                     <h3 class="text-xl font-semibold mb-2">Reports & Analytics</h3>
                     <p class="text-gray-600 text-center">Generate reports and view subdivision analytics.</p>
                 </div>
                 <div class="mt-4 space-y-2">
-                    <a href="#" class="btn-info block text-center">
-                        <i class="bi bi-file-earmark-bar-graph mr-1"></i> Financial Reports
+                    <a href="@Url.Action("GenerateReport", "Billing")" class="btn-luxury block text-center">
+                        <i class="fas fa-file-invoice-dollar mr-1"></i> Financial Reports
                     </a>
-                    <a href="#" class="btn-outline-info block text-center">
-                        <i class="bi bi-graph-up mr-1"></i> Community Analytics
+                    <a href="@Url.Action("Dashboard", "Reports")" class="btn-outline-luxury block text-center">
+                        <i class="fas fa-chart-bar mr-1"></i> Community Analytics
                     </a>
                 </div>
             </div>
         </div>
         
         <!-- Settings Card -->
-        <div class="bg-white rounded-lg shadow-sm overflow-hidden animate-fade-in-up card-delay-4 card-hover">
+        <div class="admin-dashboard-card overflow-hidden animate-luxury card-delay-4">
             <div class="p-6">
                 <div class="flex flex-col items-center mb-4">
-                    <i class="bi bi-gear-fill dashboard-icon text-dark"></i>
+                    <i class="fas fa-cogs dashboard-icon text-dark"></i>
                     <h3 class="text-xl font-semibold mb-2">System Settings</h3>
                     <p class="text-gray-600 text-center">Configure system parameters and global settings.</p>
                 </div>
                 <div class="mt-4 space-y-2">
-                    <a href="#" class="btn-dark block text-center">
-                        <i class="bi bi-sliders mr-1"></i> General Settings
+                    <a href="@Url.Action("SystemSettings", "System")" class="btn-luxury block text-center">
+                        <i class="fas fa-sliders-h mr-1"></i> General Settings
                     </a>
-                    <a href="#" class="btn-outline-dark block text-center">
-                        <i class="bi bi-shield-lock mr-1"></i> Security Settings
+                    <a href="@Url.Action("SecuritySettings", "System")" class="btn-outline-luxury block text-center">
+                        <i class="fas fa-shield-alt mr-1"></i> Security Settings
                     </a>
                 </div>
             </div>
         </div>
         
         <!-- Communications Card -->
-        <div class="bg-white rounded-lg shadow-sm overflow-hidden animate-fade-in-up card-delay-5 card-hover">
+        <div class="admin-dashboard-card overflow-hidden animate-luxury card-delay-5">
             <div class="p-6">
                 <div class="flex flex-col items-center mb-4">
-                    <i class="bi bi-broadcast dashboard-icon text-primary"></i>
+                    <i class="fas fa-broadcast-tower dashboard-icon text-primary"></i>
                     <h3 class="text-xl font-semibold mb-2">Communications</h3>
                     <p class="text-gray-600 text-center">Send announcements and manage communications.</p>
                 </div>
                 <div class="mt-4 space-y-2">
-                    <a href="#" class="btn-primary block text-center">
-                        <i class="bi bi-megaphone mr-1"></i> Send Announcement
+                    <a href="@Url.Action("Create", "Announcements")" class="btn-luxury block text-center">
+                        <i class="fas fa-bullhorn mr-1"></i> Send Announcement
                     </a>
-                    <a href="#" class="btn-outline-primary block text-center">
-                        <i class="bi bi-envelope mr-1"></i> Message Center
+                    <a href="@Url.Action("Index", "Notifications")" class="btn-outline-luxury block text-center">
+                        <i class="fas fa-envelope mr-1"></i> Message Center
                     </a>
                 </div>
             </div>
         </div>
         
         <!-- Maintenance Card -->
-        <div class="bg-white rounded-lg shadow-sm overflow-hidden animate-fade-in-up card-delay-6 card-hover">
+        <div class="admin-dashboard-card overflow-hidden animate-luxury card-delay-6">
             <div class="p-6">
                 <div class="flex flex-col items-center mb-4">
-                    <i class="bi bi-tools dashboard-icon text-warning"></i>
+                    <i class="fas fa-tools dashboard-icon text-warning"></i>
                     <h3 class="text-xl font-semibold mb-2">Maintenance Requests</h3>
                     <p class="text-gray-600 text-center">Manage and track community maintenance requests.</p>
                 </div>
                 <div class="mt-4 space-y-2">
-                    <a href="#" class="btn-warning block text-center">
-                        <i class="bi bi-clipboard-data mr-1"></i> View Requests
+                    <a href="@Url.Action("Index", "ServiceRequests")" class="btn-luxury block text-center">
+                        <i class="fas fa-clipboard-list mr-1"></i> View Requests
                     </a>
-                    <a href="#" class="btn-outline-warning block text-center">
-                        <i class="bi bi-calendar-check mr-1"></i> Maintenance Schedule
+                    <a href="@Url.Action("Schedule", "ServiceRequests")" class="btn-outline-luxury block text-center">
+                        <i class="fas fa-calendar-check mr-1"></i> Maintenance Schedule
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Feedback Card -->
+        <div class="admin-dashboard-card overflow-hidden animate-luxury card-delay-7">
+            <div class="p-6">
+                <div class="flex flex-col items-center mb-4">
+                    <i class="fas fa-comment-dots dashboard-icon text-indigo-600"></i>
+                    <h3 class="text-xl font-semibold mb-2">Feedback & Complaints</h3>
+                    <p class="text-gray-600 text-center">Manage feedback, complaints, and suggestions from homeowners.</p>
+                </div>
+                <div class="mt-4 space-y-2">
+                    <a href="@Url.Action("Index", "Feedback")" class="btn-luxury block text-center">
+                        <i class="fas fa-list-ul mr-1"></i> View All Feedback
+                    </a>
+                    <a href="@Url.Action("Public", "Feedback")" class="btn-outline-luxury block text-center">
+                        <i class="fas fa-eye mr-1"></i> Public Feedback
                     </a>
                 </div>
             </div>
@@ -183,4 +212,36 @@
 
 @section Scripts {
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script>
+        // Create particle effects for the hero section
+        document.addEventListener('DOMContentLoaded', function() {
+            const particlesContainer = document.getElementById('particles');
+            if (particlesContainer) {
+                const particleCount = 15;
+                
+                for (let i = 0; i < particleCount; i++) {
+                    const particle = document.createElement('span');
+                    const size = Math.random() * 5 + 2; // Random size between 2-7px
+                    
+                    // Set random position
+                    const posX = Math.random() * 100;
+                    const posY = Math.random() * 100;
+                    
+                    // Set random animation duration and delay
+                    const duration = Math.random() * 8 + 4; // 4-12 seconds
+                    const delay = Math.random() * 3; // 0-3 seconds
+                    
+                    // Apply styles
+                    particle.style.width = `${size}px`;
+                    particle.style.height = `${size}px`;
+                    particle.style.left = `${posX}%`;
+                    particle.style.top = `${posY}%`;
+                    particle.style.animationDuration = `${duration}s`;
+                    particle.style.animationDelay = `${delay}s`;
+                    
+                    particlesContainer.appendChild(particle);
+                }
+            }
+        });
+    </script>
 } 

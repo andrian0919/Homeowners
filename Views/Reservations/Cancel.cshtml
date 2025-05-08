@@ -27,7 +27,7 @@
 
                             <dt class="col-sm-4">Time</dt>
                             <dd class="col-sm-8">
-                                @Model.StartTime.ToString(@"hh\:mm tt") - @Model.EndTime.ToString(@"hh\:mm tt")
+                                @Model.StartTime.Hours.ToString("00"):@Model.StartTime.Minutes.ToString("00") - @Model.EndTime.Hours.ToString("00"):@Model.EndTime.Minutes.ToString("00")
                                 (@((Model.EndTime - Model.StartTime).TotalHours.ToString("0.#")) hour(s))
                             </dd>
 

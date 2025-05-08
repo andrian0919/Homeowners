@@ -1,0 +1,404 @@
+@model HomeownersSubdivision.ViewModels.ServiceRequestListViewModel
+
+@{
+    ViewData["Title"] = ViewBag.MyRequestsView == true ? "My Service Requests" : 
+                        ViewBag.AssignedToMeView == true ? "Requests Assigned to Me" : 
+                        "Service Requests";
+}
+
+@await Html.PartialAsync("_LuxuryBackground")
+
+<style>
+    .main-heading {
+        display: flex;
+        align-items: center;
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(to right, #1a1a2e, #3366FF);
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        color: white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .main-heading i {
+        font-size: 1.75rem;
+        margin-right: 0.75rem;
+        color: #6889F7;
+    }
+    
+    .admin-card {
+        background-color: white;
+        border-radius: 0.5rem;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .admin-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.5rem 1rem;
+        border-radius: 0.375rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    
+    .admin-button-primary {
+        background: linear-gradient(to right, #3366FF, #4D76E1);
+        color: white;
+    }
+    
+    .admin-button-primary:hover {
+        background: linear-gradient(to right, #4D76E1, #6889F7);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .add-request-button {
+        background: linear-gradient(to right, #3366FF, #4D76E1);
+        color: white;
+        padding: 0.5rem 1.25rem;
+        border-radius: 0.5rem;
+        font-weight: 600;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+    
+    .add-request-button:hover {
+        background: linear-gradient(to right, #4D76E1, #6889F7);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+    }
+    
+    .admin-table thead {
+        background: linear-gradient(to right, #1a1a2e, #16213e);
+    }
+    
+    .admin-table th {
+        color: white;
+        font-weight: 600;
+        padding: 0.75rem 1rem;
+    }
+    
+    .admin-filter-toggle {
+        background: linear-gradient(to right, #f0f0f0, #e0e0e0);
+        border: none;
+        color: #333;
+        transition: all 0.2s ease;
+    }
+    
+    .admin-filter-toggle:hover {
+        background: linear-gradient(to right, #e0e0e0, #d0d0d0);
+    }
+    
+    .admin-panel {
+        background-color: white;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .action-link {
+        color: #3366FF;
+        transition: all 0.2s ease;
+    }
+    
+    .action-link:hover {
+        color: #4D76E1;
+        text-decoration: underline;
+    }
+</style>
+
+<div class="container mx-auto px-4 py-8 luxury-page-container">
+    <div class="main-heading">
+        <i class="fas fa-tools"></i> @ViewData["Title"]
+    </div>
+
+    <div class="flex justify-end mb-6">
+            @if (!(ViewBag.AssignedToMeView ?? false))
+            {
+            <a href="@Url.Action("Create")" class="add-request-button flex items-center">
+                <i class="fas fa-plus mr-2"></i> Create New Request
+                </a>
+            }
+    </div>
+
+    <div class="mb-8">
+        <div class="admin-panel p-6">
+            <div class="flex flex-col md:flex-row justify-between mb-4">
+                <div class="flex space-x-2 mb-3 md:mb-0">
+                    <a href="@Url.Action("Index")" class="px-4 py-2 rounded-md text-sm font-medium @(ViewBag.MyRequestsView == null && ViewBag.AssignedToMeView == null ? "bg-blue-600 text-white" : "text-gray-700 hover:bg-gray-100")">
+                        All Requests
+                    </a>
+                    <a href="@Url.Action("MyRequests")" class="px-4 py-2 rounded-md text-sm font-medium @(ViewBag.MyRequestsView == true ? "bg-blue-600 text-white" : "text-gray-700 hover:bg-gray-100")">
+                        My Requests
+                    </a>
+                    @if (User.IsInRole("Administrator") || User.IsInRole("Staff"))
+                    {
+                        <a href="@Url.Action("AssignedToMe")" class="px-4 py-2 rounded-md text-sm font-medium @(ViewBag.AssignedToMeView == true ? "bg-blue-600 text-white" : "text-gray-700 hover:bg-gray-100")">
+                            Assigned to Me
+                        </a>
+                    }
+                </div>
+                <div>
+                    <button type="button" id="filterToggle" class="admin-filter-toggle inline-flex items-center px-4 py-2 rounded-md shadow-sm text-sm font-medium">
+                        <i class="fas fa-filter mr-2"></i>
+                        Filters
+                    </button>
+                </div>
+            </div>
+
+            <div id="filterPanel" class="mt-4 border border-gray-200 rounded-md p-4 bg-gray-50 @(Model.Filter?.Status.HasValue == true || Model.Filter?.Type.HasValue == true || Model.Filter?.Priority.HasValue == true || Model.Filter?.FromDate.HasValue == true || Model.Filter?.ToDate.HasValue == true ? "" : "hidden")">
+                <form method="get" asp-action="Index">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                            <select name="Filter.Status" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                                <option value="">All Statuses</option>
+                                @if (ViewBag.StatusSelectList != null)
+                                {
+                                @foreach (var item in ViewBag.StatusSelectList)
+                                {
+                                    <option value="@item.Value" selected="@item.Selected">@item.Text</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Request Type</label>
+                            <select name="Filter.Type" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                                <option value="">All Types</option>
+                                @if (ViewBag.RequestTypeSelectList != null)
+                                {
+                                @foreach (var item in ViewBag.RequestTypeSelectList)
+                                {
+                                    <option value="@item.Value" selected="@item.Selected">@item.Text</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Priority</label>
+                            <select name="Filter.Priority" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                                <option value="">All Priorities</option>
+                                @if (ViewBag.PrioritySelectList != null)
+                                {
+                                @foreach (var item in ViewBag.PrioritySelectList)
+                                {
+                                    <option value="@item.Value" selected="@item.Selected">@item.Text</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">From Date</label>
+                            <input type="date" name="Filter.FromDate" value="@(Model.Filter?.FromDate?.ToString("yyyy-MM-dd"))" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">To Date</label>
+                            <input type="date" name="Filter.ToDate" value="@(Model.Filter?.ToDate?.ToString("yyyy-MM-dd"))" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" />
+                        </div>
+                        <div class="flex items-end">
+                            <button type="submit" class="admin-button admin-button-primary px-4 py-2 rounded-md shadow-md transition duration-300">
+                                Apply Filters
+                            </button>
+                            <a href="@(ViewBag.MyRequestsView == true ? Url.Action("MyRequests") : ViewBag.AssignedToMeView == true ? Url.Action("AssignedToMe") : Url.Action("Index"))" class="ml-2 inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                                Clear
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            @if (Model.ServiceRequests.Count == 0)
+            {
+                <div class="text-center py-12">
+                    <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    <h3 class="mt-2 text-sm font-medium text-gray-900">No service requests found</h3>
+                    <p class="mt-1 text-sm text-gray-500">
+                        @if (ViewBag.MyRequestsView == true)
+                        {
+                            <span>You haven't submitted any service requests yet.</span>
+                        }
+                        else if (ViewBag.AssignedToMeView == true)
+                        {
+                            <span>No service requests are currently assigned to you.</span>
+                        }
+                        else
+                        {
+                            <span>No service requests match your filter criteria.</span>
+                        }
+                    </p>
+                    @if (!(ViewBag.AssignedToMeView ?? false))
+                    {
+                        <div class="mt-6">
+                            <a href="@Url.Action("Create")" class="add-request-button flex items-center px-6 py-3 rounded-lg inline-flex mx-auto">
+                                <i class="fas fa-plus mr-2"></i>
+                                Create New Request
+                            </a>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200 mt-4 admin-table">
+                        <thead>
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Title</th>
+                                <th scope="col">Type</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Priority</th>
+                                <th scope="col">Submitted</th>
+                                @if (!(ViewBag.MyRequestsView ?? false))
+                                {
+                                    <th scope="col">Homeowner</th>
+                                }
+                                <th scope="col">Assigned To</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            @foreach (var item in Model.ServiceRequests)
+                            {
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        @item.Id
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        @item.Title
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        @item.RequestTypeDisplayName
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                            @(item.Status == HomeownersSubdivision.Models.ServiceRequestStatus.New ? "bg-blue-100 text-blue-800" : 
+                                              item.Status == HomeownersSubdivision.Models.ServiceRequestStatus.InProgress ? "bg-yellow-100 text-yellow-800" : 
+                                              item.Status == HomeownersSubdivision.Models.ServiceRequestStatus.Completed ? "bg-green-100 text-green-800" : 
+                                              "bg-red-100 text-red-800")">
+                                            @item.StatusDisplayName
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                            @(item.Priority == HomeownersSubdivision.Models.Priority.Low ? "bg-gray-100 text-gray-800" : 
+                                              item.Priority == HomeownersSubdivision.Models.Priority.Medium ? "bg-blue-100 text-blue-800" : 
+                                              "bg-red-100 text-red-800")">
+                                            @item.PriorityDisplayName
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        @item.SubmissionDate.ToShortDateString()
+                                    </td>
+                                    @if (!(ViewBag.MyRequestsView ?? false))
+                                    {
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                            @item.HomeownerName
+                                        </td>
+                                    }
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        @item.AssignedToName
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <a href="@Url.Action("Details", new { id = item.Id })" class="action-link">Details</a>
+                                        @if (User.IsInRole("Administrator") || User.IsInRole("Staff"))
+                                        {
+                                            <span class="mx-1">|</span>
+                                            <a href="@Url.Action("Edit", new { id = item.Id })" class="action-link">Edit</a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                @if (Model.Pagination.TotalPages > 1)
+                {
+                    <div class="mt-4 flex justify-between items-center">
+                        <div class="text-sm text-gray-700">
+                            Showing page <span class="font-medium">@Model.Pagination.CurrentPage</span> of <span class="font-medium">@Model.Pagination.TotalPages</span>
+                        </div>
+                        <div>
+                            <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                                @if (Model.Pagination.HasPreviousPage)
+                                {
+                                    <a href="@Url.Action(ViewContext.RouteData.Values["action"]?.ToString() ?? "Index", new { page = Model.Pagination.CurrentPage - 1, filter = Model.Filter })" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                        <span class="sr-only">Previous</span>
+                                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                            <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                        </svg>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <span class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-gray-100 text-sm font-medium text-gray-400">
+                                        <span class="sr-only">Previous</span>
+                                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                            <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                        </svg>
+                                    </span>
+                                }
+
+                                @for (int i = Math.Max(1, Model.Pagination.CurrentPage - 2); i <= Math.Min(Model.Pagination.TotalPages, Model.Pagination.CurrentPage + 2); i++)
+                                {
+                                    if (i == Model.Pagination.CurrentPage)
+                                    {
+                                        <span class="relative inline-flex items-center px-4 py-2 border border-indigo-500 bg-indigo-50 text-sm font-medium text-indigo-600">
+                                            @i
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <a href="@Url.Action(ViewContext.RouteData.Values["action"]?.ToString() ?? "Index", new { page = i, filter = Model.Filter })" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
+                                            @i
+                                        </a>
+                                    }
+                                }
+
+                                @if (Model.Pagination.HasNextPage)
+                                {
+                                    <a href="@Url.Action(ViewContext.RouteData.Values["action"]?.ToString() ?? "Index", new { page = Model.Pagination.CurrentPage + 1, filter = Model.Filter })" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                        <span class="sr-only">Next</span>
+                                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                                        </svg>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <span class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-gray-100 text-sm font-medium text-gray-400">
+                                        <span class="sr-only">Next</span>
+                                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                                        </svg>
+                                    </span>
+                                }
+                            </nav>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const filterToggle = document.getElementById('filterToggle');
+            const filterPanel = document.getElementById('filterPanel');
+
+            filterToggle.addEventListener('click', function () {
+                filterPanel.classList.toggle('hidden');
+            });
+        });
+    </script>
+} 

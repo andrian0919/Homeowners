@@ -1,312 +1,177 @@
 @model HomeownersSubdivision.Models.Bill
+
 @{
     ViewData["Title"] = "Bill Details";
 }
 
-<div class="container py-5">
-    <div class="row mb-4">
-        <div class="col-md-8">
-            <h1 class="fw-bold text-primary">Bill Details</h1>
-            <p class="text-muted">View details for Bill #@Model.Id</p>
+<div class="container mx-auto px-4 py-8 max-w-5xl">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">Bill Details</h1>
+            <p class="text-gray-600">View and manage bill information</p>
         </div>
-        <div class="col-md-4 d-flex justify-content-end align-items-center">
-            <a href="@Url.Action("Edit", new { id = Model.Id })" class="btn btn-outline-primary me-2">
-                <i class="bi bi-pencil me-2"></i> Edit
+        <div class="flex items-center gap-4 mt-4 md:mt-0">
+            <a href="@Url.Action("Edit", new { id = Model.Id })" 
+               class="inline-flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition duration-200">
+                <i class="bi bi-pencil-square mr-2"></i>
+                Edit Bill
             </a>
-            <a href="@Url.Action("Index")" class="btn btn-outline-secondary">
-                <i class="bi bi-arrow-left me-2"></i> Back to Bills
+            <a href="@Url.Action("Index")" 
+               class="inline-flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition duration-200">
+                <i class="bi bi-arrow-left mr-2"></i>
+                Back to List
             </a>
         </div>
     </div>
 
-    <!-- Success/Error Messages -->
-    @if (TempData["SuccessMessage"] != null)
+    @if (!string.IsNullOrEmpty(TempData["SuccessMessage"]?.ToString()))
     {
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <i class="bi bi-check-circle me-2"></i> @TempData["SuccessMessage"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    }
-    @if (TempData["ErrorMessage"] != null)
-    {
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <i class="bi bi-exclamation-circle me-2"></i> @TempData["ErrorMessage"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    }
-
-    <div class="row">
-        <!-- Bill Details Column -->
-        <div class="col-md-8 mb-4">
-            <div class="card shadow-sm h-100">
-                <div class="card-header bg-white py-3">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h5 class="card-title mb-0 fw-bold">
-                            <i class="bi bi-file-earmark-text text-primary me-2"></i> 
-                            Bill Information
-                        </h5>
-                        <span class="badge @(Model.Status == "Paid" ? "bg-success" : 
-                                           Model.Status == "Overdue" ? "bg-danger" : 
-                                           Model.Status == "Cancelled" ? "bg-secondary" : 
-                                           "bg-warning text-dark")">
-                            @Model.Status
-                        </span>
-                    </div>
-                </div>
-                <div class="card-body p-4">
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="form-label text-muted">Description</label>
-                                <div class="fs-5 fw-medium">@Model.Description</div>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label text-muted">Bill Type</label>
-                                <div><span class="badge bg-info text-dark">@Model.Type</span></div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="form-label text-muted">Amount</label>
-                                <div class="fs-5 fw-bold text-primary">$@Model.Amount.ToString("N2")</div>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label text-muted">Paid Amount</label>
-                                <div class="fw-medium text-success">$@Model.PaidAmount.ToString("N2")</div>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label text-muted">Remaining</label>
-                                <div class="fw-medium @(Model.RemainingAmount > 0 ? "text-danger" : "text-success")">
-                                    $@Model.RemainingAmount.ToString("N2")
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <hr class="my-3" />
-
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="form-label text-muted">Issue Date</label>
-                                <div>@Model.IssueDate.ToString("MMMM dd, yyyy")</div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="form-label text-muted">Due Date</label>
-                                <div class="@(Model.IsOverdue ? "text-danger fw-bold" : "")">
-                                    @Model.DueDate.ToString("MMMM dd, yyyy")
-                                    @if (Model.IsOverdue)
-                                    {
-                                        <span class="badge bg-danger ms-2">Overdue</span>
-                                    }
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    @if (!string.IsNullOrEmpty(Model.Notes))
-                    {
-                        <hr class="my-3" />
-                        <div class="mb-3">
-                            <label class="form-label text-muted">Notes</label>
-                            <div class="bg-light p-3 rounded">@Model.Notes</div>
-                        </div>
-                    }
-                </div>
+        <div class="bg-green-50 border-l-4 border-green-500 text-green-700 p-4 mb-6 rounded-lg" role="alert">
+            <div class="flex items-center">
+                <i class="bi bi-check-circle-fill mr-2"></i>
+                <p>@TempData["SuccessMessage"]</p>
             </div>
         </div>
+    }
 
-        <!-- Homeowner Information & Actions Column -->
-        <div class="col-md-4 mb-4">
-            <div class="card shadow-sm mb-4">
-                <div class="card-header bg-white py-3">
-                    <h5 class="card-title mb-0 fw-bold">
-                        <i class="bi bi-person-circle text-primary me-2"></i> Homeowner
-                    </h5>
+    <div class="bg-white rounded-lg shadow-md border border-gray-200">
+        <div class="p-6">
+            <!-- Bill Information -->
+            <div class="space-y-6">
+                <div>
+                    <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                        <i class="bi bi-file-earmark-text text-primary-600 mr-2"></i>
+                        Bill Information
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <p class="text-sm font-medium text-gray-500 mb-1">Bill Type</p>
+                            <p class="text-gray-900">@Model.Type</p>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-500 mb-1">Amount</p>
+                            <p class="text-gray-900">$@Model.Amount.ToString("N2")</p>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-500 mb-1">Due Date</p>
+                            <p class="text-gray-900">@Model.DueDate.ToString("MMMM dd, yyyy")</p>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-500 mb-1">Status</p>
+                            <span class="@(Model.Status == "Paid" ? "bg-green-100 text-green-800" : "bg-yellow-100 text-yellow-800") px-3 py-1 rounded-full text-sm font-medium">
+                                @Model.Status
+                            </span>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-body p-4">
-                    @if (Model.User != null)
-                    {
-                        <div class="d-flex align-items-center mb-3">
-                            <div class="bg-light rounded-circle p-3 me-3">
-                                <i class="bi bi-person-fill text-primary fs-4"></i>
+
+                <div class="border-t border-gray-200 pt-6">
+                    <div>
+                        <p class="text-sm font-medium text-gray-500 mb-1">Description</p>
+                        <p class="text-gray-900">@Model.Description</p>
+                    </div>
+                </div>
+
+                @if (!string.IsNullOrEmpty(Model.Notes))
+                {
+                    <div class="border-t border-gray-200 pt-6">
+                        <div>
+                            <p class="text-sm font-medium text-gray-500 mb-1">Additional Notes</p>
+                            <p class="text-gray-900">@Model.Notes</p>
+                        </div>
+                    </div>
+                }
+
+                <!-- Homeowner Information -->
+                <div class="border-t border-gray-200 pt-6">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                        <i class="bi bi-person text-primary-600 mr-2"></i>
+                        Homeowner Information
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <p class="text-sm font-medium text-gray-500 mb-1">Name</p>
+                            <p class="text-gray-900">@Model.User.LastName, @Model.User.FirstName</p>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-500 mb-1">Contact Number</p>
+                            <p class="text-gray-900">@(string.IsNullOrEmpty(Model.User.PhoneNumber) ? "Not provided" : Model.User.PhoneNumber)</p>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-500 mb-1">Email</p>
+                            <p class="text-gray-900">@Model.User.Email</p>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-500 mb-1">Address</p>
+                            <p class="text-gray-900">@(Model.User.Homeowner?.Address ?? "No address")</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Information -->
+                @if (Model.Payments != null && Model.Payments.Any())
+                {
+                    var latestPayment = Model.Payments.OrderByDescending(p => p.PaymentDate).First();
+                    <div class="border-t border-gray-200 pt-6">
+                        <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                            <i class="bi bi-credit-card text-primary-600 mr-2"></i>
+                            Payment Information
+                        </h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <p class="text-sm font-medium text-gray-500 mb-1">Payment Date</p>
+                                <p class="text-gray-900">@latestPayment.PaymentDate.ToString("MMMM dd, yyyy hh:mm tt")</p>
                             </div>
                             <div>
-                                <h6 class="mb-0 fw-bold">@Model.User.FullName</h6>
-                                <p class="text-muted mb-0 small">
-                                    <i class="bi bi-house-door me-1"></i> @(Model.User.Homeowner?.Address ?? "No address specified")
-                                </p>
+                                <p class="text-sm font-medium text-gray-500 mb-1">Payment Method</p>
+                                <p class="text-gray-900">@latestPayment.PaymentMethod?.Type</p>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-500 mb-1">Receipt Number</p>
+                                <p class="text-gray-900">@latestPayment.ReceiptNumber</p>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-500 mb-1">Amount Paid</p>
+                                <p class="text-gray-900">$@latestPayment.Amount.ToString("N2")</p>
                             </div>
                         </div>
-                        <div class="list-group list-group-flush">
-                            @if (!string.IsNullOrEmpty(Model.User.Email))
-                            {
-                                <div class="list-group-item bg-transparent px-0 py-2 d-flex">
-                                    <div class="me-3"><i class="bi bi-envelope text-muted"></i></div>
-                                    <div>@Model.User.Email</div>
-                                </div>
-                            }
-                            @if (!string.IsNullOrEmpty(Model.User.PhoneNumber))
-                            {
-                                <div class="list-group-item bg-transparent px-0 py-2 d-flex">
-                                    <div class="me-3"><i class="bi bi-telephone text-muted"></i></div>
-                                    <div>@Model.User.PhoneNumber</div>
-                                </div>
-                            }
-                        </div>
-                        <div class="mt-3">
-                            <a href="@Url.Action("Details", "Users", new { id = Model.UserId })" class="btn btn-outline-primary btn-sm">
-                                <i class="bi bi-person-badge me-1"></i> View Profile
-                            </a>
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="text-center p-3">
-                            <div class="text-muted mb-3">Homeowner information not available</div>
-                        </div>
-                    }
-                </div>
-            </div>
-
-            <div class="card shadow-sm">
-                <div class="card-header bg-white py-3">
-                    <h5 class="card-title mb-0 fw-bold">
-                        <i class="bi bi-gear text-primary me-2"></i> Actions
-                    </h5>
-                </div>
-                <div class="card-body p-4">
-                    <div class="d-grid gap-2">
-                        @if (Model.Status != "Paid" && Model.Status != "Cancelled")
-                        {
-                            <form asp-action="SendReminder" asp-route-id="@Model.Id" method="post">
-                                <button type="submit" class="btn btn-outline-warning w-100 mb-2">
-                                    <i class="bi bi-bell me-2"></i> Send Payment Reminder
-                                </button>
-                            </form>
-                        }
-                        
-                        <a href="@Url.Action("Edit", new { id = Model.Id })" class="btn btn-outline-primary w-100 mb-2">
-                            <i class="bi bi-pencil me-2"></i> Edit Bill
-                        </a>
-                        
-                        <button type="button" class="btn btn-outline-danger w-100" data-bs-toggle="modal" data-bs-target="#deleteModal">
-                            <i class="bi bi-trash me-2"></i> Delete Bill
-                        </button>
                     </div>
-                </div>
+                }
             </div>
-        </div>
 
-        <!-- Payment History -->
-        <div class="col-12">
-            <div class="card shadow-sm">
-                <div class="card-header bg-white py-3">
-                    <h5 class="card-title mb-0 fw-bold">
-                        <i class="bi bi-credit-card text-primary me-2"></i> Payment History
-                    </h5>
-                </div>
-                <div class="card-body p-0">
-                    @if (Model.Payments != null && Model.Payments.Any())
-                    {
-                        <div class="table-responsive">
-                            <table class="table table-hover mb-0">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>Date</th>
-                                        <th>Amount</th>
-                                        <th>Payment Method</th>
-                                        <th>Transaction ID</th>
-                                        <th>Status</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var payment in Model.Payments.OrderByDescending(p => p.PaymentDate))
-                                    {
-                                        <tr>
-                                            <td>@payment.PaymentDate.ToString("MM/dd/yyyy HH:mm")</td>
-                                            <td>
-                                                <span class="fw-bold">$@payment.Amount.ToString("N2")</span>
-                                            </td>
-                                            <td>
-                                                @if (payment.PaymentMethod != null)
-                                                {
-                                                    <span>@payment.PaymentMethod.DisplayName</span>
-                                                }
-                                                else
-                                                {
-                                                    <span class="text-muted">Not available</span>
-                                                }
-                                            </td>
-                                            <td>
-                                                @if (!string.IsNullOrEmpty(payment.TransactionId))
-                                                {
-                                                    <code class="small">@payment.TransactionId</code>
-                                                }
-                                                else
-                                                {
-                                                    <span class="text-muted">N/A</span>
-                                                }
-                                            </td>
-                                            <td>
-                                                <span class="badge @(payment.Status == "Completed" ? "bg-success" : 
-                                                                   payment.Status == "Failed" ? "bg-danger" : 
-                                                                   payment.Status == "Refunded" ? "bg-secondary" : 
-                                                                   "bg-warning text-dark")">
-                                                    @payment.Status
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <a href="@Url.Action("Details", "Payments", new { id = payment.Id })" class="btn btn-sm btn-outline-secondary">
-                                                    <i class="bi bi-eye"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="text-center p-5">
-                            <i class="bi bi-credit-card text-muted" style="font-size: 3rem;"></i>
-                            <p class="mt-3 mb-0">No payment records found for this bill.</p>
-                        </div>
-                    }
-                </div>
+            <!-- Action Buttons -->
+            <div class="flex justify-end items-center gap-4 mt-8 pt-6 border-t border-gray-200">
+                @if (Model.Status != "Paid")
+                {
+                    <a href="@Url.Action("Pay", new { id = Model.Id })" 
+                       class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition duration-200">
+                        <i class="bi bi-cash mr-2"></i>
+                        Pay Bill
+                    </a>
+                }
+                <button type="button" onclick="window.print()" 
+                        class="inline-flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition duration-200">
+                    <i class="bi bi-printer mr-2"></i>
+                    Print
+                </button>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Delete Confirmation Modal -->
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p class="mb-0">Are you sure you want to delete this bill? This action cannot be undone.</p>
-                @if (Model.PaidAmount > 0)
-                {
-                    <div class="alert alert-warning mt-3">
-                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                        <strong>Warning:</strong> This bill has payments associated with it. Deleting it may cause inconsistencies in the payment records.
-                    </div>
-                }
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <form asp-action="Delete" asp-route-id="@Model.Id" method="post">
-                    <button type="submit" class="btn btn-danger">Delete Bill</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div> 
+@section Styles {
+    <style>
+        @@media print {
+            body {
+                background-color: white;
+            }
+            .container {
+                max-width: none;
+                padding: 0;
+            }
+            .print\\:hidden {
+                display: none !important;
+            }
+        }
+    </style>
+} 

@@ -1,0 +1,146 @@
+@model IEnumerable<HomeownersSubdivision.Models.Analytics.ReportDefinition>
+
+<style>
+    .main-heading {
+        display: flex;
+        align-items: center;
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(to right, #1a1a2e, #3366FF);
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        color: white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .main-heading i {
+        font-size: 1.75rem;
+        margin-right: 0.75rem;
+        color: #6889F7;
+    }
+    .luxury-page-container {
+        position: relative;
+        z-index: 1;
+}
+</style>
+
+@await Html.PartialAsync("_LuxuryBackground")
+
+<div class="container mx-auto px-4 py-8 luxury-page-container">
+    <div class="main-heading mb-4">
+        <i class="bi bi-bar-chart-line"></i> Reports and Analytics
+    </div>
+
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold">Reports and Analytics</h1>
+        <div class="flex space-x-2">
+            <a href="@Url.Action("Dashboard")" class="btn-luxury flex items-center">
+                <i class="bi bi-speedometer2 mr-1"></i> Analytics Dashboard
+            </a>
+            <a href="@Url.Action("SavedReports")" class="btn-outline-luxury flex items-center">
+                <i class="bi bi-file-earmark-bar-graph mr-1"></i> Saved Reports
+            </a>
+        </div>
+    </div>
+
+    <div class="mb-8">
+        <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+            <div class="p-4 bg-blue-50 border-b border-blue-100">
+                <h2 class="text-lg font-semibold text-blue-700">Quick Reports</h2>
+                <p class="text-sm text-blue-600">Generate common reports with pre-defined parameters</p>
+            </div>
+            <div class="p-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-white border rounded-lg p-4 hover:shadow-md transition-shadow">
+                        <div class="flex items-center mb-2">
+                            <i class="bi bi-currency-dollar text-2xl text-green-600 mr-2"></i>
+                            <h3 class="text-xl font-bold text-blue-900">Financial Summary Report</h3>
+                        </div>
+                        <p class="text-gray-600 text-sm mb-4">Summary of bills, payments, and financial trends for the last 30 days.</p>
+                        <a href="@Url.Action("FinancialSummary")" class="btn-primary w-full text-center">
+                            <i class="bi bi-file-earmark-text mr-1"></i> Generate Report
+                        </a>
+                    </div>
+
+                    <div class="bg-white border rounded-lg p-4 hover:shadow-md transition-shadow">
+                        <div class="flex items-center mb-2">
+                            <i class="bi bi-tools text-2xl text-orange-600 mr-2"></i>
+                            <h3 class="text-xl font-bold text-blue-900">Service Requests Report</h3>
+                        </div>
+                        <p class="text-gray-600 text-sm mb-4">Analysis of service requests by status, type, and resolution times for the last 30 days.</p>
+                        <a href="@Url.Action("ServiceRequestsSummary")" class="btn-primary w-full text-center">
+                            <i class="bi bi-file-earmark-text mr-1"></i> Generate Report
+                        </a>
+                    </div>
+
+                    <div class="bg-white border rounded-lg p-4 hover:shadow-md transition-shadow">
+                        <div class="flex items-center mb-2">
+                            <i class="bi bi-people text-2xl text-purple-600 mr-2"></i>
+                            <h3 class="text-xl font-bold text-blue-900">Community Engagement Report</h3>
+                        </div>
+                        <p class="text-gray-600 text-sm mb-4">Analysis of forum activity, event participation, and community interaction for the last 30 days.</p>
+                        <a href="@Url.Action("CommunityEngagementSummary")" class="btn-primary w-full text-center">
+                            <i class="bi bi-file-earmark-text mr-1"></i> Generate Report
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+        <div class="p-4 bg-blue-50 border-b border-blue-100">
+            <h2 class="text-lg font-semibold text-blue-700">Available Reports</h2>
+            <p class="text-sm text-blue-600">Generate reports with custom parameters</p>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Report Name</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                        <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var report in Model)
+                        {
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm font-medium text-gray-900">@report.Name</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                        @report.Category
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="text-sm text-gray-500">@report.Description</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <a href="@Url.Action("Details", new { id = report.Id })" class="text-blue-600 hover:text-blue-900 mr-3">
+                                        <i class="bi bi-info-circle"></i> Details
+                                    </a>
+                                    <a href="@Url.Action("Generate", new { id = report.Id })" class="text-green-600 hover:text-green-900">
+                                        <i class="bi bi-file-earmark-bar-graph"></i> Generate
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="4" class="px-6 py-4 text-center text-sm text-gray-500">
+                                No reports are available at this time.
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div> 

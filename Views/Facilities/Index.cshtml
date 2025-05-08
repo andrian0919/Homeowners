@@ -3,72 +3,226 @@
     ViewData["Title"] = "Facilities";
 }
 
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>Facilities</h1>
+@await Html.PartialAsync("_LuxuryBackground")
+
+<style>
+    .main-heading {
+        display: flex;
+        align-items: center;
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(to right, #1a1a2e, #3366FF);
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        color: white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .main-heading i {
+        font-size: 1.75rem;
+        margin-right: 0.75rem;
+        color: #6889F7;
+    }
+    
+    .admin-card {
+        background-color: white;
+        border-radius: 0.5rem;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+    
+    .admin-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .admin-card-header {
+        background: linear-gradient(to right, #1a1a2e, #16213e);
+        color: white;
+        padding: 0.75rem 1rem;
+        font-weight: 600;
+    }
+    
+    .admin-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.5rem 1rem;
+        border-radius: 0.375rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    
+    .admin-button-primary {
+        background: linear-gradient(to right, #3366FF, #4D76E1);
+        color: white;
+    }
+    
+    .admin-button-primary:hover {
+        background: linear-gradient(to right, #4D76E1, #6889F7);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .admin-button-success {
+        background: linear-gradient(to right, #10B981, #34D399);
+        color: white;
+    }
+    
+    .admin-button-success:hover {
+        background: linear-gradient(to right, #34D399, #6EE7B7);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .admin-button-warning {
+        background: linear-gradient(to right, #F59E0B, #FBBF24);
+        color: white;
+    }
+    
+    .admin-button-warning:hover {
+        background: linear-gradient(to right, #FBBF24, #FCD34D);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .admin-title {
+        color: #1a1a2e;
+        font-weight: 700;
+    }
+    
+    .facilities-title {
+        background: linear-gradient(to right, #3366FF, #4D76E1);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-fill-color: transparent;
+        font-weight: 700;
+    }
+    
+    .add-facility-button {
+        background: linear-gradient(to right, #3366FF, #4D76E1);
+        color: white;
+        padding: 0.5rem 1.25rem;
+        border-radius: 0.5rem;
+        font-weight: 600;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+    
+    .add-facility-button:hover {
+        background: linear-gradient(to right, #4D76E1, #6889F7);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+    }
+</style>
+
+<div class="container mx-auto px-4 py-8 luxury-page-container">
+    <div class="main-heading">
+        <i class="fas fa-building"></i> Facilities
+    </div>
+    
+    <div class="flex justify-end mb-6">
         @if (User.IsInRole("Administrator") || User.IsInRole("Staff"))
         {
-            <a asp-action="Create" class="btn btn-primary">
-                <i class="fas fa-plus"></i> Add New Facility
+            <a asp-action="Create" class="add-facility-button flex items-center">
+                <i class="fas fa-plus mr-2"></i> Add New Facility
             </a>
         }
     </div>
 
     @if (!Model.Facilities.Any())
     {
-        <div class="alert alert-info">
-            <i class="fas fa-info-circle"></i> No facilities have been added yet.
+        <div class="bg-blue-50 border-l-4 border-blue-500 text-blue-700 p-4 mb-6 rounded-lg shadow-sm">
+            <div class="flex items-center">
+                <i class="fas fa-info-circle text-blue-500 mr-2"></i>
+                <span>No facilities have been added yet.</span>
+            </div>
         </div>
     }
     else
     {
-        <div class="row">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @foreach (var facility in Model.Facilities)
             {
-                <div class="col-md-4 mb-4">
-                    <div class="card h-100">
-                        <div class="card-header d-flex justify-content-between align-items-center">
-                            <h5 class="mb-0">@facility.Name</h5>
-                            @if (!facility.IsActive)
+                <div class="admin-card">
+                    <div class="admin-card-header flex justify-between items-center">
+                        <h3 class="text-lg font-semibold text-white flex items-center">
+                            @switch (facility.Type)
                             {
-                                <span class="badge bg-warning text-dark">Inactive</span>
+                                case FacilityType.SwimmingPool:
+                                    <i class="fas fa-swimming-pool text-blue-300 mr-2"></i>
+                                    break;
+                                case FacilityType.SportsCourt:
+                                    <i class="fas fa-basketball-ball text-orange-300 mr-2"></i>
+                                    break;
+                                case FacilityType.FunctionHall:
+                                    <i class="fas fa-warehouse text-purple-300 mr-2"></i>
+                                    break;
+                                case FacilityType.Other:
+                                default:
+                                    <i class="fas fa-building text-gray-300 mr-2"></i>
+                                    break;
                             }
+                            @facility.Name
+                        </h3>
+                        @if (!facility.IsActive)
+                        {
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                Inactive
+                            </span>
+                        }
+                    </div>
+                    <div class="p-4 bg-white">
+                        <div class="mb-3">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
+                                @facility.Type
+                            </span>
                         </div>
-                        <div class="card-body">
-                            <p class="card-text">
-                                <strong>Type:</strong> @facility.Type
-                            </p>
-                            <p class="card-text">
-                                <strong>Capacity:</strong> @facility.MaxCapacity persons
-                            </p>
-                            <p class="card-text">
-                                <strong>Rate:</strong> @string.Format("{0:C}", facility.HourlyRate) per hour
-                            </p>
-                            <p class="card-text">
-                                <strong>Hours:</strong> @facility.OpeningTime.ToString(@"hh\:mm") - @facility.ClosingTime.ToString(@"hh\:mm")
-                            </p>
-                            @if (!string.IsNullOrWhiteSpace(facility.Description))
-                            {
-                                <p class="card-text">@facility.Description</p>
-                            }
+                        <div class="flex items-center mb-3">
+                            <i class="fas fa-users text-purple-500 mr-2"></i>
+                            <span class="text-sm text-gray-700">Capacity: <span class="font-medium">@facility.MaxCapacity</span> persons</span>
                         </div>
-                        <div class="card-footer d-flex justify-content-between">
-                            <a asp-action="Details" asp-route-id="@facility.Id" class="btn btn-sm btn-info">
-                                <i class="fas fa-info-circle"></i> Details
+                        <div class="flex items-center mb-3">
+                            <i class="fas fa-money-bill text-green-500 mr-2"></i>
+                            <span class="text-sm text-gray-700">Rate: <span class="font-medium">@string.Format("{0:C}", facility.HourlyRate)</span> per hour</span>
+                        </div>
+                        <div class="flex items-center mb-3">
+                            <i class="fas fa-clock text-blue-500 mr-2"></i>
+                            <span class="text-sm text-gray-700">Hours: <span class="font-medium">@facility.OpeningTime.Hours.ToString("00"):@facility.OpeningTime.Minutes.ToString("00") - @facility.ClosingTime.Hours.ToString("00"):@facility.ClosingTime.Minutes.ToString("00")</span></span>
+                        </div>
+                        @if (!string.IsNullOrWhiteSpace(facility.Description))
+                        {
+                            <div class="mt-3 border-t border-gray-100 pt-3">
+                                <p class="text-sm text-gray-600 flex items-start">
+                                    <i class="fas fa-info-circle text-blue-500 mr-2 mt-0.5"></i> 
+                                    @facility.Description
+                                </p>
+                            </div>
+                        }
+                    </div>
+                    <div class="px-4 py-3 bg-gray-50 border-t border-gray-200 flex justify-between">
+                        <a asp-action="Details" asp-route-id="@facility.Id" 
+                           class="admin-button admin-button-primary">
+                            <i class="fas fa-info-circle mr-1"></i> Details
+                        </a>
+                        @if (facility.IsActive)
+                        {
+                            <a asp-controller="Reservations" asp-action="Create" asp-route-facilityId="@facility.Id" 
+                               class="admin-button admin-button-success">
+                                <i class="fas fa-calendar-plus mr-1"></i> Reserve
                             </a>
-                            @if (facility.IsActive)
-                            {
-                                <a asp-controller="Reservations" asp-action="Create" asp-route-facilityId="@facility.Id" class="btn btn-sm btn-success">
-                                    <i class="fas fa-calendar-plus"></i> Reserve
-                                </a>
-                            }
-                            @if (User.IsInRole("Administrator") || User.IsInRole("Staff"))
-                            {
-                                <a asp-action="Edit" asp-route-id="@facility.Id" class="btn btn-sm btn-warning">
-                                    <i class="fas fa-edit"></i> Edit
-                                </a>
-                            }
-                        </div>
+                        }
+                        @if (User.IsInRole("Administrator") || User.IsInRole("Staff"))
+                        {
+                            <a asp-action="Edit" asp-route-id="@facility.Id" 
+                               class="admin-button admin-button-warning">
+                                <i class="fas fa-edit mr-1"></i> Edit
+                            </a>
+                        }
                     </div>
                 </div>
             }

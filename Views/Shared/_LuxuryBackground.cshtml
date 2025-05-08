@@ -1,0 +1,102 @@
+@{
+    // This is a partial view for luxury background styling
+    var backgroundImage = ViewData["BackgroundImage"] as string ?? "/images/backgrounds/luxury-bg.jpg";
+}
+
+<div class="luxury-background">
+    <div class="absolute inset-0 bg-cover bg-center z-0" style="background-image: url('@backgroundImage')"></div>
+    <div class="absolute inset-0 bg-gradient-to-r from-gray-900/80 to-gray-900/60 z-0"></div>
+</div>
+
+<style>
+    :root {
+        --theme-primary: #3B82F6;       /* Blue 500 */
+        --theme-primary-dark: #2563EB;  /* Blue 600 */
+        --theme-primary-light: #60A5FA; /* Blue 400 */
+        --theme-secondary: #1E40AF;     /* Blue 800 */
+    }
+    
+    .luxury-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        z-index: -1;
+        overflow: hidden;
+    }
+    
+    .luxury-page-container {
+        position: relative;
+        z-index: 1;
+        padding-top: 2rem;
+        padding-bottom: 4rem;
+        color: #fff;
+    }
+    
+    .luxury-content-card {
+        background-color: white;
+        border-radius: 0.5rem;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        color: #1a202c;
+    }
+    
+    /* Theme text colors */
+    .text-theme {
+        color: var(--theme-primary);
+    }
+    
+    .text-theme-dark {
+        color: var(--theme-primary-dark);
+    }
+    
+    .text-theme-light {
+        color: var(--theme-primary-light);
+    }
+    
+    /* Luxury button styling */
+    .luxury-button {
+        background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-secondary) 100%);
+        color: white;
+        font-weight: 500;
+        letter-spacing: 0.025em;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
+    
+    .luxury-button:hover {
+        background: linear-gradient(135deg, var(--theme-primary-light) 0%, var(--theme-primary) 100%);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15), 0 6px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Fix for Announcements page */
+    .announcements-container h1 {
+        color: #fff !important;
+    }
+    
+    /* Add some transparency to announcement cards */
+    .announcements-card {
+        background-color: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 0.5rem;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .announcements-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 15px 20px rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+    
+    /* Improve text on dark backgrounds */
+    .luxury-page-container h1 {
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+    
+    /* Fix the "New Announcement" button background */
+    .bg-theme {
+        background-color: var(--theme-primary);
+    }
+</style> 

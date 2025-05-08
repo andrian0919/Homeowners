@@ -1,0 +1,520 @@
+@model IEnumerable<HomeownersSubdivision.Models.FacilityReservation>
+@{
+    ViewData["Title"] = "Manage Reservations";
+}
+
+@await Html.PartialAsync("_LuxuryBackground")
+
+<style>
+    .main-heading {
+        display: flex;
+        align-items: center;
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(to right, #1a1a2e, #3366FF);
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        color: white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .main-heading i {
+        font-size: 1.75rem;
+        margin-right: 0.75rem;
+        color: #6889F7;
+    }
+    
+    .admin-card {
+        background-color: white;
+        border-radius: 0.5rem;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+    
+    .admin-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.5rem 1rem;
+        border-radius: 0.375rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    
+    .admin-button-primary {
+        background: linear-gradient(to right, #3366FF, #4D76E1);
+        color: white;
+    }
+    
+    .admin-button-primary:hover {
+        background: linear-gradient(to right, #4D76E1, #6889F7);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .admin-button-secondary {
+        background: linear-gradient(to right, #f0f0f0, #e0e0e0);
+        color: #333;
+    }
+    
+    .admin-button-secondary:hover {
+        background: linear-gradient(to right, #e0e0e0, #d0d0d0);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .admin-button-danger {
+        background: linear-gradient(to right, #e53e3e, #c53030);
+        color: white;
+    }
+    
+    .admin-button-danger:hover {
+        background: linear-gradient(to right, #c53030, #9b2c2c);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .admin-panel {
+        background-color: white;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e5e7eb;
+    }
+    
+    .admin-table thead {
+        background: linear-gradient(to right, #1a1a2e, #16213e);
+    }
+    
+    .admin-table th {
+        color: white;
+        font-weight: 600;
+        padding: 0.75rem 1rem;
+    }
+    
+    .add-reservation-button {
+        background: linear-gradient(to right, #3366FF, #4D76E1);
+        color: white;
+        padding: 0.5rem 1.25rem;
+        border-radius: 0.5rem;
+        font-weight: 600;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+    
+    .add-reservation-button:hover {
+        background: linear-gradient(to right, #4D76E1, #6889F7);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+    }
+    
+    .action-link {
+        color: #3366FF;
+        transition: all 0.2s ease;
+    }
+    
+    .action-link:hover {
+        color: #4D76E1;
+        text-decoration: underline;
+    }
+    
+    .statistics-card {
+        background-color: white;
+        border-radius: 0.5rem;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        border: 1px solid #e5e7eb;
+    }
+    
+    .statistics-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .filter-card {
+        background-color: white;
+        border-radius: 0.5rem;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e5e7eb;
+    }
+</style>
+
+<div class="container mx-auto px-4 py-8 luxury-page-container">
+    <div class="main-heading">
+        <i class="fas fa-calendar-alt"></i> Manage Reservations
+        </div>
+    
+    <p class="text-gray-200 mb-6">Review and manage all facility reservations in the system</p>
+    
+    <div class="flex flex-wrap justify-end gap-2 mb-6">
+        <a asp-action="Create" class="add-reservation-button inline-flex items-center">
+                <i class="fas fa-calendar-plus mr-2"></i> New Reservation
+            </a>
+            <div class="relative inline-block text-left">
+            <button type="button" id="reservationActionsButton" class="admin-button admin-button-secondary inline-flex items-center" 
+                        onclick="toggleDropdown()">
+                    <i class="fas fa-cog mr-2"></i> Actions
+                    <i class="fas fa-chevron-down ml-2"></i>
+                </button>
+                <div id="reservationActionsDropdown" class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 hidden z-10">
+                    <div class="py-1">
+                        <a href="@Url.Action("ExportToExcel")" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            <i class="fas fa-file-excel mr-2 text-green-600"></i> Export to Excel
+                        </a>
+                        <a href="@Url.Action("GenerateReport")" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            <i class="fas fa-chart-bar mr-2 text-blue-600"></i> Generate Report
+                        </a>
+                    </div>
+                    <div class="py-1">
+                        <a href="#" onclick="showPendingOnly()" class="flex items-center px-4 py-2 text-sm text-amber-600 hover:bg-gray-100">
+                            <i class="fas fa-clock mr-2"></i> Show Pending Only
+                        </a>
+                        <a href="#" onclick="showTodayOnly()" class="flex items-center px-4 py-2 text-sm text-green-600 hover:bg-gray-100">
+                            <i class="fas fa-calendar-day mr-2"></i> Show Today's Only
+                        </a>
+                        <a href="@Url.Action("AdminIndex")" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            <i class="fas fa-sync-alt mr-2"></i> Refresh List
+                        </a>
+                    </div>
+                    <div class="py-1">
+                        <a href="@Url.Action("Index", "Facilities")" class="flex items-center px-4 py-2 text-sm text-indigo-600 hover:bg-gray-100">
+                            <i class="fas fa-building mr-2"></i> Manage Facilities
+                        </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters and search -->
+    <div class="filter-card mb-6">
+        <div class="p-6">
+            <form method="get" asp-action="AdminIndex" asp-controller="Reservations" class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                <div>
+                    <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Search</label>
+                    <input type="text" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-gray-700" 
+                           id="search" name="searchString" value="@ViewBag.CurrentFilter" 
+                           placeholder="Search by user or facility">
+                </div>
+                <div>
+                    <label for="facility" class="block text-sm font-medium text-gray-700 mb-1">Facility</label>
+                    <select name="facilityId" id="facility" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-gray-700">
+                        <option value="">All Facilities</option>
+                        @foreach (var facility in ViewBag.Facilities ?? new List<dynamic>())
+                        {
+                            <option value="@facility.Id" selected="@(ViewBag.CurrentFacility == facility.Id.ToString())">@facility.Name</option>
+                        }
+                    </select>
+                </div>
+                <div>
+                    <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                    <select name="status" id="status" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-gray-700">
+                        <option value="">All Statuses</option>
+                        @foreach (var status in Enum.GetValues(typeof(ReservationStatus)))
+                        {
+                            <option value="@status" selected="@(ViewBag.CurrentStatus == status.ToString())">@status</option>
+                        }
+                    </select>
+                </div>
+                <div>
+                    <label for="dateRange" class="block text-sm font-medium text-gray-700 mb-1">Date Range</label>
+                    <select name="dateRange" id="dateRange" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-gray-700">
+                        <option value="">All Dates</option>
+                        <option value="Today" selected="@(ViewBag.CurrentDateRange == "Today")">Today</option>
+                        <option value="ThisWeek" selected="@(ViewBag.CurrentDateRange == "ThisWeek")">This Week</option>
+                        <option value="ThisMonth" selected="@(ViewBag.CurrentDateRange == "ThisMonth")">This Month</option>
+                        <option value="NextMonth" selected="@(ViewBag.CurrentDateRange == "NextMonth")">Next Month</option>
+                        <option value="Past" selected="@(ViewBag.CurrentDateRange == "Past")">Past Reservations</option>
+                    </select>
+                </div>
+                <div class="flex items-end gap-2">
+                    <button type="submit" class="w-full admin-button admin-button-primary">
+                        <i class="fas fa-search mr-2"></i> Filter
+                    </button>
+                    <a href="@Url.Action("AdminIndex")" class="w-full admin-button admin-button-secondary">
+                        <i class="fas fa-times mr-2"></i> Clear
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Success/Error Messages -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6 rounded-lg shadow-sm" role="alert">
+            <div class="flex items-center">
+                <i class="fas fa-check-circle mr-2"></i>
+                <span>@TempData["SuccessMessage"]</span>
+            </div>
+            <button type="button" class="float-right text-green-500 hover:text-green-700" onclick="this.parentElement.style.display='none'">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded-lg shadow-sm" role="alert">
+            <div class="flex items-center">
+                <i class="fas fa-exclamation-circle mr-2"></i>
+                <span>@TempData["ErrorMessage"]</span>
+            </div>
+            <button type="button" class="float-right text-red-500 hover:text-red-700" onclick="this.parentElement.style.display='none'">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    }
+
+    <!-- Summary Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div class="statistics-card p-4">
+            <div class="flex justify-between">
+                <div>
+                    <p class="text-sm text-gray-500">Total Reservations</p>
+                    <p class="text-2xl font-bold text-gray-800">@ViewBag.TotalReservations</p>
+                </div>
+                <div class="text-blue-500">
+                    <i class="fas fa-calendar-check text-3xl"></i>
+                </div>
+            </div>
+        </div>
+        <div class="statistics-card p-4">
+            <div class="flex justify-between">
+                <div>
+                    <p class="text-sm text-gray-500">Pending Approval</p>
+                    <p class="text-2xl font-bold text-yellow-600">@ViewBag.PendingReservations</p>
+                </div>
+                <div class="text-yellow-500">
+                    <i class="fas fa-clock text-3xl"></i>
+                </div>
+            </div>
+        </div>
+        <div class="statistics-card p-4">
+            <div class="flex justify-between">
+                <div>
+                    <p class="text-sm text-gray-500">For Today</p>
+                    <p class="text-2xl font-bold text-green-600">@ViewBag.TodayReservations</p>
+                </div>
+                <div class="text-green-500">
+                    <i class="fas fa-calendar-day text-3xl"></i>
+                </div>
+            </div>
+        </div>
+        <div class="statistics-card p-4">
+            <div class="flex justify-between">
+                <div>
+                    <p class="text-sm text-gray-500">Total Revenue</p>
+                    <p class="text-2xl font-bold text-indigo-600">@string.Format("{0:C}", ViewBag.TotalRevenue)</p>
+                </div>
+                <div class="text-indigo-500">
+                    <i class="fas fa-dollar-sign text-3xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reservations Table -->
+    <div class="admin-panel mb-6">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200 admin-table">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">User</th>
+                        <th scope="col">Facility</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Time</th>
+                        <th scope="col">Guests</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Cost</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var reservation in Model)
+                        {
+                            <tr class="hover:bg-gray-50 transition">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 py-1 inline-flex text-xs leading-4 font-semibold rounded-full bg-gray-100 text-gray-800">#@reservation.Id</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm font-medium text-gray-900">@reservation.User.FullName</div>
+                                    <div class="text-xs text-gray-500">@reservation.User.Email</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm font-medium text-gray-900">@reservation.Facility.Name</div>
+                                    <div class="text-xs text-gray-500">@reservation.Facility.Type</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900">@reservation.ReservationDate.ToShortDateString()</div>
+                                    <div class="text-xs text-gray-500">
+                                        @if (reservation.ReservationDate.Date == DateTime.Today)
+                                        {
+                                            <span class="px-2 py-0.5 inline-flex text-xs leading-4 font-semibold rounded-full bg-green-100 text-green-800">Today</span>
+                                        }
+                                        else if (reservation.ReservationDate.Date < DateTime.Today)
+                                        {
+                                            <span class="px-2 py-0.5 inline-flex text-xs leading-4 font-semibold rounded-full bg-gray-100 text-gray-800">Past</span>
+                                        }
+                                        else
+                                        {
+                                            <span>@((reservation.ReservationDate - DateTime.Today).Days) days from now</span>
+                                        }
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900">@reservation.StartTime.Hours.ToString("00"):@reservation.StartTime.Minutes.ToString("00") - @reservation.EndTime.Hours.ToString("00"):@reservation.EndTime.Minutes.ToString("00")</div>
+                                    <div class="text-xs text-gray-500">@((reservation.EndTime - reservation.StartTime).TotalHours) hours</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900">@reservation.NumberOfGuests</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    @{
+                                        string badgeClass = "";
+                                        
+                                        switch (reservation.Status)
+                                        {
+                                            case ReservationStatus.Pending:
+                                                badgeClass = "bg-yellow-100 text-yellow-800";
+                                                break;
+                                            case ReservationStatus.Approved:
+                                                badgeClass = "bg-green-100 text-green-800";
+                                                break;
+                                            case ReservationStatus.Cancelled:
+                                                badgeClass = "bg-red-100 text-red-800";
+                                                break;
+                                            case ReservationStatus.Completed:
+                                                badgeClass = "bg-blue-100 text-blue-800";
+                                                break;
+                                            default:
+                                                badgeClass = "bg-gray-100 text-gray-800";
+                                                break;
+                                        }
+                                    }
+                                    <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full @badgeClass">
+                                        @reservation.Status.ToString()
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                    @string.Format("{0:C}", reservation.TotalCost)
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <div class="flex space-x-2 justify-end">
+                                        <a href="@Url.Action("Details", new { id = reservation.Id })" class="action-link hover:text-blue-800" title="View Details">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        @if (reservation.Status == ReservationStatus.Pending)
+                                        {
+                                            <a href="@Url.Action("Approve", new { id = reservation.Id })" class="text-green-600 hover:text-green-800" title="Approve">
+                                                <i class="fas fa-check"></i>
+                                            </a>
+                                        }
+                                        <a href="@Url.Action("Edit", new { id = reservation.Id })" class="text-yellow-600 hover:text-yellow-800" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        @if (reservation.Status != ReservationStatus.Cancelled)
+                                        {
+                                            <a href="@Url.Action("Cancel", new { id = reservation.Id })" class="text-red-600 hover:text-red-800" title="Cancel">
+                                                <i class="fas fa-times"></i>
+                                            </a>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="9" class="px-6 py-10 text-center text-gray-500">
+                                <div class="flex flex-col items-center">
+                                    <i class="fas fa-calendar-times text-3xl mb-2"></i>
+                                    <p>No reservations found matching your criteria.</p>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    @if (ViewBag.TotalPages > 1)
+    {
+        <div class="flex justify-between items-center mt-4 mb-6">
+            <div class="text-sm text-gray-200">
+                Showing page <span class="font-medium">@ViewBag.CurrentPage</span> of <span class="font-medium">@ViewBag.TotalPages</span>
+            </div>
+            <div>
+                <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                    @if (ViewBag.HasPreviousPage)
+                    {
+                        <a href="@Url.Action("AdminIndex", new { page = ViewBag.CurrentPage - 1, searchString = ViewBag.CurrentFilter, status = ViewBag.CurrentStatus, facilityId = ViewBag.CurrentFacility, dateRange = ViewBag.CurrentDateRange })" 
+                           class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                    <span class="sr-only">Previous</span>
+                            <i class="fas fa-chevron-left"></i>
+                </a>
+                    }
+                @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                {
+                        if (i == ViewBag.CurrentPage)
+                        {
+                            <span class="relative inline-flex items-center px-4 py-2 border border-blue-500 bg-blue-50 text-sm font-medium text-blue-600">
+                                @i
+                            </span>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("AdminIndex", new { page = i, searchString = ViewBag.CurrentFilter, status = ViewBag.CurrentStatus, facilityId = ViewBag.CurrentFacility, dateRange = ViewBag.CurrentDateRange })" 
+                               class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
+                        @i
+                    </a>
+                }
+                    }
+                    @if (ViewBag.HasNextPage)
+                    {
+                        <a href="@Url.Action("AdminIndex", new { page = ViewBag.CurrentPage + 1, searchString = ViewBag.CurrentFilter, status = ViewBag.CurrentStatus, facilityId = ViewBag.CurrentFacility, dateRange = ViewBag.CurrentDateRange })" 
+                           class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                    <span class="sr-only">Next</span>
+                            <i class="fas fa-chevron-right"></i>
+                </a>
+                    }
+            </nav>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        function toggleDropdown() {
+            const dropdown = document.getElementById('reservationActionsDropdown');
+            dropdown.classList.toggle('hidden');
+        }
+
+        function showPendingOnly() {
+            window.location.href = '@Url.Action("AdminIndex", new { status = "Pending" })';
+        }
+
+        function showTodayOnly() {
+            window.location.href = '@Url.Action("AdminIndex", new { dateRange = "Today" })';
+        }
+
+        // Close dropdown when clicking outside
+        window.addEventListener('click', function(e) {
+            const dropdown = document.getElementById('reservationActionsDropdown');
+            const button = document.getElementById('reservationActionsButton');
+            
+            if (!dropdown.contains(e.target) && !button.contains(e.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
+    </script>
+} 

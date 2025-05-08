@@ -3,138 +3,165 @@
     ViewData["Title"] = $"Reservation Details: {Model.Facility.Name}";
 }
 
-<div class="container mt-4">
-    <div class="row">
-        <div class="col-md-8 offset-md-2">
-            <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h3>Reservation Details</h3>
+@await Html.PartialAsync("_LuxuryBackground")
+
+<div class="max-w-4xl mx-auto px-4 py-8">
+    <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+        <div class="flex justify-between items-center px-6 py-4 bg-gradient-to-r from-blue-800 to-blue-600">
+            <h3 class="text-xl font-bold text-white flex items-center">
+                <i class="fas fa-calendar-check mr-2"></i> Reservation Details
+            </h3>
+            <div>
+                @switch (Model.Reservation.Status)
+                {
+                    case ReservationStatus.Pending:
+                        <span class="px-3 py-1 rounded-full text-sm font-semibold bg-yellow-200 text-yellow-800">Pending</span>
+                        break;
+                    case ReservationStatus.Approved:
+                        <span class="px-3 py-1 rounded-full text-sm font-semibold bg-green-200 text-green-800">Approved</span>
+                        break;
+                    case ReservationStatus.Rejected:
+                        <span class="px-3 py-1 rounded-full text-sm font-semibold bg-red-200 text-red-800">Rejected</span>
+                        break;
+                    case ReservationStatus.Cancelled:
+                        <span class="px-3 py-1 rounded-full text-sm font-semibold bg-gray-200 text-gray-800">Cancelled</span>
+                        break;
+                    case ReservationStatus.Completed:
+                        <span class="px-3 py-1 rounded-full text-sm font-semibold bg-blue-200 text-blue-800">Completed</span>
+                        break;
+                }
+            </div>
+        </div>
+        
+        <div class="p-6">
+            <div class="mb-8">
+                <h4 class="mb-4 pb-2 border-b border-gray-200 text-lg font-semibold flex items-center text-blue-700">
+                    <i class="fas fa-building mr-2"></i> Facility Information
+                </h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
                     <div>
-                        @switch (Model.Reservation.Status)
-                        {
-                            case ReservationStatus.Pending:
-                                <span class="badge bg-warning text-dark">Pending</span>
-                                break;
-                            case ReservationStatus.Approved:
-                                <span class="badge bg-success">Approved</span>
-                                break;
-                            case ReservationStatus.Rejected:
-                                <span class="badge bg-danger">Rejected</span>
-                                break;
-                            case ReservationStatus.Cancelled:
-                                <span class="badge bg-secondary">Cancelled</span>
-                                break;
-                            case ReservationStatus.Completed:
-                                <span class="badge bg-info">Completed</span>
-                                break;
-                        }
+                        <span class="text-sm text-gray-500">Facility Name</span>
+                        <p class="font-semibold text-gray-800">@Model.Facility.Name</p>
+                    </div>
+                    <div>
+                        <span class="text-sm text-gray-500">Facility Type</span>
+                        <p class="font-semibold text-gray-800">@Model.Facility.Type</p>
+                    </div>
+                    <div>
+                        <span class="text-sm text-gray-500">Hourly Rate</span>
+                        <p class="font-semibold text-gray-800">@string.Format("{0:C}", Model.Facility.HourlyRate)</p>
                     </div>
                 </div>
-                
-                <div class="card-body">
-                    <h4 class="mb-3">Facility Information</h4>
-                    <dl class="row">
-                        <dt class="col-sm-4">Facility Name</dt>
-                        <dd class="col-sm-8">@Model.Facility.Name</dd>
-                        
-                        <dt class="col-sm-4">Facility Type</dt>
-                        <dd class="col-sm-8">@Model.Facility.Type</dd>
-                        
-                        <dt class="col-sm-4">Hourly Rate</dt>
-                        <dd class="col-sm-8">@string.Format("{0:C}", Model.Facility.HourlyRate)</dd>
-                    </dl>
-                    
-                    <hr class="my-4" />
-                    
-                    <h4 class="mb-3">Reservation Information</h4>
-                    <dl class="row">
-                        <dt class="col-sm-4">Reservation ID</dt>
-                        <dd class="col-sm-8">#@Model.Reservation.Id</dd>
-                        
-                        <dt class="col-sm-4">Reserved By</dt>
-                        <dd class="col-sm-8">@Model.User.FullName</dd>
-                        
-                        <dt class="col-sm-4">Date</dt>
-                        <dd class="col-sm-8">@Model.Reservation.ReservationDate.ToLongDateString()</dd>
-                        
-                        <dt class="col-sm-4">Time</dt>
-                        <dd class="col-sm-8">
-                            @Model.Reservation.StartTime.ToString(@"hh\:mm tt") - @Model.Reservation.EndTime.ToString(@"hh\:mm tt")
-                            (@Model.Reservation.Duration.TotalHours.ToString("0.#") hour(s))
-                        </dd>
-                        
-                        <dt class="col-sm-4">Number of Guests</dt>
-                        <dd class="col-sm-8">@Model.Reservation.NumberOfGuests</dd>
-                        
-                        @if (!string.IsNullOrWhiteSpace(Model.Reservation.Purpose))
-                        {
-                            <dt class="col-sm-4">Purpose</dt>
-                            <dd class="col-sm-8">@Model.Reservation.Purpose</dd>
-                        }
-                        
-                        <dt class="col-sm-4">Total Cost</dt>
-                        <dd class="col-sm-8">@string.Format("{0:C}", Model.Reservation.TotalCost)</dd>
-                        
-                        <dt class="col-sm-4">Status</dt>
-                        <dd class="col-sm-8">
+            </div>
+            
+            <div class="mb-8">
+                <h4 class="mb-4 pb-2 border-b border-gray-200 text-lg font-semibold flex items-center text-blue-700">
+                    <i class="fas fa-info-circle mr-2"></i> Reservation Information
+                </h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+                    <div>
+                        <span class="text-sm text-gray-500">Reservation ID</span>
+                        <p class="font-semibold text-gray-800 flex items-center">
+                            <span class="px-2 py-0.5 bg-blue-100 text-blue-800 rounded-full text-xs mr-1">#@Model.Reservation.Id</span>
+                        </p>
+                    </div>
+                    <div>
+                        <span class="text-sm text-gray-500">Reserved By</span>
+                        <p class="font-semibold text-gray-800">@Model.User.FullName</p>
+                    </div>
+                    <div>
+                        <span class="text-sm text-gray-500">Date</span>
+                        <p class="font-semibold text-gray-800">@Model.Reservation.ReservationDate.ToLongDateString()</p>
+                    </div>
+                    <div>
+                        <span class="text-sm text-gray-500">Time</span>
+                        <p class="font-semibold text-gray-800">
+                            @Model.Reservation.StartTime.Hours.ToString("00"):@Model.Reservation.StartTime.Minutes.ToString("00") - @Model.Reservation.EndTime.Hours.ToString("00"):@Model.Reservation.EndTime.Minutes.ToString("00")
+                            <span class="text-sm text-gray-500 ml-1">(@Model.Reservation.Duration.TotalHours.ToString("0.#") hour(s))</span>
+                        </p>
+                    </div>
+                    <div>
+                        <span class="text-sm text-gray-500">Number of Guests</span>
+                        <p class="font-semibold text-gray-800">@Model.Reservation.NumberOfGuests</p>
+                    </div>
+                    <div>
+                        <span class="text-sm text-gray-500">Status</span>
+                        <p>
                             @switch (Model.Reservation.Status)
                             {
                                 case ReservationStatus.Pending:
-                                    <span class="badge bg-warning text-dark">Pending</span>
+                                    <span class="px-3 py-1 rounded-full text-sm font-semibold bg-yellow-200 text-yellow-800">Pending</span>
                                     break;
                                 case ReservationStatus.Approved:
-                                    <span class="badge bg-success">Approved</span>
+                                    <span class="px-3 py-1 rounded-full text-sm font-semibold bg-green-200 text-green-800">Approved</span>
                                     break;
                                 case ReservationStatus.Rejected:
-                                    <span class="badge bg-danger">Rejected</span>
+                                    <span class="px-3 py-1 rounded-full text-sm font-semibold bg-red-200 text-red-800">Rejected</span>
                                     break;
                                 case ReservationStatus.Cancelled:
-                                    <span class="badge bg-secondary">Cancelled</span>
+                                    <span class="px-3 py-1 rounded-full text-sm font-semibold bg-gray-200 text-gray-800">Cancelled</span>
                                     break;
                                 case ReservationStatus.Completed:
-                                    <span class="badge bg-info">Completed</span>
+                                    <span class="px-3 py-1 rounded-full text-sm font-semibold bg-blue-200 text-blue-800">Completed</span>
                                     break;
                             }
-                        </dd>
-                        
-                        @if (Model.Reservation.Status == ReservationStatus.Rejected && !string.IsNullOrWhiteSpace(Model.Reservation.RejectionReason))
-                        {
-                            <dt class="col-sm-4">Rejection Reason</dt>
-                            <dd class="col-sm-8">
-                                <div class="alert alert-danger mb-0">@Model.Reservation.RejectionReason</div>
-                            </dd>
-                        }
-                        
-                        <dt class="col-sm-4">Created On</dt>
-                        <dd class="col-sm-8">@Model.Reservation.CreatedAt.ToString("g")</dd>
-                        
-                        @if (Model.Reservation.UpdatedAt.HasValue)
-                        {
-                            <dt class="col-sm-4">Last Updated</dt>
-                            <dd class="col-sm-8">@Model.Reservation.UpdatedAt.Value.ToString("g")</dd>
-                        }
-                    </dl>
-                </div>
-                
-                <div class="card-footer">
-                    <div class="d-flex justify-content-between">
-                        <a asp-action="Index" class="btn btn-secondary">
-                            <i class="fas fa-arrow-left"></i> Back to List
-                        </a>
-                        <div>
-                            @if ((Model.Reservation.Status == ReservationStatus.Pending || Model.Reservation.Status == ReservationStatus.Approved) && 
-                                 (User.IsInRole("Administrator") || User.IsInRole("Staff") || 
-                                  (Model.User.Username == User.Identity?.Name && Model.Reservation.ReservationDate > DateTime.Today)))
-                            {
-                                <a asp-action="Edit" asp-route-id="@Model.Reservation.Id" class="btn btn-warning me-2">
-                                    <i class="fas fa-edit"></i> Edit
-                                </a>
-                                <a asp-action="Cancel" asp-route-id="@Model.Reservation.Id" class="btn btn-danger">
-                                    <i class="fas fa-times"></i> Cancel
-                                </a>
-                            }
-                        </div>
+                        </p>
                     </div>
+                    
+                    @if (!string.IsNullOrWhiteSpace(Model.Reservation.Purpose))
+                    {
+                        <div class="col-span-1 md:col-span-2">
+                            <span class="text-sm text-gray-500">Purpose</span>
+                            <p class="font-semibold text-gray-800">@Model.Reservation.Purpose</p>
+                        </div>
+                    }
+                    
+                    <div>
+                        <span class="text-sm text-gray-500">Total Cost</span>
+                        <p class="font-semibold text-green-600">@string.Format("{0:C}", Model.Reservation.TotalCost)</p>
+                    </div>
+                    
+                    @if (Model.Reservation.Status == ReservationStatus.Rejected && !string.IsNullOrWhiteSpace(Model.Reservation.RejectionReason))
+                    {
+                        <div class="col-span-1 md:col-span-2 mt-2">
+                            <span class="text-sm text-gray-500">Rejection Reason</span>
+                            <div class="mt-2 p-3 bg-red-50 border border-red-200 text-red-700 rounded-md">@Model.Reservation.RejectionReason</div>
+                        </div>
+                    }
+                    
+                    <div>
+                        <span class="text-sm text-gray-500">Created On</span>
+                        <p class="text-gray-700">@Model.Reservation.CreatedAt.ToString("g")</p>
+                    </div>
+                    
+                    @if (Model.Reservation.UpdatedAt.HasValue)
+                    {
+                        <div>
+                            <span class="text-sm text-gray-500">Last Updated</span>
+                            <p class="text-gray-700">@Model.Reservation.UpdatedAt.Value.ToString("g")</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        
+        <div class="px-6 py-4 bg-gray-50 border-t border-gray-200">
+            <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+                <a asp-action="Index" class="inline-flex items-center px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-md transition duration-200">
+                    <i class="fas fa-arrow-left mr-2"></i> Back to List
+                </a>
+                <div class="flex gap-2">
+                    @if ((Model.Reservation.Status == ReservationStatus.Pending || Model.Reservation.Status == ReservationStatus.Approved) && 
+                            (User.IsInRole("Administrator") || User.IsInRole("Staff") || 
+                            (Model.User.Username == User.Identity?.Name && Model.Reservation.ReservationDate > DateTime.Today)))
+                    {
+                        <a asp-action="Edit" asp-route-id="@Model.Reservation.Id" class="inline-flex items-center px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded-md transition duration-200">
+                            <i class="fas fa-edit mr-2"></i> Edit
+                        </a>
+                        <a asp-action="Cancel" asp-route-id="@Model.Reservation.Id" class="inline-flex items-center px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-md transition duration-200">
+                            <i class="fas fa-times mr-2"></i> Cancel
+                        </a>
+                    }
                 </div>
             </div>
         </div>

@@ -1,0 +1,244 @@
+@model HomeownersSubdivision.Models.Feedback
+
+@{
+    ViewData["Title"] = "Feedback Details";
+    bool isAdminOrStaff = ViewBag.IsAdminOrStaff ?? false;
+}
+
+<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="mb-6 flex justify-between items-center">
+        <h1 class="text-2xl font-semibold text-gray-800">Feedback Details</h1>
+        <div>
+            @if (isAdminOrStaff)
+            {
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="inline-flex items-center px-4 py-2 mr-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                    Edit
+                </a>
+            }
+            <a asp-action="Index" class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Back to List
+            </a>
+        </div>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="bg-green-50 border-l-4 border-green-400 p-4 mb-6 rounded-md">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <svg class="h-5 w-5 text-green-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm text-green-700">@TempData["SuccessMessage"]</p>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="bg-red-50 border-l-4 border-red-400 p-4 mb-6 rounded-md">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <svg class="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm text-red-700">@TempData["ErrorMessage"]</p>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="bg-white shadow-md rounded-lg overflow-hidden mb-6">
+        <div class="px-6 py-5 border-b border-gray-200">
+            <div class="flex justify-between items-center">
+                <h2 class="text-xl font-medium text-gray-800 leading-tight">@Model.Subject</h2>
+                <div class="flex space-x-2">
+                    @{
+                        string typeBadgeColor = Model.Type switch
+                        {
+                            FeedbackType.Feedback => "bg-blue-100 text-blue-800",
+                            FeedbackType.Complaint => "bg-red-100 text-red-800",
+                            FeedbackType.Suggestion => "bg-green-100 text-green-800",
+                            _ => "bg-gray-100 text-gray-800"
+                        };
+
+                        string statusBadgeColor = Model.Status switch
+                        {
+                            FeedbackStatus.Pending => "bg-yellow-100 text-yellow-800",
+                            FeedbackStatus.InProgress => "bg-blue-100 text-blue-800",
+                            FeedbackStatus.Resolved => "bg-green-100 text-green-800",
+                            FeedbackStatus.Rejected => "bg-red-100 text-red-800",
+                            FeedbackStatus.Closed => "bg-gray-100 text-gray-800",
+                            _ => "bg-gray-100 text-gray-800"
+                        };
+
+                        string priorityText = Model.Priority switch
+                        {
+                            0 => "Low",
+                            1 => "Medium",
+                            2 => "High",
+                            _ => "Low"
+                        };
+                        
+                        string priorityBadgeColor = Model.Priority switch
+                        {
+                            0 => "bg-gray-100 text-gray-800",
+                            1 => "bg-yellow-100 text-yellow-800",
+                            2 => "bg-red-100 text-red-800",
+                            _ => "bg-gray-100 text-gray-800"
+                        };
+                    }
+                    <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full @typeBadgeColor">
+                        @Model.Type
+                    </span>
+                    <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full @statusBadgeColor">
+                        @Model.Status
+                    </span>
+                    @if (isAdminOrStaff)
+                    {
+                        <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full @priorityBadgeColor">
+                            @priorityText Priority
+                        </span>
+                    }
+                </div>
+            </div>
+            <div class="text-sm text-gray-500 mt-1">
+                <span>Submitted by: @(Model.SubmittedBy?.FullName ?? "Unknown")</span>
+                <span class="ml-4">Date: @Model.CreatedAt.ToString("MMM dd, yyyy HH:mm")</span>
+                @if (!string.IsNullOrEmpty(Model.Category))
+                {
+                    <span class="ml-4">Category: @Model.Category</span>
+                }
+            </div>
+        </div>
+        <div class="p-6">
+            <div class="mb-6">
+                <h3 class="text-lg font-medium text-gray-800 mb-2">Description</h3>
+                <div class="bg-gray-50 p-4 rounded-md text-gray-800 whitespace-pre-line">@Model.Description</div>
+            </div>
+
+            @if (Model.Status != FeedbackStatus.Pending && !string.IsNullOrEmpty(Model.AdminResponse))
+            {
+                <div class="mb-6 border-t border-gray-200 pt-6">
+                    <h3 class="text-lg font-medium text-gray-800 mb-2">Response</h3>
+                    <div class="bg-blue-50 p-4 rounded-md text-gray-800 whitespace-pre-line">@Model.AdminResponse</div>
+                    <div class="text-sm text-gray-500 mt-2">
+                        @if (Model.ProcessedBy != null)
+                        {
+                            <span>Responded by: @Model.ProcessedBy.FullName</span>
+                        }
+                        @if (Model.UpdatedAt.HasValue)
+                        {
+                            <span class="ml-4">Date: @Model.UpdatedAt.Value.ToString("MMM dd, yyyy HH:mm")</span>
+                        }
+                    </div>
+                </div>
+            }
+
+            <div class="border-t border-gray-200 pt-6">
+                <h3 class="text-lg font-medium text-gray-800 mb-2">Additional Information</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <p class="text-sm font-medium text-gray-500">Status</p>
+                        <p class="mt-1 text-sm text-gray-800">@Model.Status</p>
+                    </div>
+                    @if (Model.ResolvedAt.HasValue)
+                    {
+                        <div>
+                            <p class="text-sm font-medium text-gray-500">Resolved Date</p>
+                            <p class="mt-1 text-sm text-gray-800">@Model.ResolvedAt.Value.ToString("MMM dd, yyyy")</p>
+                        </div>
+                    }
+                    <div>
+                        <p class="text-sm font-medium text-gray-500">Visibility</p>
+                        <p class="mt-1 text-sm text-gray-800">@(Model.IsPublic ? "Public" : "Private")</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (isAdminOrStaff && Model.Status != FeedbackStatus.Resolved && Model.Status != FeedbackStatus.Closed)
+    {
+        <div class="bg-white shadow-md rounded-lg overflow-hidden mt-6">
+            <div class="px-6 py-5 border-b border-gray-200">
+                <h3 class="text-lg font-medium text-gray-800">Update Status</h3>
+            </div>
+            <div class="p-6">
+                <div class="flex flex-wrap -mx-2">
+                    @if (Model.Status == FeedbackStatus.Pending)
+                    {
+                        <div class="px-2 mb-3">
+                            <form asp-action="UpdateStatus" method="post">
+                                <input type="hidden" name="id" value="@Model.Id" />
+                                <input type="hidden" name="status" value="@FeedbackStatus.InProgress" />
+                                <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                    Mark In Progress
+                                </button>
+                            </form>
+                        </div>
+                    }
+                    
+                    <div class="px-2 mb-3">
+                        <form asp-action="UpdateStatus" method="post">
+                            <input type="hidden" name="id" value="@Model.Id" />
+                            <input type="hidden" name="status" value="@FeedbackStatus.Resolved" />
+                            <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                                Mark Resolved
+                            </button>
+                        </form>
+                    </div>
+                    
+                    <div class="px-2 mb-3">
+                        <form asp-action="UpdateStatus" method="post">
+                            <input type="hidden" name="id" value="@Model.Id" />
+                            <input type="hidden" name="status" value="@FeedbackStatus.Rejected" />
+                            <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                Reject
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    <form asp-action="UpdateStatus" method="post" class="space-y-4">
+                        <input type="hidden" name="id" value="@Model.Id" />
+                        
+                        <div>
+                            <label for="adminResponse" class="block text-sm font-medium text-gray-700">Response to Homeowner</label>
+                            <textarea id="adminResponse" name="adminResponse" rows="4" class="mt-1 block w-full shadow-sm sm:text-sm focus:ring-primary focus:border-primary border-gray-300 rounded-md" placeholder="Enter your response to the homeowner...">@Model.AdminResponse</textarea>
+                        </div>
+                        
+                        <div>
+                            <label for="statusSelect" class="block text-sm font-medium text-gray-700">Update Status</label>
+                            <select id="statusSelect" name="status" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
+                                <option value="0" selected="@(Model.Status == FeedbackStatus.Pending)">Pending</option>
+                                <option value="1" selected="@(Model.Status == FeedbackStatus.InProgress)">In Progress</option>
+                                <option value="2" selected="@(Model.Status == FeedbackStatus.Resolved)">Resolved</option>
+                                <option value="3" selected="@(Model.Status == FeedbackStatus.Rejected)">Rejected</option>
+                                <option value="4" selected="@(Model.Status == FeedbackStatus.Closed)">Closed</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                                Update with Response
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    }
+</div> 

@@ -32,7 +32,7 @@
                             <dd class="col-sm-8">@string.Format("{0:C}", Model.HourlyRate)</dd>
 
                             <dt class="col-sm-4">Opening Hours</dt>
-                            <dd class="col-sm-8">@Model.OpeningTime.ToString(@"hh\:mm") - @Model.ClosingTime.ToString(@"hh\:mm")</dd>
+                            <dd class="col-sm-8">@Model.OpeningTime.Hours.ToString("00"):@Model.OpeningTime.Minutes.ToString("00") - @Model.ClosingTime.Hours.ToString("00"):@Model.ClosingTime.Minutes.ToString("00")</dd>
 
                             @if (!string.IsNullOrWhiteSpace(Model.Description))
                             {

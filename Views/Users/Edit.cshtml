@@ -4,86 +4,67 @@
     ViewData["Title"] = "Edit User";
 }
 
-<div class="container">
-    <h1>Edit User</h1>
-    <hr />
-
-    <div class="row">
-        <div class="col-md-8">
-            <form asp-action="Edit">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="Id" />
-
-                <div class="card mb-4">
-                    <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0">Basic Information</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label asp-for="FirstName" class="form-label">First Name</label>
-                                <input asp-for="FirstName" class="form-control" required />
-                                <span asp-validation-for="FirstName" class="text-danger"></span>
-                            </div>
-                            <div class="col-md-6">
-                                <label asp-for="LastName" class="form-label">Last Name</label>
-                                <input asp-for="LastName" class="form-control" required />
-                                <span asp-validation-for="LastName" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label asp-for="PhoneNumber" class="form-label">Phone Number</label>
-                            <input asp-for="PhoneNumber" class="form-control" />
-                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-                        </div>
-                    </div>
+<div class="container max-w-2xl mx-auto py-8">
+    <div class="luxury-content-card p-8 animate-luxury">
+        <h1 class="text-2xl font-bold text-gray-800 mb-6 flex items-center"><i class="fas fa-user-edit text-primary mr-2"></i> Edit User</h1>
+        <form asp-action="Edit" class="space-y-6">
+            <div asp-validation-summary="ModelOnly" class="text-red-500 mb-4 p-3 bg-red-50 rounded-md"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label asp-for="FirstName" class="block font-semibold text-gray-700">First Name</label>
+                    <input asp-for="FirstName" class="luxury-input" required />
+                    <span asp-validation-for="FirstName" class="text-red-500 text-xs"></span>
                 </div>
-
-                <div class="card mb-4">
-                    <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0">Account Information</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="mb-3">
-                            <label asp-for="Username" class="form-label">Username</label>
-                            <input asp-for="Username" class="form-control" required />
-                            <span asp-validation-for="Username" class="text-danger"></span>
-                        </div>
-                        <div class="mb-3">
-                            <label asp-for="Email" class="form-label">Email</label>
-                            <input asp-for="Email" class="form-control" type="email" required />
-                            <span asp-validation-for="Email" class="text-danger"></span>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label asp-for="Role" class="form-label">Role</label>
-                                <select asp-for="Role" class="form-select" asp-items="@ViewData["Roles"] as SelectList" required>
-                                    <option value="">Select Role</option>
-                                </select>
-                                <span asp-validation-for="Role" class="text-danger"></span>
-                            </div>
-                            <div class="col-md-6">
-                                <label asp-for="HomeownerId" class="form-label">Associated Homeowner</label>
-                                <select asp-for="HomeownerId" class="form-select" asp-items="@ViewData["Homeowners"] as SelectList">
-                                    <option value="">None</option>
-                                </select>
-                                <span asp-validation-for="HomeownerId" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="form-check mb-3">
-                            <input class="form-check-input" asp-for="IsActive" />
-                            <label class="form-check-label" asp-for="IsActive">Account Active</label>
-                        </div>
-                    </div>
+                <div>
+                    <label asp-for="LastName" class="block font-semibold text-gray-700">Last Name</label>
+                    <input asp-for="LastName" class="luxury-input" required />
+                    <span asp-validation-for="LastName" class="text-red-500 text-xs"></span>
                 </div>
-
-                <div class="form-group mb-3">
-                    <button type="submit" class="btn btn-primary">Save</button>
-                    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
-                    <a asp-action="ChangePassword" asp-route-id="@Model.Id" class="btn btn-outline-primary">Change Password</a>
+            </div>
+            <div>
+                <label asp-for="PhoneNumber" class="block font-semibold text-gray-700">Phone Number</label>
+                <input asp-for="PhoneNumber" class="luxury-input" />
+                <span asp-validation-for="PhoneNumber" class="text-red-500 text-xs"></span>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label asp-for="Username" class="block font-semibold text-gray-700">Username</label>
+                    <input asp-for="Username" class="luxury-input" required />
+                    <span asp-validation-for="Username" class="text-red-500 text-xs"></span>
                 </div>
-            </form>
-        </div>
+                <div>
+                    <label asp-for="Email" class="block font-semibold text-gray-700">Email</label>
+                    <input asp-for="Email" class="luxury-input" type="email" required />
+                    <span asp-validation-for="Email" class="text-red-500 text-xs"></span>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label asp-for="Role" class="block font-semibold text-gray-700">Role</label>
+                    <select asp-for="Role" class="luxury-input" asp-items="@ViewData["Roles"] as SelectList" required>
+                        <option value="">Select Role</option>
+                    </select>
+                    <span asp-validation-for="Role" class="text-red-500 text-xs"></span>
+                </div>
+                <div>
+                    <label asp-for="HomeownerId" class="block font-semibold text-gray-700">Associated Homeowner</label>
+                    <select asp-for="HomeownerId" class="luxury-input" asp-items="@ViewData["Homeowners"] as SelectList">
+                        <option value="">None</option>
+                    </select>
+                    <span asp-validation-for="HomeownerId" class="text-red-500 text-xs"></span>
+                </div>
+            </div>
+            <div class="flex items-center mb-4">
+                <input class="luxury-checkbox mr-2" asp-for="IsActive" />
+                <label class="text-gray-700" asp-for="IsActive">Account Active</label>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-3 mt-6">
+                <button type="submit" class="btn-luxury w-full sm:w-auto flex justify-center items-center"><i class="fas fa-save mr-2"></i> Save</button>
+                <a asp-action="Index" class="btn-outline-luxury w-full sm:w-auto flex justify-center items-center"><i class="fas fa-arrow-left mr-2"></i> Back to List</a>
+                <a asp-action="ChangePassword" asp-route-id="@Model.Id" class="btn-outline-luxury w-full sm:w-auto flex justify-center items-center"><i class="fas fa-key mr-2"></i> Change Password</a>
+            </div>
+        </form>
     </div>
 </div>
 
