@@ -7,6 +7,23 @@
 <div class="container max-w-2xl mx-auto py-8">
     <div class="luxury-content-card p-8 animate-luxury">
         <h1 class="text-2xl font-bold text-gray-800 mb-6 flex items-center"><i class="fas fa-user-plus text-primary mr-2"></i> Create User</h1>
+        
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm font-medium text-red-800">@TempData["ErrorMessage"]</p>
+                    </div>
+                </div>
+            </div>
+        }
+        
         <form asp-action="Create" class="space-y-6">
             <div asp-validation-summary="ModelOnly" class="text-red-500 mb-4 p-3 bg-red-50 rounded-md"></div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -52,19 +69,43 @@
                 </div>
                 <div>
                     <label asp-for="Role" class="block font-semibold text-gray-700 mb-2">Role</label>
-                    <select asp-for="Role" class="form-select luxury-input" asp-items="@ViewData["Roles"] as SelectList" required>
+                    <select asp-for="Role" id="userRole" class="form-select luxury-input" asp-items="@ViewData["Roles"] as SelectList" required>
                         <option value="">Select Role</option>
                     </select>
                     <span asp-validation-for="Role" class="text-red-500 text-sm"></span>
                 </div>
             </div>
-            <div>
-                <label asp-for="HomeownerId" class="block font-semibold text-gray-700 mb-2">Associated Homeowner</label>
-                <select asp-for="HomeownerId" class="form-select luxury-input" asp-items="@ViewData["Homeowners"] as SelectList">
-                    <option value="">None</option>
+            
+            <!-- Existing Homeowner selection (shows only when role is Homeowner) -->
+            <div id="existingHomeownerSection" class="hidden">
+                <label asp-for="HomeownerId" class="block font-semibold text-gray-700 mb-2">Associate with Existing Homeowner</label>
+                <select asp-for="HomeownerId" id="homeownerId" class="form-select luxury-input" asp-items="@ViewData["Homeowners"] as SelectList">
+                    <option value="">None (Create New Homeowner)</option>
                 </select>
                 <span asp-validation-for="HomeownerId" class="text-red-500 text-sm"></span>
             </div>
+            
+            <!-- New Homeowner fields (shows only when role is Homeowner and no existing homeowner is selected) -->
+            <div id="homeownerFields" class="hidden space-y-6">
+                <h3 class="text-lg font-semibold text-gray-800 mt-4 mb-2">Homeowner Details</h3>
+                
+                <div>
+                    <label for="Address" class="block font-semibold text-gray-700 mb-2">Address</label>
+                    <input name="Address" id="Address" class="form-control luxury-input" />
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="LotNumber" class="block font-semibold text-gray-700 mb-2">Lot Number</label>
+                        <input name="LotNumber" id="LotNumber" class="form-control luxury-input" />
+                    </div>
+                    <div>
+                        <label for="BlockNumber" class="block font-semibold text-gray-700 mb-2">Block Number</label>
+                        <input name="BlockNumber" id="BlockNumber" class="form-control luxury-input" />
+                    </div>
+                </div>
+            </div>
+            
             <div class="flex justify-between mt-8">
                 <a asp-action="Index" class="btn-outline-luxury flex items-center"><i class="bi bi-arrow-left mr-2"></i> Back to List</a>
                 <button type="submit" class="btn-luxury flex items-center"><i class="bi bi-person-plus mr-2"></i> Create</button>
@@ -75,4 +116,47 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        // Show/hide homeowner fields based on role selection
+        document.addEventListener('DOMContentLoaded', function() {
+            const userRoleSelect = document.getElementById('userRole');
+            const existingHomeownerSection = document.getElementById('existingHomeownerSection');
+            const homeownerIdSelect = document.getElementById('homeownerId');
+            const homeownerFields = document.getElementById('homeownerFields');
+            
+            function updateFields() {
+                // Check if the selected value is for Homeowner role (0 = Homeowner)
+                const selectedRole = userRoleSelect.options[userRoleSelect.selectedIndex].text;
+                const isHomeowner = selectedRole === 'Homeowner';
+                
+                console.log('Selected role:', selectedRole);
+                console.log('Is homeowner:', isHomeowner);
+                
+                // Show/hide the existing homeowner section
+                existingHomeownerSection.classList.toggle('hidden', !isHomeowner);
+                
+                // Show homeowner fields only if Homeowner role is selected and no existing homeowner is selected
+                const showHomeownerFields = isHomeowner && (!homeownerIdSelect.value || homeownerIdSelect.value === '');
+                homeownerFields.classList.toggle('hidden', !showHomeownerFields);
+                
+                // Make homeowner fields required when they're visible
+                const homeownerInputs = homeownerFields.querySelectorAll('input');
+                homeownerInputs.forEach(input => {
+                    input.required = showHomeownerFields;
+                });
+                
+                console.log('Show homeowner fields:', showHomeownerFields);
+            }
+            
+            // Update on role change
+            userRoleSelect.addEventListener('change', updateFields);
+            
+            // Update on homeowner selection change
+            homeownerIdSelect.addEventListener('change', updateFields);
+            
+            // Initial update
+            updateFields();
+        });
+    </script>
 }

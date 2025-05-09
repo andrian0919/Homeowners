@@ -5,19 +5,43 @@
     ViewData["Title"] = "Payment History";
 }
 
+@await Html.PartialAsync("_LuxuryBackground")
+
+<style>
+    .main-heading {
+        display: flex;
+        align-items: center;
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(to right, #1a1a2e, #3366FF);
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        color: white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .main-heading i {
+        font-size: 1.75rem;
+        margin-right: 0.75rem;
+        color: #6889F7;
+    }
+</style>
+
 <div class="container mx-auto px-4 py-6">
     <div class="bg-white rounded-lg shadow-md p-6">
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
-            <div>
-                <h1 class="text-2xl font-bold text-gray-800 mb-2">Payment History</h1>
-                <p class="text-gray-600">View all your previous payments and transactions.</p>
+            <div class="main-heading">
+                <i class="bi bi-clock-history"></i> Payment History
             </div>
             <div class="mt-4 md:mt-0">
-                <a href="@Url.Action("MyBills", "Billing")" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-                    <i class="bi bi-arrow-left mr-1"></i> Back to Bills
+                <a href="@Url.Action("MyBills", "Billing")" class="btn-luxury hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 flex items-center">
+                    <i class="bi bi-arrow-left mr-2"></i> Back to Bills
                 </a>
             </div>
         </div>
+
+        <p class="text-gray-600 mb-6">View all your previous payments and transactions.</p>
 
         @if (TempData["SuccessMessage"] != null)
         {
@@ -50,7 +74,13 @@
         </div>
 
         <!-- Filter Form -->
-        <div class="bg-gray-50 p-4 rounded-lg mb-6">
+        <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 mb-6">
+            <div class="bg-gradient-to-r from-blue-800 to-blue-600 px-6 py-4 border-b border-gray-200">
+                <h5 class="font-semibold text-white flex items-center">
+                    <i class="bi bi-funnel mr-2"></i> Filter Payments
+                </h5>
+            </div>
+            <div class="p-6">
             <form method="get" id="filterForm" class="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div>
                     <label for="Status" class="block text-sm font-medium text-gray-700 mb-1">Payment Status</label>
@@ -72,7 +102,7 @@
                 </div>
                 <div class="flex items-end">
                     <div class="flex gap-2 w-full">
-                        <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded">
+                            <button type="submit" class="flex-1 btn-luxury hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 flex items-center justify-center">
                             <i class="bi bi-filter mr-1"></i> Filter
                         </button>
                         <a href="@Url.Action("PaymentHistory", "Payments")" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded text-center">
@@ -81,6 +111,7 @@
                     </div>
                 </div>
             </form>
+            </div>
         </div>
 
         @if (!Model.Any())
@@ -107,15 +138,15 @@
         {
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
+                    <thead class="bg-gradient-to-r from-blue-800 to-blue-600 text-white">
                         <tr>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Receipt #</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bill</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Method</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Receipt #</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Date</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Amount</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Bill</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Method</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Status</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">

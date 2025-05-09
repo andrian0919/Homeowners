@@ -120,6 +120,10 @@
         text-decoration: underline;
     }
     
+    .inline {
+        display: inline-block;
+    }
+    
     .statistics-card {
         background-color: white;
         border-radius: 0.5rem;
@@ -411,9 +415,12 @@
                                         </a>
                                         @if (reservation.Status == ReservationStatus.Pending)
                                         {
-                                            <a href="@Url.Action("Approve", new { id = reservation.Id })" class="text-green-600 hover:text-green-800" title="Approve">
+                                            <form asp-action="Approve" asp-route-id="@reservation.Id" method="post" class="inline">
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="text-green-600 hover:text-green-800" title="Approve">
                                                 <i class="fas fa-check"></i>
-                                            </a>
+                                                </button>
+                                            </form>
                                         }
                                         <a href="@Url.Action("Edit", new { id = reservation.Id })" class="text-yellow-600 hover:text-yellow-800" title="Edit">
                                             <i class="fas fa-edit"></i>

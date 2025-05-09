@@ -71,22 +71,108 @@ namespace HomeownersSubdivision.Controllers
         // POST: Users/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Username,Email,Password,FirstName,LastName,PhoneNumber,Role,HomeownerId")] User user, string confirmPassword)
+        public async Task<IActionResult> Create(
+            [Bind("Username,Email,Password,FirstName,LastName,PhoneNumber,Role,HomeownerId")] User user, 
+            string confirmPassword, 
+            string? Address = null, 
+            string? LotNumber = null, 
+            string? BlockNumber = null)
         {
             if (!IsAdmin())
             {
                 return RedirectToAction("AccessDenied", "Account");
             }
 
+            if (user.Password != confirmPassword)
+            {
+                ModelState.AddModelError("", "Password and confirmation password do not match.");
+                ViewData["Roles"] = new SelectList(Enum.GetValues(typeof(UserRole)));
+                ViewData["Homeowners"] = new SelectList(await _context.Homeowners.ToListAsync(), "Id", "LastName");
+                return View(user);
+            }
+
+            // Check if username or email already exists
+            if (await _context.Users.AnyAsync(u => u.Username == user.Username))
+            {
+                ModelState.AddModelError("Username", "This username is already taken");
+                ViewData["Roles"] = new SelectList(Enum.GetValues(typeof(UserRole)));
+                ViewData["Homeowners"] = new SelectList(await _context.Homeowners.ToListAsync(), "Id", "LastName");
+                return View(user);
+            }
+
+            if (await _context.Users.AnyAsync(u => u.Email == user.Email))
+            {
+                ModelState.AddModelError("Email", "This email is already in use");
+                ViewData["Roles"] = new SelectList(Enum.GetValues(typeof(UserRole)));
+                ViewData["Homeowners"] = new SelectList(await _context.Homeowners.ToListAsync(), "Id", "LastName");
+                return View(user);
+            }
+
             if (ModelState.IsValid)
             {
-                if (await _userService.CreateUserAsync(user, user.Password))
+                try
                 {
-                    return RedirectToAction(nameof(Index));
+                    // Ensure the user is active by default
+                    user.IsActive = true;
+                    
+                    // For Homeowner role with no existing Homeowner selected, create a new Homeowner record
+                    if (user.Role == UserRole.Homeowner && (user.HomeownerId == null || user.HomeownerId == 0))
+                    {
+                        // Check if required homeowner fields are provided
+                        if (string.IsNullOrEmpty(Address) || string.IsNullOrEmpty(LotNumber) || string.IsNullOrEmpty(BlockNumber))
+                        {
+                            ModelState.AddModelError("", "Address, Lot Number, and Block Number are required for new Homeowners.");
+                            ViewData["Roles"] = new SelectList(Enum.GetValues(typeof(UserRole)));
+                            ViewData["Homeowners"] = new SelectList(await _context.Homeowners.ToListAsync(), "Id", "LastName");
+                            return View(user);
+                        }
+
+                        // Create new Homeowner
+                        var homeowner = new Homeowner
+                        {
+                            FirstName = user.FirstName,
+                            LastName = user.LastName,
+                            Email = user.Email,
+                            Phone = user.PhoneNumber ?? string.Empty,
+                            Address = Address,
+                            LotNumber = LotNumber,
+                            BlockNumber = BlockNumber,
+                            JoinDate = DateTime.Now
+                        };
+
+                        _context.Homeowners.Add(homeowner);
+                        await _context.SaveChangesAsync();
+
+                        // Assign the new homeowner ID to the user
+                        user.HomeownerId = homeowner.Id;
+                    }
+                    
+                    // Create the user
+                    if (await _userService.CreateUserAsync(user, user.Password))
+                    {
+                        TempData["SuccessMessage"] = "User created successfully.";
+                        return RedirectToAction(nameof(Index));
+                    }
+                    else
+                    {
+                        // If we reach here, there was a problem with user creation
+                        // If we created a homeowner, we should delete it to avoid orphaned records
+                        if (user.HomeownerId.HasValue && user.Role == UserRole.Homeowner)
+                        {
+                            var homeowner = await _context.Homeowners.FindAsync(user.HomeownerId.Value);
+                            if (homeowner != null)
+                            {
+                                _context.Homeowners.Remove(homeowner);
+                                await _context.SaveChangesAsync();
+                            }
+                        }
+                        
+                        ModelState.AddModelError("", "An error occurred while creating the user.");
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    ModelState.AddModelError("", "Username or email already exists.");
+                    ModelState.AddModelError("", $"An error occurred: {ex.Message}");
                 }
             }
 
@@ -117,57 +203,137 @@ namespace HomeownersSubdivision.Controllers
         // POST: Users/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Username,Email,FirstName,LastName,PhoneNumber,Role,IsActive,HomeownerId")] User user)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Username,Email,FirstName,LastName,PhoneNumber,Role,IsActive,HomeownerId")] User user, string debugField)
         {
             if (!IsAdmin())
             {
                 return RedirectToAction("AccessDenied", "Account");
             }
 
+            // Check if form was submitted (debug field should be present)
+            if (debugField != "EditFormSubmitted")
+            {
+                TempData["ErrorMessage"] = "Form submission error: Debug field missing";
+                ViewData["Roles"] = new SelectList(Enum.GetValues(typeof(UserRole)));
+                ViewData["Homeowners"] = new SelectList(await _context.Homeowners.ToListAsync(), "Id", "LastName");
+                return View(user);
+            }
+
             if (id != user.Id)
             {
+                TempData["ErrorMessage"] = "ID mismatch error";
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            // Always log the received data
+            var debugInfo = $"Received data - ID: {user.Id}, Username: {user.Username}, FirstName: {user.FirstName}, LastName: {user.LastName}, Role: {user.Role}";
+            Console.WriteLine(debugInfo);
+
+            // Remove Password validation errors since we're not updating the password here
+            if (!ModelState.IsValid)
             {
-                try
+                // Remove Password validation errors
+                if (ModelState.ContainsKey("Password"))
                 {
-                    var existingUser = await _userService.GetUserByIdAsync(id);
-                    if (existingUser == null)
-                    {
-                        return NotFound();
-                    }
-
-                    // Update only these properties
-                    existingUser.Username = user.Username;
-                    existingUser.Email = user.Email;
-                    existingUser.FirstName = user.FirstName;
-                    existingUser.LastName = user.LastName;
-                    existingUser.PhoneNumber = user.PhoneNumber;
-                    existingUser.Role = user.Role;
-                    existingUser.IsActive = user.IsActive;
-                    existingUser.HomeownerId = user.HomeownerId;
-
-                    await _userService.UpdateUserAsync(existingUser);
-                    return RedirectToAction(nameof(Index));
+                    ModelState.Remove("Password");
                 }
-                catch (DbUpdateConcurrencyException)
+                
+                // Check if model is valid after removing Password validation
+                if (!ModelState.IsValid)
                 {
-                    if (!await UserExists(user.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    var errors = string.Join("; ", ModelState.Values
+                        .SelectMany(v => v.Errors)
+                        .Select(e => e.ErrorMessage));
+                    TempData["ErrorMessage"] = $"Model validation failed: {errors}";
+                    
+                    ViewData["Roles"] = new SelectList(Enum.GetValues(typeof(UserRole)));
+                    ViewData["Homeowners"] = new SelectList(await _context.Homeowners.ToListAsync(), "Id", "LastName");
+                    return View(user);
                 }
             }
 
-            ViewData["Roles"] = new SelectList(Enum.GetValues(typeof(UserRole)));
-            ViewData["Homeowners"] = new SelectList(await _context.Homeowners.ToListAsync(), "Id", "LastName");
-            return View(user);
+            try
+            {
+                // Get the existing user from the database
+                var existingUser = await _context.Users.FindAsync(id);
+                if (existingUser == null)
+                {
+                    TempData["ErrorMessage"] = "User not found in database";
+                    return NotFound();
+                }
+
+                // Check for username uniqueness
+                if (user.Username != existingUser.Username)
+                {
+                    var usernameExists = await _context.Users.AnyAsync(u => u.Username == user.Username && u.Id != id);
+                    if (usernameExists)
+                    {
+                        ModelState.AddModelError("Username", "This username is already taken");
+                        ViewData["Roles"] = new SelectList(Enum.GetValues(typeof(UserRole)));
+                        ViewData["Homeowners"] = new SelectList(await _context.Homeowners.ToListAsync(), "Id", "LastName");
+                        return View(user);
+                    }
+                }
+
+                // Check for email uniqueness
+                if (user.Email != existingUser.Email)
+                {
+                    var emailExists = await _context.Users.AnyAsync(u => u.Email == user.Email && u.Id != id);
+                    if (emailExists)
+                    {
+                        ModelState.AddModelError("Email", "This email is already in use");
+                        ViewData["Roles"] = new SelectList(Enum.GetValues(typeof(UserRole)));
+                        ViewData["Homeowners"] = new SelectList(await _context.Homeowners.ToListAsync(), "Id", "LastName");
+                        return View(user);
+                    }
+                }
+
+                // Update the properties manually but preserve the password
+                existingUser.Username = user.Username;
+                existingUser.Email = user.Email;
+                existingUser.FirstName = user.FirstName;
+                existingUser.LastName = user.LastName;
+                existingUser.PhoneNumber = user.PhoneNumber;
+                existingUser.Role = user.Role;
+                existingUser.IsActive = user.IsActive;
+                existingUser.HomeownerId = user.HomeownerId;
+                // Password is not updated here - we keep the existing password
+
+                // Save changes directly to the database
+                var rowsAffected = await _context.SaveChangesAsync();
+                
+                if (rowsAffected > 0)
+                {
+                    TempData["SuccessMessage"] = $"User updated successfully. ({rowsAffected} rows affected)";
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "No changes were saved to the database";
+                }
+                
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                if (!await UserExists(user.Id))
+                {
+                    TempData["ErrorMessage"] = "User no longer exists in database";
+                    return NotFound();
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = $"Concurrency error: {ex.Message}";
+                    throw;
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Error updating user: {ex.Message}";
+                ModelState.AddModelError("", $"An error occurred: {ex.Message}");
+                ViewData["Roles"] = new SelectList(Enum.GetValues(typeof(UserRole)));
+                ViewData["Homeowners"] = new SelectList(await _context.Homeowners.ToListAsync(), "Id", "LastName");
+                return View(user);
+            }
         }
 
         // GET: Users/Delete/5
@@ -197,8 +363,26 @@ namespace HomeownersSubdivision.Controllers
                 return RedirectToAction("AccessDenied", "Account");
             }
 
-            await _userService.DeleteUserAsync(id);
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                var user = await _context.Users.FindAsync(id);
+                if (user == null)
+                {
+                    return NotFound();
+                }
+
+                // Actually delete the user from the database
+                _context.Users.Remove(user);
+                await _context.SaveChangesAsync();
+
+                TempData["SuccessMessage"] = "User deleted successfully.";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Error deleting user: {ex.Message}";
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         // GET: Users/ChangePassword/5
@@ -233,18 +417,26 @@ namespace HomeownersSubdivision.Controllers
             if (newPassword != confirmPassword)
             {
                 ModelState.AddModelError("", "New password and confirmation password do not match.");
+                var user = await _userService.GetUserByIdAsync(id);
+                if (user != null)
+                {
+                    ViewBag.UserId = id;
+                    ViewBag.UserName = user.Username;
+                }
                 return View();
             }
 
-            var user = await _userService.GetUserByIdAsync(id);
-            if (user == null)
+            var userToUpdate = await _userService.GetUserByIdAsync(id);
+            if (userToUpdate == null)
             {
                 return NotFound();
             }
 
-            // Admin can change password without knowing current password
-            user.Password = newPassword;
-            await _context.SaveChangesAsync();
+            // Use the UserService to update the password properly with hashing
+            await _userService.ChangePasswordAsync(id, null, newPassword);
+            
+            // Add success message
+            TempData["SuccessMessage"] = $"Password for {userToUpdate.Username} has been changed successfully.";
 
             return RedirectToAction(nameof(Index));
         }

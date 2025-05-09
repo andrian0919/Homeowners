@@ -4,53 +4,83 @@
     ViewData["Title"] = "Delete User";
 }
 
-<div class="container">
-    <h1>Delete User</h1>
+<div class="container max-w-4xl mx-auto py-8">
+    <h1 class="text-3xl font-bold text-gray-800 mb-6 flex items-center">
+        <i class="fas fa-user-minus text-red-600 mr-2"></i> Delete User
+    </h1>
     
-    <div class="alert alert-danger">
-        <h3>Are you sure you want to delete this user?</h3>
-        <p>This action cannot be undone and will deactivate this user account.</p>
+    <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
+        <div class="flex">
+            <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="ml-3">
+                <h3 class="text-lg font-medium text-red-800">Are you sure you want to permanently delete this user?</h3>
+                <p class="mt-2 text-red-700">This action cannot be undone. The user will be completely removed from the system.</p>
+            </div>
+        </div>
     </div>
 
-    <div class="row">
-        <div class="col-md-8">
-            <div class="card mb-4">
-                <div class="card-header bg-secondary text-white">
-                    <h5 class="mb-0">User Information</h5>
-                </div>
-                <div class="card-body">
-                    <div class="row mb-3">
-                        <label class="col-sm-3 col-form-label"><strong>Name:</strong></label>
-                        <div class="col-sm-9">
-                            <p class="form-control-plaintext">@Model.FirstName @Model.LastName</p>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <label class="col-sm-3 col-form-label"><strong>Username:</strong></label>
-                        <div class="col-sm-9">
-                            <p class="form-control-plaintext">@Model.Username</p>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <label class="col-sm-3 col-form-label"><strong>Email:</strong></label>
-                        <div class="col-sm-9">
-                            <p class="form-control-plaintext">@Model.Email</p>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <label class="col-sm-3 col-form-label"><strong>Role:</strong></label>
-                        <div class="col-sm-9">
-                            <p class="form-control-plaintext"><span class="badge bg-info">@Model.Role</span></p>
-                        </div>
-                    </div>
-                </div>
+    <div class="luxury-content-card p-6 mb-6">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">User Information</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="border-b border-gray-200 pb-3">
+                <span class="text-sm font-medium text-gray-500">Name</span>
+                <p class="mt-1">@Model.FirstName @Model.LastName</p>
             </div>
             
-            <form asp-action="Delete">
-                <input type="hidden" asp-for="Id" />
-                <button type="submit" class="btn btn-danger">Delete</button>
-                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-            </form>
+            <div class="border-b border-gray-200 pb-3">
+                <span class="text-sm font-medium text-gray-500">Username</span>
+                <p class="mt-1">@Model.Username</p>
+            </div>
+            
+            <div class="border-b border-gray-200 pb-3">
+                <span class="text-sm font-medium text-gray-500">Email</span>
+                <p class="mt-1">@Model.Email</p>
+            </div>
+            
+            <div class="border-b border-gray-200 pb-3">
+                <span class="text-sm font-medium text-gray-500">Role</span>
+                <p class="mt-1">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                        @Model.Role
+                    </span>
+                </p>
+            </div>
+            
+            <div class="border-b border-gray-200 pb-3">
+                <span class="text-sm font-medium text-gray-500">Status</span>
+                <p class="mt-1">
+                    @if (Model.IsActive)
+                    {
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                            Active
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                            Inactive
+                        </span>
+                    }
+                </p>
+            </div>
         </div>
+    </div>
+    
+    <div class="flex justify-between">
+        <a asp-action="Index" class="btn-outline-luxury flex items-center">
+            <i class="bi bi-arrow-left mr-2"></i> Back to List
+        </a>
+        
+        <form asp-action="Delete" class="inline">
+            <input type="hidden" asp-for="Id" />
+            <button type="submit" class="btn-danger-luxury flex items-center">
+                <i class="bi bi-trash mr-2"></i> Permanently Delete User
+            </button>
+        </form>
     </div>
 </div> 

@@ -103,6 +103,7 @@ namespace HomeownersSubdivision.Controllers
                     CategoryName = t.Category?.Name ?? "Unknown",
                     AuthorId = t.CreatedById.ToString(),
                     AuthorName = t.CreatedBy?.FullName ?? "Unknown",
+                    AuthorAvatarUrl = t.CreatedBy?.ProfilePictureUrl,
                     CreatedAt = t.CreatedAt,
                     LastActivityAt = t.LastActivityAt,
                     ViewCount = t.ViewCount,
@@ -115,7 +116,7 @@ namespace HomeownersSubdivision.Controllers
                         TopicTitle = t.Title,
                         AuthorId = t.CreatedById.ToString(),
                         AuthorName = t.CreatedBy?.FullName ?? "Unknown",
-                        AuthorAvatarUrl = "/images/avatar.jpg",
+                        AuthorAvatarUrl = t.CreatedBy?.ProfilePictureUrl,
                         Content = "",
                         CreatedAt = t.CreatedAt
                     }
@@ -181,6 +182,8 @@ namespace HomeownersSubdivision.Controllers
                     CategoryName = category.Name,
                     AuthorId = t.CreatedById.ToString(),
                     AuthorName = t.CreatedBy?.FullName ?? "Unknown",
+                    // Use the user's profile picture if available
+                    AuthorAvatarUrl = t.CreatedBy?.ProfilePictureUrl,
                     CreatedAt = t.CreatedAt,
                     LastActivityAt = t.LastActivityAt,
                     ViewCount = t.ViewCount,
@@ -193,7 +196,8 @@ namespace HomeownersSubdivision.Controllers
                         TopicTitle = t.Title,
                         AuthorId = t.CreatedById.ToString(),
                         AuthorName = t.CreatedBy?.FullName ?? "Unknown",
-                        AuthorAvatarUrl = "/images/avatar.jpg",
+                        // Use the user's profile picture if available
+                        AuthorAvatarUrl = t.CreatedBy?.ProfilePictureUrl,
                         Content = "",
                         CreatedAt = t.LastActivityAt
                     }
@@ -245,7 +249,8 @@ namespace HomeownersSubdivision.Controllers
                     TopicTitle = topic.Title,
                     AuthorId = p.CreatedById.ToString(),
                     AuthorName = p.CreatedBy?.FullName ?? "Unknown",
-                    AuthorAvatarUrl = "/images/avatar.jpg", // Default avatar
+                    // Use the user's profile picture if available
+                    AuthorAvatarUrl = p.CreatedBy?.ProfilePictureUrl,
                     Content = p.Content,
                     CreatedAt = p.CreatedAt,
                     UpdatedAt = p.UpdatedAt,
@@ -258,7 +263,8 @@ namespace HomeownersSubdivision.Controllers
                         ParentPostId = r.ParentPostId,
                         AuthorId = r.CreatedById.ToString(),
                         AuthorName = r.CreatedBy?.FullName ?? "Unknown",
-                        AuthorAvatarUrl = "/images/avatar.jpg",
+                        // Use the user's profile picture if available
+                        AuthorAvatarUrl = r.CreatedBy?.ProfilePictureUrl,
                         Content = r.Content,
                         CreatedAt = r.CreatedAt,
                         UpdatedAt = r.UpdatedAt,
@@ -287,7 +293,8 @@ namespace HomeownersSubdivision.Controllers
                         TopicTitle = topic.Title,
                         AuthorId = topic.CreatedById.ToString(),
                         AuthorName = topic.CreatedBy?.FullName ?? "Unknown",
-                        AuthorAvatarUrl = "/images/avatar.jpg",
+                        // Use the user's profile picture if available
+                        AuthorAvatarUrl = topic.CreatedBy?.ProfilePictureUrl,
                         Content = "",
                         CreatedAt = topic.LastActivityAt
                     }

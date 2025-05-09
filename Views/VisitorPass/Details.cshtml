@@ -6,10 +6,10 @@
 
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <div class="bg-white shadow overflow-hidden sm:rounded-lg">
-        <div class="px-4 py-5 sm:px-6 flex justify-between items-center">
+        <div class="px-4 py-5 sm:px-6 flex justify-between items-center bg-gradient-to-r from-blue-800 to-blue-600">
             <div>
-                <h3 class="text-lg leading-6 font-medium text-gray-900">Visitor Pass Details</h3>
-                <p class="mt-1 max-w-2xl text-sm text-gray-500">Detailed information about this visitor pass request.</p>
+                <h3 class="text-lg leading-6 font-bold text-white">Visitor Pass Details</h3>
+                <p class="mt-1 max-w-2xl text-sm text-blue-100">Detailed information about this visitor pass request.</p>
             </div>
             <div>
                 @{
@@ -79,10 +79,8 @@
     </div>
 
     <div class="mt-6 flex justify-between">
-        <a asp-action="Index" class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
-            </svg>
+        <a asp-action="Index" class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            <i class="fas fa-arrow-left mr-2"></i>
             Back to List
         </a>
         

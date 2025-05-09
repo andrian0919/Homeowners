@@ -1,0 +1,227 @@
+/* Mobile-friendly styles for Homeowners section */
+
+/* Base responsive adjustments */
+@media (max-width: 767px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  h1 {
+    font-size: 1.75rem !important;
+  }
+  
+  h2 {
+    font-size: 1.5rem !important;
+  }
+  
+  h3 {
+    font-size: 1.25rem !important;
+  }
+  
+  .jumbotron {
+    padding: 1.5rem !important;
+  }
+  
+  .jumbotron h1 {
+    font-size: 1.5rem !important;
+  }
+  
+  /* Improve form elements on mobile */
+  input, select, textarea {
+    font-size: 16px !important; /* Prevents iOS zoom on focus */
+  }
+  
+  /* Adjust button sizes for better touch targets */
+  .btn, button, .luxury-button {
+    padding: 0.625rem 1rem !important;
+    min-height: 44px !important; /* Minimum touch target size */
+  }
+  
+  /* Adjust card spacing for mobile */
+  .card, .card-hover {
+    margin-bottom: 1rem !important;
+  }
+  
+  /* Improve table display on small screens */
+  table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+  }
+  
+  /* Fix for nav links on mobile */
+  .nav-link {
+    padding: 0.75rem 0.5rem !important;
+  }
+}
+
+/* Homeowner dashboard specific adjustments */
+@media (max-width: 767px) {
+  /* Adjust grid layout for dashboard cards */
+  .grid-cols-1.sm\:grid-cols-2.md\:grid-cols-3.lg\:grid-cols-5 {
+    grid-template-columns: 1fr !important;
+  }
+  
+  /* Adjust announcement cards */
+  .announcements-card {
+    padding: 1rem !important;
+  }
+  
+  /* Reduce padding in card bodies */
+  .p-6 {
+    padding: 1rem !important;
+  }
+  
+  /* Make icons smaller on mobile */
+  .text-4xl {
+    font-size: 1.75rem !important;
+  }
+}
+
+/* Homeowner profile specific adjustments */
+@media (max-width: 767px) {
+  /* Stack profile picture and upload control */
+  .flex-col.md\:flex-row {
+    flex-direction: column !important;
+    align-items: center !important;
+  }
+  
+  /* Center profile picture */
+  .w-32.h-32.rounded-full {
+    margin-bottom: 1rem !important;
+  }
+  
+  /* Adjust form section spacing */
+  .mb-8 {
+    margin-bottom: 1.5rem !important;
+  }
+  
+  /* Adjust form button layout */
+  .flex.justify-between.items-center {
+    flex-direction: column !important;
+    gap: 1rem !important;
+  }
+  
+  .flex.justify-between.items-center > a,
+  .flex.justify-between.items-center > button {
+    width: 100% !important;
+    text-align: center !important;
+  }
+}
+
+/* Property page specific adjustments */
+@media (max-width: 767px) {
+  .property-info-card {
+    border-radius: 0.5rem !important;
+    overflow: hidden !important;
+  }
+  
+  .property-info-section {
+    padding: 1rem !important;
+  }
+  
+  .property-detail-row {
+    flex-direction: column !important;
+    padding: 0.5rem 0 !important;
+  }
+  
+  .property-detail-label {
+    width: 100% !important;
+    margin-bottom: 0.25rem !important;
+  }
+  
+  .property-detail-value {
+    width: 100% !important;
+  }
+}
+
+/* Billing and payments adjustments */
+@media (max-width: 767px) {
+  .payment-history-table th,
+  .payment-history-table td {
+    padding: 0.5rem !important;
+  }
+  
+  .bill-card {
+    padding: 1rem !important;
+  }
+  
+  .bill-amount {
+    font-size: 1.25rem !important;
+  }
+}
+
+/* Fix for mobile navigation */
+@media (max-width: 767px) {
+  .mobile-menu-container {
+    width: 100% !important;
+    padding: 0 !important;
+  }
+  
+  .mobile-menu {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    padding: 0.5rem 0 !important;
+  }
+  
+  .mobile-menu .nav-link {
+    padding: 0.75rem 1rem !important;
+    border-bottom: 1px solid rgba(0,0,0,0.05) !important;
+  }
+}
+
+/* Improve touch targets for mobile */
+@media (max-width: 767px) {
+  a, button, .btn, .nav-link, [role="button"] {
+    min-height: 44px !important;
+    min-width: 44px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  
+  /* Fix for inline links */
+  p a, span a, td a, h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
+    min-height: auto !important;
+    min-width: auto !important;
+    display: inline !important;
+  }
+}
+
+/* Fix for form inputs on mobile */
+@media (max-width: 767px) {
+  input[type="file"] {
+    width: 100% !important;
+  }
+  
+  .form-control, .form-select {
+    height: 44px !important;
+  }
+}
+
+/* Improve modal display on mobile */
+@media (max-width: 767px) {
+  .modal-content {
+    padding: 1rem !important;
+  }
+  
+  .modal-header {
+    padding: 0.75rem 1rem !important;
+  }
+  
+  .modal-body {
+    padding: 1rem !important;
+  }
+  
+  .modal-footer {
+    padding: 0.75rem 1rem !important;
+    flex-direction: column !important;
+    gap: 0.5rem !important;
+  }
+  
+  .modal-footer button {
+    width: 100% !important;
+  }
+} 

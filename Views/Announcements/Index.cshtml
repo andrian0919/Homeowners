@@ -4,6 +4,17 @@
     ViewData["Title"] = "Announcements";
     var isAdminOrStaff = Context.Session.GetString("UserRole") == "Administrator" || 
                           Context.Session.GetString("UserRole") == "Staff";
+                          
+    string GetCreatorDisplay(HomeownersSubdivision.Models.User? creator)
+    {
+        if (creator == null)
+            return "Unknown User";
+            
+        if (creator.Role == HomeownersSubdivision.Models.UserRole.Staff)
+            return "Staff";
+            
+        return creator.FirstName + " " + creator.LastName;
+    }
 }
 
 @await Html.PartialAsync("_LuxuryBackground")
@@ -190,7 +201,7 @@
                             <i class="fas fa-user mr-1"></i>
                                 @if (item.Creator != null)
                                 {
-                                    @(item.Creator.FirstName + " " + item.Creator.LastName)
+                                    @GetCreatorDisplay(item.Creator)
                                 }
                                 else
                                 {

@@ -9,8 +9,19 @@ using HomeownersSubdivision.Models;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Threading.Tasks;
+using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Configure Kestrel to listen on specific IP address
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    serverOptions.Listen(IPAddress.Parse("192.168.1.14"), 5000); // HTTP on port 5000
+    serverOptions.Listen(IPAddress.Parse("192.168.1.14"), 5001, listenOptions =>
+    {
+        listenOptions.UseHttps(); // HTTPS on port 5001
+    });
+});
 
 // Configure services
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -86,7 +97,8 @@ else
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+// Comment out HTTPS redirection for local network access
+// app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();

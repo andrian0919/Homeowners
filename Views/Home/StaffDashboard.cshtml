@@ -1,195 +1,221 @@
 @{
     ViewData["Title"] = "Staff Dashboard";
+    ViewData["UseLuxuryBackground"] = true;
 }
 
-<div class="staff-theme">
-    <div class="jumbotron staff-gradient rounded-lg p-8 mb-6">
-        <div class="container mx-auto">
-            <h1 class="text-4xl font-heading font-bold mb-2 flex items-center">
-                <i class="fas fa-briefcase mr-2"></i>Staff Dashboard
-            </h1>
-            <p class="text-xl opacity-90">Manage day-to-day operations for Homeowners Subdivision.</p>
+@using HomeownersSubdivision.Models
+@using HomeownersSubdivision.Data
+@using Microsoft.EntityFrameworkCore
+@inject ApplicationDbContext _context
+
+@if (ViewData["UseLuxuryBackground"] != null && (bool)ViewData["UseLuxuryBackground"])
+{
+    <partial name="_AdminBackground" />
+}
+
+<div class="container mx-auto px-4 py-8 admin-dashboard-container">
+    <div class="admin-hero-section">
+        <div class="admin-hero-particle" id="particles">
+            <!-- Particles will be added by JavaScript -->
+        </div>
+        <div class="container mx-auto relative z-10">
+            <h1 class="text-3xl font-bold font-heading mb-2 text-white">Staff Dashboard</h1>
+            <p class="text-white text-opacity-90">
+                Manage day-to-day operations for Homeowners Subdivision.
+            </p>
         </div>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div class="animate-fade-in-up card-delay-1">
-            <div class="bg-white rounded-lg shadow overflow-hidden card-hover h-full flex flex-col">
-                <div class="bg-staffPrimary text-white px-5 py-4">
-                    <h2 class="text-lg font-semibold flex items-center">
-                        <i class="fas fa-home mr-2"></i>Homeowners
-                    </h2>
+        <div class="admin-dashboard-card overflow-hidden animate-luxury card-delay-1">
+            <div class="p-6">
+                <div class="flex flex-col items-center mb-4">
+                    <i class="bi bi-megaphone dashboard-icon text-primary"></i>
+                    <h3 class="text-xl font-semibold mb-2">Announcements</h3>
+                    <p class="text-gray-600 text-center">Create and manage announcements for homeowners.</p>
                 </div>
-                <div class="p-5 flex-grow flex flex-col">
-                    <div class="text-center">
-                        <i class="fas fa-home text-staffPrimary opacity-25 text-5xl mb-4"></i>
-                    </div>
-                    <p class="text-gray-600 mb-4 flex-grow">View homeowner information, properties, and contact details. Respond to inquiries.</p>
-                    <div class="mt-auto">
-                        <a asp-controller="Homeowners" asp-action="Index" class="btn-info w-full text-center flex items-center justify-center">
-                            <i class="fas fa-arrow-right mr-1"></i> View Homeowners
-                        </a>
-                    </div>
+                <div class="mt-4">
+                    <a asp-controller="Announcements" asp-action="Index" class="btn-luxury block text-center">
+                        <i class="fas fa-arrow-right mr-1"></i> View Announcements
+                    </a>
                 </div>
             </div>
         </div>
         
-        <div class="animate-fade-in-up card-delay-2">
-            <div class="bg-white rounded-lg shadow overflow-hidden card-hover h-full flex flex-col">
-                <div class="bg-staffPrimary text-white px-5 py-4">
-                    <h2 class="text-lg font-semibold flex items-center">
-                        <i class="fas fa-tasks mr-2"></i>Tasks
-                    </h2>
+        <div class="admin-dashboard-card overflow-hidden animate-luxury card-delay-2">
+            <div class="p-6">
+                <div class="flex flex-col items-center mb-4">
+                    <i class="bi bi-tools dashboard-icon text-info"></i>
+                    <h3 class="text-xl font-semibold mb-2">Service Requests</h3>
+                    <p class="text-gray-600 text-center">View and manage service requests assigned to you.</p>
                 </div>
-                <div class="p-5 flex-grow flex flex-col">
-                    <div class="text-center">
-                        <i class="fas fa-tasks text-staffPrimary opacity-25 text-5xl mb-4"></i>
-                    </div>
-                    <p class="text-gray-600 mb-4 flex-grow">View and manage assigned tasks, duties, and responsibilities.</p>
-                    <div class="mt-auto">
-                        <a href="#" class="btn-info w-full text-center flex items-center justify-center">
-                            <i class="fas fa-arrow-right mr-1"></i> Manage Tasks
-                        </a>
-                    </div>
+                <div class="mt-4">
+                    <a asp-controller="ServiceRequests" asp-action="AssignedToMe" class="btn-luxury block text-center">
+                        <i class="fas fa-arrow-right mr-1"></i> My Service Requests
+                    </a>
                 </div>
             </div>
         </div>
         
-        <div class="animate-fade-in-up card-delay-3">
-            <div class="bg-white rounded-lg shadow overflow-hidden card-hover h-full flex flex-col">
-                <div class="bg-staffPrimary text-white px-5 py-4">
-                    <h2 class="text-lg font-semibold flex items-center">
-                        <i class="fas fa-calendar-alt mr-2"></i>Schedule
-                    </h2>
+        <div class="admin-dashboard-card overflow-hidden animate-luxury card-delay-3">
+            <div class="p-6">
+                <div class="flex flex-col items-center mb-4">
+                    <i class="bi bi-building dashboard-icon text-success"></i>
+                    <h3 class="text-xl font-semibold mb-2">Facilities</h3>
+                    <p class="text-gray-600 text-center">Manage community facilities and amenities.</p>
                 </div>
-                <div class="p-5 flex-grow flex flex-col">
-                    <div class="text-center">
-                        <i class="fas fa-calendar-alt text-staffPrimary opacity-25 text-5xl mb-4"></i>
-                    </div>
-                    <p class="text-gray-600 mb-4 flex-grow">View upcoming events, meetings, and community activities.</p>
-                    <div class="mt-auto">
-                        <a href="#" class="btn-info w-full text-center flex items-center justify-center">
-                            <i class="fas fa-arrow-right mr-1"></i> View Schedule
-                        </a>
-                    </div>
+                <div class="mt-4">
+                    <a asp-controller="Facilities" asp-action="Index" class="btn-luxury block text-center">
+                        <i class="fas fa-arrow-right mr-1"></i> View Facilities
+                    </a>
                 </div>
             </div>
         </div>
         
-        <div class="animate-fade-in-up card-delay-4">
-            <div class="bg-white rounded-lg shadow overflow-hidden card-hover h-full flex flex-col">
-                <div class="bg-staffPrimary text-white px-5 py-4">
-                    <h2 class="text-lg font-semibold flex items-center">
-                        <i class="fas fa-envelope mr-2"></i>Messages
-                    </h2>
+        <div class="admin-dashboard-card overflow-hidden animate-luxury card-delay-4">
+            <div class="p-6">
+                <div class="flex flex-col items-center mb-4">
+                    <i class="bi bi-calendar-week dashboard-icon text-primary"></i>
+                    <h3 class="text-xl font-semibold mb-2">Manage Reservations</h3>
+                    <p class="text-gray-600 text-center">View and manage facility reservations.</p>
                 </div>
-                <div class="p-5 flex-grow flex flex-col">
-                    <div class="text-center">
-                        <i class="fas fa-envelope text-staffPrimary opacity-25 text-5xl mb-4"></i>
-                    </div>
-                    <p class="text-gray-600 mb-4 flex-grow">View and respond to messages from homeowners and management.</p>
-                    <div class="mt-auto">
-                        <a href="#" class="btn-info w-full text-center flex items-center justify-center">
-                            <i class="fas fa-arrow-right mr-1"></i> View Messages
-                        </a>
-                    </div>
+                <div class="mt-4">
+                    <a asp-controller="Reservations" asp-action="AdminIndex" class="btn-luxury block text-center">
+                        <i class="fas fa-arrow-right mr-1"></i> View Reservations
+                    </a>
                 </div>
             </div>
         </div>
         
-        <div class="animate-fade-in-up card-delay-5">
-            <div class="bg-white rounded-lg shadow overflow-hidden card-hover h-full flex flex-col">
-                <div class="bg-staffPrimary text-white px-5 py-4">
-                    <h2 class="text-lg font-semibold flex items-center">
-                        <i class="fas fa-exclamation-circle mr-2"></i>Maintenance Requests
-                    </h2>
+        <div class="admin-dashboard-card overflow-hidden animate-luxury card-delay-5">
+            <div class="p-6">
+                <div class="flex flex-col items-center mb-4">
+                    <i class="bi bi-person-badge dashboard-icon text-warning"></i>
+                    <h3 class="text-xl font-semibold mb-2">Visitor Passes</h3>
+                    <p class="text-gray-600 text-center">Manage visitor passes and access control.</p>
                 </div>
-                <div class="p-5 flex-grow flex flex-col">
-                    <div class="text-center">
-                        <i class="fas fa-exclamation-circle text-staffPrimary opacity-25 text-5xl mb-4"></i>
-                    </div>
-                    <p class="text-gray-600 mb-4 flex-grow">Process and track maintenance requests from homeowners.</p>
-                    <div class="mt-auto">
-                        <a href="#" class="btn-info w-full text-center flex items-center justify-center">
-                            <i class="fas fa-arrow-right mr-1"></i> View Requests
-                        </a>
-                    </div>
+                <div class="mt-4">
+                    <a asp-controller="VisitorPass" asp-action="Index" class="btn-luxury block text-center">
+                        <i class="fas fa-arrow-right mr-1"></i> View Visitor Passes
+                    </a>
                 </div>
             </div>
         </div>
         
-        <div class="animate-fade-in-up card-delay-6">
-            <div class="bg-white rounded-lg shadow overflow-hidden card-hover h-full flex flex-col">
-                <div class="bg-staffPrimary text-white px-5 py-4">
-                    <h2 class="text-lg font-semibold flex items-center">
-                        <i class="fas fa-file-alt mr-2"></i>Reports
-                    </h2>
+        <div class="admin-dashboard-card overflow-hidden animate-luxury card-delay-6">
+            <div class="p-6">
+                <div class="flex flex-col items-center mb-4">
+                    <i class="bi bi-people dashboard-icon text-info"></i>
+                    <h3 class="text-xl font-semibold mb-2">Homeowners</h3>
+                    <p class="text-gray-600 text-center">View and manage homeowner information.</p>
                 </div>
-                <div class="p-5 flex-grow flex flex-col">
-                    <div class="text-center">
-                        <i class="fas fa-file-alt text-staffPrimary opacity-25 text-5xl mb-4"></i>
-                    </div>
-                    <p class="text-gray-600 mb-4 flex-grow">Generate and view reports for management review.</p>
-                    <div class="mt-auto">
-                        <a href="#" class="btn-info w-full text-center flex items-center justify-center">
-                            <i class="fas fa-arrow-right mr-1"></i> Generate Reports
-                        </a>
-                    </div>
+                <div class="mt-4">
+                    <a asp-controller="Home" asp-action="ManageHomeowners" class="btn-luxury block text-center">
+                        <i class="fas fa-arrow-right mr-1"></i> View Homeowners
+                    </a>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="mt-8 animate-fade-in-up" style="animation-delay: 0.7s;">
-        <div class="bg-white rounded-lg shadow overflow-hidden">
-            <div class="bg-staffPrimary text-white px-5 py-4">
-                <h2 class="text-lg font-semibold flex items-center">
-                    <i class="fas fa-bell mr-2"></i>Recent Activity
-                </h2>
-            </div>
-            <div class="p-6">
-                <ul class="space-y-4">
+    @{
+        // Get recent service requests
+        var recentServiceRequests = _context.ServiceRequests
+            .OrderByDescending(sr => sr.SubmissionDate)
+            .Take(3)
+            .Select(sr => new {
+                Id = sr.Id,
+                Title = sr.Title,
+                Status = sr.Status,
+                SubmissionDate = sr.SubmissionDate,
+                HomeownerName = sr.Homeowner.FirstName + " " + sr.Homeowner.LastName
+            })
+            .ToList();
+
+        // Get recent reservations
+        var recentReservations = _context.FacilityReservations
+            .Include(r => r.User)
+            .Include(r => r.Facility)
+            .OrderByDescending(r => r.CreatedAt)
+            .Take(3)
+            .ToList();
+
+        // Get recent announcements
+        var recentAnnouncements = _context.Announcements
+            .OrderByDescending(a => a.PublishDate)
+            .Take(2)
+            .ToList();
+    }
+
+    <div class="mt-8 admin-dashboard-card overflow-hidden animate-luxury card-delay-7">
+        <div class="p-6">
+            <h2 class="text-xl font-semibold mb-4 flex items-center">
+                <i class="fas fa-bell text-primary mr-2"></i>Recent Activity
+            </h2>
+            <ul class="space-y-4">
+                @foreach (var request in recentServiceRequests)
+                {
                     <li class="border-b border-gray-100 pb-4">
                         <div class="flex justify-between items-start">
                             <div>
                                 <h5 class="text-lg font-medium flex items-center">
-                                    <i class="fas fa-user-plus text-staffPrimary mr-2"></i>
-                                    New homeowner registration
+                                    <i class="bi bi-tools text-primary mr-2"></i>
+                                    Service Request #@request.Id
                                 </h5>
-                                <p class="text-gray-600 mt-1">John Doe registered as a new homeowner at Block 12, Lot 4.</p>
+                                <p class="text-gray-600 mt-1">@request.Title submitted by @request.HomeownerName</p>
                             </div>
-                            <span class="bg-gray-100 text-gray-700 text-xs px-3 py-1 rounded-full">3 days ago</span>
+                            <span class="bg-gray-100 text-gray-700 text-xs px-3 py-1 rounded-full">
+                                @(request.SubmissionDate > DateTime.Now.AddDays(-1) ? "Today" : 
+                                  request.SubmissionDate > DateTime.Now.AddDays(-2) ? "Yesterday" : 
+                                  request.SubmissionDate.ToString("MMM d"))
+                            </span>
                         </div>
                     </li>
+                }
+                
+                @foreach (var reservation in recentReservations)
+                {
                     <li class="border-b border-gray-100 pb-4">
                         <div class="flex justify-between items-start">
                             <div>
                                 <h5 class="text-lg font-medium flex items-center">
-                                    <i class="fas fa-tools text-staffPrimary mr-2"></i>
-                                    Maintenance request submitted
+                                    <i class="bi bi-calendar-check text-primary mr-2"></i>
+                                    New Reservation
                                 </h5>
-                                <p class="text-gray-600 mt-1">Jane Smith reported issues with streetlights at Block 8.</p>
+                                <p class="text-gray-600 mt-1">@reservation.User.FullName reserved @reservation.Facility.Name for @reservation.ReservationDate.ToString("MMM d")</p>
                             </div>
-                            <span class="bg-gray-100 text-gray-700 text-xs px-3 py-1 rounded-full">5 days ago</span>
+                            <span class="bg-gray-100 text-gray-700 text-xs px-3 py-1 rounded-full">
+                                @(reservation.CreatedAt > DateTime.Now.AddDays(-1) ? "Today" : 
+                                  reservation.CreatedAt > DateTime.Now.AddDays(-2) ? "Yesterday" : 
+                                  reservation.CreatedAt.ToString("MMM d"))
+                            </span>
                         </div>
                     </li>
-                    <li class="pb-2">
+                }
+                
+                @foreach (var announcement in recentAnnouncements)
+                {
+                    <li class="@(announcement == recentAnnouncements.Last() ? "pb-2" : "border-b border-gray-100 pb-4")">
                         <div class="flex justify-between items-start">
                             <div>
                                 <h5 class="text-lg font-medium flex items-center">
-                                    <i class="fas fa-calendar-day text-staffPrimary mr-2"></i>
-                                    Community event scheduled
+                                    <i class="bi bi-megaphone text-primary mr-2"></i>
+                                    @(announcement.IsPublished ? "Published Announcement" : "Draft Announcement")
                                 </h5>
-                                <p class="text-gray-600 mt-1">Annual homeowners meeting scheduled for next month.</p>
+                                <p class="text-gray-600 mt-1">@announcement.Title</p>
                             </div>
-                            <span class="bg-gray-100 text-gray-700 text-xs px-3 py-1 rounded-full">1 week ago</span>
+                            <span class="bg-gray-100 text-gray-700 text-xs px-3 py-1 rounded-full">
+                                @(announcement.PublishDate > DateTime.Now.AddDays(-1) ? "Today" : 
+                                  announcement.PublishDate > DateTime.Now.AddDays(-2) ? "Yesterday" : 
+                                  announcement.PublishDate.ToString("MMM d"))
+                            </span>
                         </div>
                     </li>
-                </ul>
-            </div>
-            <div class="bg-gray-50 px-6 py-3 flex justify-end">
-                <a href="#" class="btn-outline-info text-sm px-3 py-1 inline-flex items-center">
-                    <i class="fas fa-list mr-1"></i> View All Activity
+                }
+            </ul>
+            <div class="mt-4 flex justify-end">
+                <a asp-controller="Reports" asp-action="Dashboard" class="btn-outline-luxury inline-flex items-center">
+                    <i class="fas fa-chart-line mr-1"></i> View Activity Dashboard
                 </a>
             </div>
         </div>
@@ -198,4 +224,36 @@
 
 @section Scripts {
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script>
+        // Create particle effects for the hero section
+        document.addEventListener('DOMContentLoaded', function() {
+            const particlesContainer = document.getElementById('particles');
+            if (particlesContainer) {
+                const particleCount = 15;
+                
+                for (let i = 0; i < particleCount; i++) {
+                    const particle = document.createElement('span');
+                    const size = Math.random() * 5 + 2; // Random size between 2-7px
+                    
+                    // Set random position
+                    const posX = Math.random() * 100;
+                    const posY = Math.random() * 100;
+                    
+                    // Set random animation duration and delay
+                    const duration = Math.random() * 8 + 4; // 4-12 seconds
+                    const delay = Math.random() * 3; // 0-3 seconds
+                    
+                    // Apply styles
+                    particle.style.width = `${size}px`;
+                    particle.style.height = `${size}px`;
+                    particle.style.left = `${posX}%`;
+                    particle.style.top = `${posY}%`;
+                    particle.style.animationDuration = `${duration}s`;
+                    particle.style.animationDelay = `${delay}s`;
+                    
+                    particlesContainer.appendChild(particle);
+                }
+            }
+        });
+    </script>
 } 

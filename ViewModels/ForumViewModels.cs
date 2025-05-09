@@ -95,6 +95,7 @@ namespace HomeownersSubdivision.ViewModels
         public required string CategoryName { get; set; }
         public required string AuthorId { get; set; }
         public required string AuthorName { get; set; }
+        public string? AuthorAvatarUrl { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime LastActivityAt { get; set; }
         public int ViewCount { get; set; }
@@ -111,7 +112,7 @@ namespace HomeownersSubdivision.ViewModels
         public required string TopicTitle { get; set; }
         public required string AuthorId { get; set; }
         public required string AuthorName { get; set; }
-        public required string AuthorAvatarUrl { get; set; }
+        public string? AuthorAvatarUrl { get; set; }
         public int? ParentPostId { get; set; }
         public required string Content { get; set; }
         public DateTime CreatedAt { get; set; }

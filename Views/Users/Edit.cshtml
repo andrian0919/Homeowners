@@ -7,9 +7,27 @@
 <div class="container max-w-2xl mx-auto py-8">
     <div class="luxury-content-card p-8 animate-luxury">
         <h1 class="text-2xl font-bold text-gray-800 mb-6 flex items-center"><i class="fas fa-user-edit text-primary mr-2"></i> Edit User</h1>
-        <form asp-action="Edit" class="space-y-6">
+        
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm font-medium text-red-800">@TempData["ErrorMessage"]</p>
+                    </div>
+                </div>
+            </div>
+        }
+        
+        <form asp-action="Edit" method="post" class="space-y-6">
             <div asp-validation-summary="ModelOnly" class="text-red-500 mb-4 p-3 bg-red-50 rounded-md"></div>
             <input type="hidden" asp-for="Id" />
+            <input type="hidden" name="debugField" value="EditFormSubmitted" />
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <label asp-for="FirstName" class="block font-semibold text-gray-700">First Name</label>
@@ -70,4 +88,17 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        // Add form submission debugging
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form[asp-action="Edit"]');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    console.log('Form submitted');
+                    // Continue with form submission
+                });
+            }
+        });
+    </script>
 } 

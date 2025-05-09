@@ -6,43 +6,44 @@
 
 @await Html.PartialAsync("_LuxuryBackground")
 
+<style>
+    .main-heading {
+        display: flex;
+        align-items: center;
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(to right, #1a1a2e, #3366FF);
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        color: white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .main-heading i {
+        font-size: 1.75rem;
+        margin-right: 0.75rem;
+        color: #6889F7;
+    }
+    
+    /* Fix text visibility in form fields */
+    .form-input {
+        color: #1a1a2e !important;
+        background-color: white !important;
+    }
+    
+    .form-select {
+        color: #1a1a2e !important;
+        background-color: white !important;
+    }
+</style>
 
 <div class="container mx-auto px-4 py-8 luxury-page-container">
-    <div class="mb-6">
-        <nav class="flex mb-3" aria-label="Breadcrumb">
-            <ol class="inline-flex items-center space-x-1 md:space-x-3">
-                <li class="inline-flex items-center">
-                    <a href="@Url.Action("Index", "Home")" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-indigo-600">
-                        <svg class="mr-2 w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
-                        </svg>
-                        Home
-                    </a>
-                </li>
-                <li>
-                    <div class="flex items-center">
-                        <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
-                        </svg>
-                        <a href="@Url.Action("Index", "ServiceRequests")" class="ml-1 text-sm font-medium text-gray-700 hover:text-indigo-600 md:ml-2">
-                            Service Requests
-                        </a>
-                    </div>
-                </li>
-                <li aria-current="page">
-                    <div class="flex items-center">
-                        <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
-                        </svg>
-                        <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2">Create New Request</span>
-                    </div>
-                </li>
-            </ol>
-        </nav>
-
-        <h1 class="text-3xl font-bold text-gray-800 mb-2">Create Service Request</h1>
-        <p class="text-gray-600">Please provide the details about the issue you're experiencing.</p>
+    <div class="main-heading">
+        <i class="fas fa-tools"></i> Create Service Request
     </div>
+    
+    <p class="text-gray-200 mb-6">Please provide the details about the issue you're experiencing.</p>
 
     <div class="bg-white rounded-lg shadow-sm overflow-hidden">
         <form method="post" asp-controller="ServiceRequests" asp-action="Create" enctype="multipart/form-data" class="p-6">
@@ -50,13 +51,13 @@
             
             <div class="mb-6">
                 <label asp-for="Title" class="block text-sm font-medium text-gray-700 mb-1">Title</label>
-                <input asp-for="Title" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="Enter a brief title describing the issue" />
+                <input asp-for="Title" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm form-input" placeholder="Enter a brief title describing the issue" />
                 <span asp-validation-for="Title" class="text-red-500 text-sm mt-1"></span>
             </div>
             
             <div class="mb-6">
                 <label asp-for="RequestType" class="block text-sm font-medium text-gray-700 mb-1">Request Type</label>
-                <select asp-for="RequestType" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                <select asp-for="RequestType" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm form-select">
                     @foreach (var item in ViewBag.RequestTypeSelectList)
                     {
                         <option value="@item.Value">@item.Text</option>
@@ -67,7 +68,7 @@
             
             <div class="mb-6">
                 <label asp-for="Priority" class="block text-sm font-medium text-gray-700 mb-1">Priority</label>
-                <select asp-for="Priority" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                <select asp-for="Priority" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm form-select">
                     @foreach (var item in ViewBag.PrioritySelectList)
                     {
                         <option value="@item.Value">@item.Text</option>
@@ -78,7 +79,7 @@
             
             <div class="mb-6">
                 <label asp-for="Description" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                <textarea asp-for="Description" rows="5" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="Please provide a detailed description of the issue..."></textarea>
+                <textarea asp-for="Description" rows="5" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm form-input" placeholder="Please provide a detailed description of the issue..."></textarea>
                 <span asp-validation-for="Description" class="text-red-500 text-sm mt-1"></span>
             </div>
             

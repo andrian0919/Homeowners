@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Edit Profile";
+    ViewData["UseLuxuryBackground"] = true;
 }
 
 <div class="container mx-auto px-4 py-8">
@@ -39,11 +40,40 @@
                 </div>
             }
             
-            <form asp-controller="Account" asp-action="UpdateHomeownerProfile" method="post">
+            <form asp-controller="Account" asp-action="UpdateHomeownerProfile" method="post" enctype="multipart/form-data">
                 <input type="hidden" asp-for="Id" />
                 <input type="hidden" asp-for="JoinDate" />
+                <input type="hidden" asp-for="ProfilePictureUrl" />
                 
                 <div asp-validation-summary="ModelOnly" class="text-red-500 mb-4"></div>
+                
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold text-gray-700 border-b pb-2 mb-4">Profile Picture</h3>
+                    
+                    <div class="flex flex-col md:flex-row items-center gap-6">
+                        <div class="w-32 h-32 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center">
+                            @if (!string.IsNullOrEmpty(Model.ProfilePictureUrl))
+                            {
+                                <img src="@Model.ProfilePictureUrl" alt="Profile Picture" class="w-full h-full object-cover" />
+                            }
+                            else
+                            {
+                                <i class="bi bi-person-fill text-6xl text-gray-400"></i>
+                            }
+                        </div>
+                        
+                        <div class="flex-1">
+                            <label asp-for="ProfilePicture" class="block text-gray-700 font-semibold mb-2"></label>
+                            <input asp-for="ProfilePicture" type="file" accept="image/*" class="w-full text-sm text-gray-500
+                                file:mr-4 file:py-2 file:px-4
+                                file:rounded-md file:border-0
+                                file:text-sm file:font-semibold
+                                file:bg-success-50 file:text-success-700
+                                hover:file:bg-success-100" />
+                            <p class="text-sm text-gray-500 mt-1">Recommended size: 300x300 pixels. Max file size: 2MB.</p>
+                        </div>
+                    </div>
+                </div>
                 
                 <div class="mb-8">
                     <h3 class="text-xl font-semibold text-gray-700 border-b pb-2 mb-4">Account Information</h3>
@@ -144,12 +174,12 @@
                     </div>
                 </div>
                 
-                <div class="flex justify-between items-center mt-6">
-                    <a href="@Url.Action("Index", "Home")" class="text-gray-600 hover:text-gray-800">
+                <div class="flex flex-col sm:flex-row justify-between items-center mt-6 gap-4">
+                    <a href="@Url.Action("Index", "Home")" class="w-full sm:w-auto text-center text-gray-600 hover:text-gray-800 bg-gray-200 hover:bg-gray-300 px-6 py-2 rounded-md transition-colors">
                         <i class="bi bi-arrow-left mr-1"></i> Back to Dashboard
                     </a>
                     
-                    <button type="submit" class="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">
+                    <button type="submit" class="w-full sm:w-auto text-center px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">
                         <i class="bi bi-check-circle mr-2"></i>Save Changes
                     </button>
                 </div>
@@ -180,6 +210,65 @@
                     passwordFields.classList.add('hidden');
                 }
             });
+            
+            // Preview profile picture when a new file is selected
+            const profilePictureInput = document.getElementById('ProfilePicture');
+            if (profilePictureInput) {
+                profilePictureInput.addEventListener('change', function() {
+                    if (this.files && this.files[0]) {
+                        const reader = new FileReader();
+                        
+                        reader.onload = function(e) {
+                            // Update the profile picture preview
+                            const profileImageContainer = profilePictureInput.closest('.flex-col, .flex-row').querySelector('.rounded-full');
+                            
+                            // If there's an existing image, update its src
+                            let imgElement = profileImageContainer.querySelector('img');
+                            
+                            if (!imgElement) {
+                                // If there's no image yet (just the icon), replace with an image
+                                profileImageContainer.innerHTML = '';
+                                imgElement = document.createElement('img');
+                                imgElement.className = 'w-full h-full object-cover';
+                                imgElement.alt = 'Profile Picture';
+                                profileImageContainer.appendChild(imgElement);
+                            }
+                            
+                            imgElement.src = e.target.result;
+                            
+                            // Also update the profile picture in the header if it exists
+                            const headerProfilePic = document.querySelector('#user-menu-button img');
+                            if (headerProfilePic) {
+                                headerProfilePic.src = e.target.result;
+                            } else {
+                                // If there's no image in the header (just the icon container), replace with an image
+                                const headerProfileContainer = document.querySelector('#user-menu-button .rounded-full');
+                                if (headerProfileContainer) {
+                                    headerProfileContainer.innerHTML = '';
+                                    const newHeaderImg = document.createElement('img');
+                                    newHeaderImg.className = 'h-8 w-8 rounded-full object-cover';
+                                    newHeaderImg.alt = 'Profile picture';
+                                    newHeaderImg.src = e.target.result;
+                                    headerProfileContainer.appendChild(newHeaderImg);
+                                }
+                            }
+                        };
+                        
+                        reader.readAsDataURL(this.files[0]);
+                    }
+                });
+            }
+            
+            // Fix for mobile devices to ensure proper touch target sizes
+            if (window.innerWidth <= 767) {
+                const inputs = document.querySelectorAll('input, select, textarea');
+                inputs.forEach(input => {
+                    if (input.type !== 'checkbox' && input.type !== 'radio') {
+                        input.style.fontSize = '16px'; // Prevent iOS zoom
+                        input.style.minHeight = '44px'; // Ensure minimum touch target size
+                    }
+                });
+            }
         });
     </script>
 } 

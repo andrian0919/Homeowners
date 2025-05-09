@@ -13,8 +13,27 @@ else
         @foreach (var notification in Model)
         {
             var isUrgent = notification.Priority == NotificationPriority.High || notification.Priority == NotificationPriority.Urgent;
-            var bgColor = isUrgent ? "bg-red-50" : "bg-white";
-            var textColor = isUrgent ? "text-red-700" : "text-gray-700";
+            var isAnnouncement = notification.Type == NotificationType.Announcement;
+            
+            // Set background color based on notification type and priority
+            string bgColor;
+            string textColor;
+            
+            if (isAnnouncement)
+            {
+                bgColor = "bg-gradient-to-r from-blue-100 to-blue-50";
+                textColor = "text-blue-800";
+            }
+            else if (isUrgent)
+            {
+                bgColor = "bg-red-50";
+                textColor = "text-red-700";
+            }
+            else
+            {
+                bgColor = "bg-white";
+                textColor = "text-gray-700";
+            }
             
             // Set icon and color based on notification type
             string icon;
@@ -27,7 +46,7 @@ else
                     break;
                 case NotificationType.Announcement:
                     icon = "bi-megaphone";
-                    iconColor = "text-blue-500";
+                    iconColor = "text-blue-600";
                     break;
                 case NotificationType.MaintenanceRequest:
                 case NotificationType.ServiceRequest:
@@ -56,8 +75,12 @@ else
                     break;
             }
             
-            <div class="p-4 @bgColor hover:bg-gray-50 transition-colors duration-150 cursor-pointer"
+            <div class="p-4 @bgColor hover:bg-gray-50 transition-colors duration-150 cursor-pointer relative"
                  onclick="window.location.href='@Url.Action("Navigate", "Notifications", new { id = notification.Id })'">
+                @if (isAnnouncement && !notification.Status.HasFlag(NotificationStatus.Read))
+                {
+                    <div class="absolute left-0 top-0 bottom-0 w-1 bg-blue-600"></div>
+                }
                 <div class="flex items-start">
                     <div class="flex-shrink-0">
                         <i class="bi @icon text-lg @iconColor"></i>
@@ -73,7 +96,7 @@ else
                             <span>@notification.CreatedAt.ToString("MMM d, yyyy h:mm tt")</span>
                             @if (!notification.Status.HasFlag(NotificationStatus.Read))
                             {
-                                <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-primary text-white">
+                                <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium @(isAnnouncement ? "bg-blue-600 text-white" : "bg-primary text-white")">
                                     New
                                 </span>
                             }

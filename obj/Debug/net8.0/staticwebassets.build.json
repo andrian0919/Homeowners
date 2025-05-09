@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "3/WCv2U0evOiFX/mhv5h2BNeQIQouEmmQdUY2kfU1Mw=",
+  "Hash": "JXF5SyQP/v4ZR4ZHjYq/OUjVLZkVoPD1E8W6womeqOI=",
   "Source": "HomeownersSubdivision",
   "BasePath": "_content/HomeownersSubdivision",
   "Mode": "Default",
@@ -36,6 +36,27 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\luxury.css"
+    },
+    {
+      "Identity": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\css\\mobile.css",
+      "SourceId": "HomeownersSubdivision",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\",
+      "BasePath": "_content/HomeownersSubdivision",
+      "RelativePath": "css/mobile#[.{fingerprint}]?.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "hqh4bb91wt",
+      "Integrity": "yflrpxYLGp4zBMvqVIkcMUt7T0953wgGV5GKhk3HI1g=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\mobile.css"
     },
     {
       "Identity": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\css\\site.css",
@@ -78,6 +99,90 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\images\\4770380-hd_1920_1080_30fps.mp4"
+    },
+    {
+      "Identity": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\Balberos.png",
+      "SourceId": "HomeownersSubdivision",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\",
+      "BasePath": "_content/HomeownersSubdivision",
+      "RelativePath": "images/Balberos#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "rtlsx5ygvu",
+      "Integrity": "gY09+zjW3Mztlb88F4z0NDsYFVrsWe+UE9SDiq56gsU=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\Balberos.png"
+    },
+    {
+      "Identity": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\Caballes.jpg",
+      "SourceId": "HomeownersSubdivision",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\",
+      "BasePath": "_content/HomeownersSubdivision",
+      "RelativePath": "images/Caballes#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "kvixmbyedt",
+      "Integrity": "0F8Jl+N0ohE0PB/St7QmPZAibTdkKkpHKCTIh4oiseA=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\Caballes.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\Cutad.jpg",
+      "SourceId": "HomeownersSubdivision",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\",
+      "BasePath": "_content/HomeownersSubdivision",
+      "RelativePath": "images/Cutad#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "z4kdc7xebr",
+      "Integrity": "zcBI67jc+FP5aH5u1CCFqUe/0Yn1gXkdVz/xn27D13k=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\Cutad.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\Lazaga.jpg",
+      "SourceId": "HomeownersSubdivision",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\",
+      "BasePath": "_content/HomeownersSubdivision",
+      "RelativePath": "images/Lazaga#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "y6amvyuhbk",
+      "Integrity": "5rsKHqZHi4HixSHiMh4Jnloq9UaknrqWAxKC/eGq8xU=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\Lazaga.jpg"
     },
     {
       "Identity": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\neighborhood.jpg",
@@ -225,6 +330,69 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\images\\pexels-wanderbug-3094423.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\profiles\\default-profile.txt",
+      "SourceId": "HomeownersSubdivision",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\",
+      "BasePath": "_content/HomeownersSubdivision",
+      "RelativePath": "images/profiles/default-profile#[.{fingerprint}]?.txt",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "72hmg35xy0",
+      "Integrity": "34st7Y3ytCJN6zFXtycvp1jA1ia3VR2GMEZw8+pRUW8=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\profiles\\default-profile.txt"
+    },
+    {
+      "Identity": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\profiles\\profile_8_638823749391294694.jpg",
+      "SourceId": "HomeownersSubdivision",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\",
+      "BasePath": "_content/HomeownersSubdivision",
+      "RelativePath": "images/profiles/profile_8_638823749391294694#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "iz8d1xl6r0",
+      "Integrity": "QvxQqfp7j9ujttRIBhC2rUuCtaOO5C44/9MMmDwQa/Q=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\profiles\\profile_8_638823749391294694.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\Singco.jpg",
+      "SourceId": "HomeownersSubdivision",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\",
+      "BasePath": "_content/HomeownersSubdivision",
+      "RelativePath": "images/Singco#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "91lhzzu455",
+      "Integrity": "vdMnR7hUDOZLSqwHTR+bDu59EhZHNBTUuSAv4cgXMiI=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\Singco.jpg"
     },
     {
       "Identity": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\sit_in_records.xls",
@@ -395,6 +563,88 @@
       ]
     },
     {
+      "Route": "css/mobile.css",
+      "AssetFile": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\css\\mobile.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "4666"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"yflrpxYLGp4zBMvqVIkcMUt7T0953wgGV5GKhk3HI1g=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 09 May 2025 15:34:24 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-yflrpxYLGp4zBMvqVIkcMUt7T0953wgGV5GKhk3HI1g="
+        }
+      ]
+    },
+    {
+      "Route": "css/mobile.hqh4bb91wt.css",
+      "AssetFile": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\css\\mobile.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "4666"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"yflrpxYLGp4zBMvqVIkcMUt7T0953wgGV5GKhk3HI1g=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 09 May 2025 15:34:24 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "hqh4bb91wt"
+        },
+        {
+          "Name": "label",
+          "Value": "css/mobile.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-yflrpxYLGp4zBMvqVIkcMUt7T0953wgGV5GKhk3HI1g="
+        }
+      ]
+    },
+    {
       "Route": "css/site.css",
       "AssetFile": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\css\\site.css",
       "Selectors": [],
@@ -417,7 +667,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 01 May 2025 03:05:06 GMT"
+          "Value": "Fri, 09 May 2025 14:30:26 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -454,7 +704,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Thu, 01 May 2025 03:05:06 GMT"
+          "Value": "Fri, 09 May 2025 14:30:26 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -555,6 +805,334 @@
         {
           "Name": "integrity",
           "Value": "sha256-sriMCDLHNSU4f4kUj55X9XN1+qnY9feX3FKjI/NK34Y="
+        }
+      ]
+    },
+    {
+      "Route": "images/Balberos.png",
+      "AssetFile": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\Balberos.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "183602"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"gY09+zjW3Mztlb88F4z0NDsYFVrsWe+UE9SDiq56gsU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 09 May 2025 15:51:25 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-gY09+zjW3Mztlb88F4z0NDsYFVrsWe+UE9SDiq56gsU="
+        }
+      ]
+    },
+    {
+      "Route": "images/Balberos.rtlsx5ygvu.png",
+      "AssetFile": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\Balberos.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "183602"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"gY09+zjW3Mztlb88F4z0NDsYFVrsWe+UE9SDiq56gsU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 09 May 2025 15:51:25 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "rtlsx5ygvu"
+        },
+        {
+          "Name": "label",
+          "Value": "images/Balberos.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-gY09+zjW3Mztlb88F4z0NDsYFVrsWe+UE9SDiq56gsU="
+        }
+      ]
+    },
+    {
+      "Route": "images/Caballes.jpg",
+      "AssetFile": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\Caballes.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "18628"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"0F8Jl+N0ohE0PB/St7QmPZAibTdkKkpHKCTIh4oiseA=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 09 May 2025 15:50:15 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-0F8Jl+N0ohE0PB/St7QmPZAibTdkKkpHKCTIh4oiseA="
+        }
+      ]
+    },
+    {
+      "Route": "images/Caballes.kvixmbyedt.jpg",
+      "AssetFile": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\Caballes.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "18628"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"0F8Jl+N0ohE0PB/St7QmPZAibTdkKkpHKCTIh4oiseA=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 09 May 2025 15:50:15 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "kvixmbyedt"
+        },
+        {
+          "Name": "label",
+          "Value": "images/Caballes.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-0F8Jl+N0ohE0PB/St7QmPZAibTdkKkpHKCTIh4oiseA="
+        }
+      ]
+    },
+    {
+      "Route": "images/Cutad.jpg",
+      "AssetFile": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\Cutad.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "18505"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"zcBI67jc+FP5aH5u1CCFqUe/0Yn1gXkdVz/xn27D13k=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 09 May 2025 15:49:42 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-zcBI67jc+FP5aH5u1CCFqUe/0Yn1gXkdVz/xn27D13k="
+        }
+      ]
+    },
+    {
+      "Route": "images/Cutad.z4kdc7xebr.jpg",
+      "AssetFile": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\Cutad.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "18505"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"zcBI67jc+FP5aH5u1CCFqUe/0Yn1gXkdVz/xn27D13k=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 09 May 2025 15:49:42 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "z4kdc7xebr"
+        },
+        {
+          "Name": "label",
+          "Value": "images/Cutad.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-zcBI67jc+FP5aH5u1CCFqUe/0Yn1gXkdVz/xn27D13k="
+        }
+      ]
+    },
+    {
+      "Route": "images/Lazaga.jpg",
+      "AssetFile": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\Lazaga.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "17641"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"5rsKHqZHi4HixSHiMh4Jnloq9UaknrqWAxKC/eGq8xU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 09 May 2025 15:49:59 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-5rsKHqZHi4HixSHiMh4Jnloq9UaknrqWAxKC/eGq8xU="
+        }
+      ]
+    },
+    {
+      "Route": "images/Lazaga.y6amvyuhbk.jpg",
+      "AssetFile": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\Lazaga.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "17641"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"5rsKHqZHi4HixSHiMh4Jnloq9UaknrqWAxKC/eGq8xU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 09 May 2025 15:49:59 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "y6amvyuhbk"
+        },
+        {
+          "Name": "label",
+          "Value": "images/Lazaga.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-5rsKHqZHi4HixSHiMh4Jnloq9UaknrqWAxKC/eGq8xU="
         }
       ]
     },
@@ -1129,6 +1707,252 @@
         {
           "Name": "integrity",
           "Value": "sha256-kj69AaCcAuIycRdDxlxVtp/jLPZVy6YzHUkBJgZmaHo="
+        }
+      ]
+    },
+    {
+      "Route": "images/profiles/default-profile.72hmg35xy0.txt",
+      "AssetFile": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\profiles\\default-profile.txt",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "116"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/plain"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"34st7Y3ytCJN6zFXtycvp1jA1ia3VR2GMEZw8+pRUW8=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 09 May 2025 00:05:18 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "72hmg35xy0"
+        },
+        {
+          "Name": "label",
+          "Value": "images/profiles/default-profile.txt"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-34st7Y3ytCJN6zFXtycvp1jA1ia3VR2GMEZw8+pRUW8="
+        }
+      ]
+    },
+    {
+      "Route": "images/profiles/default-profile.txt",
+      "AssetFile": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\profiles\\default-profile.txt",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "116"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/plain"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"34st7Y3ytCJN6zFXtycvp1jA1ia3VR2GMEZw8+pRUW8=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 09 May 2025 00:05:18 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-34st7Y3ytCJN6zFXtycvp1jA1ia3VR2GMEZw8+pRUW8="
+        }
+      ]
+    },
+    {
+      "Route": "images/profiles/profile_8_638823749391294694.iz8d1xl6r0.jpg",
+      "AssetFile": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\profiles\\profile_8_638823749391294694.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "67404"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"QvxQqfp7j9ujttRIBhC2rUuCtaOO5C44/9MMmDwQa/Q=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 09 May 2025 00:08:59 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "iz8d1xl6r0"
+        },
+        {
+          "Name": "label",
+          "Value": "images/profiles/profile_8_638823749391294694.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-QvxQqfp7j9ujttRIBhC2rUuCtaOO5C44/9MMmDwQa/Q="
+        }
+      ]
+    },
+    {
+      "Route": "images/profiles/profile_8_638823749391294694.jpg",
+      "AssetFile": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\profiles\\profile_8_638823749391294694.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "67404"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"QvxQqfp7j9ujttRIBhC2rUuCtaOO5C44/9MMmDwQa/Q=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 09 May 2025 00:08:59 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-QvxQqfp7j9ujttRIBhC2rUuCtaOO5C44/9MMmDwQa/Q="
+        }
+      ]
+    },
+    {
+      "Route": "images/Singco.91lhzzu455.jpg",
+      "AssetFile": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\Singco.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "17212"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"vdMnR7hUDOZLSqwHTR+bDu59EhZHNBTUuSAv4cgXMiI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 09 May 2025 15:50:29 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "91lhzzu455"
+        },
+        {
+          "Name": "label",
+          "Value": "images/Singco.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-vdMnR7hUDOZLSqwHTR+bDu59EhZHNBTUuSAv4cgXMiI="
+        }
+      ]
+    },
+    {
+      "Route": "images/Singco.jpg",
+      "AssetFile": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\Singco.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "17212"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"vdMnR7hUDOZLSqwHTR+bDu59EhZHNBTUuSAv4cgXMiI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 09 May 2025 15:50:29 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-vdMnR7hUDOZLSqwHTR+bDu59EhZHNBTUuSAv4cgXMiI="
         }
       ]
     },

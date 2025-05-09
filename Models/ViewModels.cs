@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Http;
 
 namespace HomeownersSubdivision.Models
 {
@@ -131,6 +132,13 @@ namespace HomeownersSubdivision.Models
         [Display(Name = "Join Date")]
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = false)]
         public DateTime JoinDate { get; set; }
+        
+        [Display(Name = "Current Profile Picture")]
+        public string? ProfilePictureUrl { get; set; }
+        
+        [Display(Name = "Upload Profile Picture")]
+        [NotMapped]
+        public IFormFile? ProfilePicture { get; set; }
     }
     
     public class AdminProfileViewModel : BaseProfileViewModel

@@ -2,6 +2,17 @@
 
 @{
     ViewData["Title"] = $"Announcement - {Model.Title}";
+    
+    string GetCreatorDisplay(HomeownersSubdivision.Models.User? creator)
+    {
+        if (creator == null)
+            return "Unknown User";
+            
+        if (creator.Role == HomeownersSubdivision.Models.UserRole.Staff)
+            return "Staff";
+            
+        return creator.FirstName + " " + creator.LastName;
+    }
 }
 
 @await Html.PartialAsync("_LuxuryBackground")
@@ -155,7 +166,7 @@
                             <span class="mx-1">|</span>
                             <span>
                             <i class="fas fa-user mr-1"></i>
-                                By: @Model.Creator.FirstName @Model.Creator.LastName
+                                By: @GetCreatorDisplay(Model.Creator)
                             </span>
                         }
                         else

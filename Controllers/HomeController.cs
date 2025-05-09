@@ -5,6 +5,8 @@ using HomeownersSubdivision.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
+using HomeownersSubdivision.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HomeownersSubdivision.Controllers
 {
@@ -12,11 +14,13 @@ namespace HomeownersSubdivision.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ApplicationDbContext _context;
+        private readonly IUserService _userService;
 
-        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context, IUserService userService)
         {
             _logger = logger;
             _context = context;
+            _userService = userService;
         }
 
         public IActionResult Index()
@@ -121,17 +125,32 @@ namespace HomeownersSubdivision.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Check if username and password match a user in the database
-                var user = await _context.Users
-                    .FirstOrDefaultAsync(u => u.Username == model.Username && u.Password == model.Password);
+                // Use UserService to authenticate
+                var isAuthenticated = await _userService.AuthenticateAsync(model.Username, model.Password);
                 
-                if (user != null)
+                if (isAuthenticated)
                 {
+                    // Get user details for the session
+                    var user = await _userService.GetUserByUsernameAsync(model.Username) ?? 
+                               await _userService.GetUserByEmailAsync(model.Username);
+                    
+                    if (user == null)
+                    {
+                        ModelState.AddModelError("", "User not found.");
+                        return View(model);
+                    }
+                    
                     // Store user information in session
                     HttpContext.Session.SetInt32("UserId", user.Id);
                     HttpContext.Session.SetString("UserName", user.Username);
                     HttpContext.Session.SetString("FullName", $"{user.FirstName} {user.LastName}");
                     HttpContext.Session.SetString("UserRole", user.Role.ToString());
+                    
+                    // Store profile picture URL if available
+                    if (!string.IsNullOrEmpty(user.ProfilePictureUrl))
+                    {
+                        HttpContext.Session.SetString("ProfilePictureUrl", user.ProfilePictureUrl);
+                    }
                     
                     // Create claims for the user
                     var claims = new List<System.Security.Claims.Claim>
@@ -187,13 +206,16 @@ namespace HomeownersSubdivision.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Check if username already exists
-                var existingUser = await _context.Users
-                    .FirstOrDefaultAsync(u => u.Username == model.Username);
-                
-                if (existingUser != null)
+                // Check if username or email already exists
+                if (await _context.Users.AnyAsync(u => u.Username == model.Username))
                 {
                     ModelState.AddModelError("Username", "Username already exists");
+                    return View(model);
+                }
+                
+                if (await _context.Users.AnyAsync(u => u.Email == model.Email))
+                {
+                    ModelState.AddModelError("Email", "Email already exists");
                     return View(model);
                 }
                 
@@ -216,7 +238,6 @@ namespace HomeownersSubdivision.Controllers
                 var newUser = new User
                 {
                     Username = model.Username,
-                    Password = model.Password, // In a real app, hash this password
                     FirstName = model.FirstName,
                     LastName = model.LastName,
                     Email = model.Email,
@@ -226,13 +247,25 @@ namespace HomeownersSubdivision.Controllers
                     HomeownerId = homeowner.Id
                 };
                 
-                _context.Users.Add(newUser);
-                await _context.SaveChangesAsync();
+                // Use UserService to create user with proper password hashing
+                var result = await _userService.CreateUserAsync(newUser, model.Password);
                 
+                if (result)
+                {
                 // Instead of logging in the user automatically, redirect to login page
                 // with a success message
                 TempData["SuccessMessage"] = "Registration successful! Please login with your credentials.";
                 return RedirectToAction("Login");
+                }
+                else
+                {
+                    // If user creation failed, remove the homeowner we just created
+                    _context.Homeowners.Remove(homeowner);
+                    await _context.SaveChangesAsync();
+                    
+                    ModelState.AddModelError("", "Registration failed. Please try again.");
+                    return View(model);
+                }
             }
             
             return View(model);
@@ -287,6 +320,38 @@ namespace HomeownersSubdivision.Controllers
             };
             
             return View();
+        }
+
+        [Authorize(Roles = "Homeowner")]
+        public async Task<IActionResult> MyProperty()
+        {
+            // Check if user is a homeowner
+            if (HttpContext.Session.GetString("UserRole") != UserRole.Homeowner.ToString())
+            {
+                return RedirectToAction("AccessDenied", "Account");
+            }
+            
+            // Set luxury background
+            ViewData["UseLuxuryBackground"] = true;
+            
+            // Get user ID from session
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (!userId.HasValue)
+            {
+                return RedirectToAction("Login");
+            }
+            
+            // Get the homeowner information
+            var user = await _context.Users
+                .Include(u => u.Homeowner)
+                .FirstOrDefaultAsync(u => u.Id == userId.Value);
+                
+            if (user?.Homeowner == null)
+            {
+                return NotFound();
+            }
+            
+            return View(user.Homeowner);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

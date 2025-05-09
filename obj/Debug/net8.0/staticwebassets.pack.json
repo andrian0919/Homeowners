@@ -5,6 +5,10 @@
       "PackagePath": "staticwebassets\\css\\luxury.css"
     },
     {
+      "Id": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\css\\mobile.css",
+      "PackagePath": "staticwebassets\\css\\mobile.css"
+    },
+    {
       "Id": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\css\\site.css",
       "PackagePath": "staticwebassets\\css\\site.css"
     },
@@ -13,8 +17,28 @@
       "PackagePath": "staticwebassets\\images\\4770380-hd_1920_1080_30fps.mp4"
     },
     {
+      "Id": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\Balberos.png",
+      "PackagePath": "staticwebassets\\images\\Balberos.png"
+    },
+    {
+      "Id": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\Caballes.jpg",
+      "PackagePath": "staticwebassets\\images\\Caballes.jpg"
+    },
+    {
+      "Id": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\Cutad.jpg",
+      "PackagePath": "staticwebassets\\images\\Cutad.jpg"
+    },
+    {
+      "Id": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\Lazaga.jpg",
+      "PackagePath": "staticwebassets\\images\\Lazaga.jpg"
+    },
+    {
       "Id": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\Novocaine 2025 1080p WEB h264-ETHEL.Hi.srt",
       "PackagePath": "staticwebassets\\images\\Novocaine 2025 1080p WEB h264-ETHEL.Hi.srt"
+    },
+    {
+      "Id": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\Singco.jpg",
+      "PackagePath": "staticwebassets\\images\\Singco.jpg"
     },
     {
       "Id": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\neighborhood.jpg",
@@ -39,6 +63,14 @@
     {
       "Id": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\pexels-wanderbug-3094423.jpg",
       "PackagePath": "staticwebassets\\images\\pexels-wanderbug-3094423.jpg"
+    },
+    {
+      "Id": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\profiles\\default-profile.txt",
+      "PackagePath": "staticwebassets\\images\\profiles\\default-profile.txt"
+    },
+    {
+      "Id": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\profiles\\profile_8_638823749391294694.jpg",
+      "PackagePath": "staticwebassets\\images\\profiles\\profile_8_638823749391294694.jpg"
     },
     {
       "Id": "C:\\Users\\Andrian\\OneDrive\\Desktop\\Homeowners\\wwwroot\\images\\sit_in_records.xls",

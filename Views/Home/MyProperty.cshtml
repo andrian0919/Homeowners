@@ -1,0 +1,201 @@
+@model HomeownersSubdivision.Models.Homeowner
+
+@{
+    ViewData["Title"] = "My Property";
+    ViewData["UseLuxuryBackground"] = true;
+}
+
+@await Html.PartialAsync("_LuxuryBackground")
+
+<style>
+    .main-heading {
+        display: flex;
+        align-items: center;
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(to right, #1a1a2e, #3366FF);
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        color: white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .main-heading i {
+        font-size: 1.75rem;
+        margin-right: 0.75rem;
+        color: #6889F7;
+    }
+    
+    .property-info-card {
+        background-color: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border: none;
+        border-radius: 8px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+    
+    .property-info-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    }
+    
+    .property-header {
+        background: linear-gradient(135deg, #3498db 0%, #2c3e50 100%);
+        color: white;
+        padding: 1.25rem;
+        border-radius: 8px 8px 0 0;
+    }
+    
+    .property-detail-row {
+        padding: 1rem 0;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    
+    .property-detail-row:last-child {
+        border-bottom: none;
+    }
+    
+    .property-detail-label {
+        color: #4a5568;
+        font-weight: 600;
+    }
+    
+    .property-detail-value {
+        color: #2d3748;
+    }
+    
+    .action-button {
+        background: linear-gradient(135deg, #3498db 0%, #2c3e50 100%);
+        color: white;
+        border: none;
+        border-radius: 30px;
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-decoration: none;
+        display: inline-block;
+    }
+    
+    .action-button:hover {
+        background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+        color: white;
+    }
+</style>
+
+<div class="container mx-auto px-4 py-8 luxury-page-container">
+    <div class="max-w-4xl mx-auto">
+        <!-- Page Header -->
+        <div class="main-heading">
+            <i class="bi bi-house-door"></i>
+            My Property
+        </div>
+        <p class="text-white text-opacity-80 mb-6">View and manage your property information</p>
+        
+        <!-- Property Information Card -->
+        <div class="property-info-card mb-8">
+            <div class="property-header">
+                <h2 class="text-xl font-semibold">
+                    <i class="bi bi-info-circle mr-2"></i>Property Details
+                </h2>
+            </div>
+            
+            <div class="p-6">
+                <!-- Address -->
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3 border-b pb-2">Address Information</h3>
+                    
+                    <div class="property-detail-row">
+                        <div class="property-detail-label mb-1">Full Address:</div>
+                        <div class="property-detail-value">@Model.Address</div>
+                    </div>
+                    
+                    <div class="property-detail-row">
+                        <div class="property-detail-label mb-1">Block Number:</div>
+                        <div class="property-detail-value">@Model.BlockNumber</div>
+                    </div>
+                    
+                    <div class="property-detail-row">
+                        <div class="property-detail-label mb-1">Lot Number:</div>
+                        <div class="property-detail-value">@Model.LotNumber</div>
+                    </div>
+                </div>
+                
+                <!-- Ownership Information -->
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3 border-b pb-2">Ownership Information</h3>
+                    
+                    <div class="property-detail-row">
+                        <div class="property-detail-label mb-1">Owner Name:</div>
+                        <div class="property-detail-value">@Model.FirstName @Model.LastName</div>
+                    </div>
+                    
+                    <div class="property-detail-row">
+                        <div class="property-detail-label mb-1">Join Date:</div>
+                        <div class="property-detail-value">@Model.JoinDate.ToString("MMMM dd, yyyy")</div>
+                    </div>
+                    
+                    <div class="property-detail-row">
+                        <div class="property-detail-label mb-1">Email:</div>
+                        <div class="property-detail-value">@Model.Email</div>
+                    </div>
+                    
+                    <div class="property-detail-row">
+                        <div class="property-detail-label mb-1">Phone:</div>
+                        <div class="property-detail-value">@Model.Phone</div>
+                    </div>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="mt-6 flex flex-col sm:flex-row gap-4">
+                    <a href="@Url.Action("Profile", "Account")" class="action-button">
+                        <i class="bi bi-pencil-square mr-2"></i>Update Information
+                    </a>
+                    <a href="@Url.Action("HomeownerDashboard", "Home")" class="action-button" style="background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);">
+                        <i class="bi bi-arrow-left mr-2"></i>Back to Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Property Services Quick Links -->
+        <h2 class="text-2xl font-bold text-white mb-4">Property Services</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+            <!-- Maintenance Request Card -->
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                <div class="p-5">
+                    <div class="flex items-center mb-3">
+                        <div class="rounded-full bg-amber-100 p-2 mr-3">
+                            <i class="bi bi-tools text-amber-600 text-xl"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-800">Maintenance Request</h3>
+                    </div>
+                    <p class="text-gray-600 mb-4">Submit a new maintenance request for your property</p>
+                    <a href="@Url.Action("Index", "ServiceRequests")" class="block w-full bg-amber-500 hover:bg-amber-600 text-white text-center py-2 rounded-md transition-colors">
+                        Request Service
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Bills Card -->
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                <div class="p-5">
+                    <div class="flex items-center mb-3">
+                        <div class="rounded-full bg-green-100 p-2 mr-3">
+                            <i class="bi bi-receipt text-green-600 text-xl"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-800">Property Bills</h3>
+                    </div>
+                    <p class="text-gray-600 mb-4">View and pay your property-related bills</p>
+                    <a href="@Url.Action("MyBills", "Billing")" class="block w-full bg-green-500 hover:bg-green-600 text-white text-center py-2 rounded-md transition-colors">
+                        View Bills
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

@@ -49,6 +49,9 @@ namespace HomeownersSubdivision.Models
         
         public DateTime? LastLoginDate { get; set; }
         
+        [StringLength(255)]
+        public string? ProfilePictureUrl { get; set; }
+        
         // Navigation property if the user is a homeowner
         public int? HomeownerId { get; set; }
         public virtual Homeowner? Homeowner { get; set; }

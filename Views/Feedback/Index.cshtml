@@ -6,12 +6,35 @@
 
 @await Html.PartialAsync("_LuxuryBackground")
 
+<style>
+    .main-heading {
+        display: flex;
+        align-items: center;
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(to right, #1a1a2e, #3366FF);
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        color: white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .main-heading i {
+        font-size: 1.75rem;
+        margin-right: 0.75rem;
+        color: #6889F7;
+    }
+</style>
 
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div class="flex justify-between items-center mb-6">
-        <h1 class="text-2xl font-semibold text-gray-800">My Feedback & Complaints</h1>
-        <a asp-action="Create" class="px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-600 transition-colors shadow-sm flex items-center">
-            <span class="mr-2">+</span> Submit New
+    <div class="main-heading">
+        <i class="fas fa-comment-dots"></i> Feedback & Complaints
+    </div>
+    
+    <div class="flex justify-end mb-6">
+        <a asp-action="Create" class="btn-luxury hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 flex items-center">
+            <i class="fas fa-plus-circle mr-2"></i> Submit New
         </a>
     </div>
 

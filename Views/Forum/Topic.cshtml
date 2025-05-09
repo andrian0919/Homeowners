@@ -124,7 +124,16 @@
                 <div class="border-b border-gray-200 bg-gray-50 px-6 py-3 flex justify-between items-center">
                     <div class="flex items-center">
                         <div class="flex-shrink-0">
-                            <img class="h-10 w-10 rounded-full" src="/images/avatar.jpg" alt="@post.CreatedBy.FullName">
+                            @if (!string.IsNullOrEmpty(post.CreatedBy.ProfilePictureUrl))
+                            {
+                                <img class="h-10 w-10 rounded-full object-cover" src="@post.CreatedBy.ProfilePictureUrl" alt="@post.CreatedBy.FullName">
+                            }
+                            else
+                            {
+                                <div class="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
+                                    <i class="bi bi-person text-gray-600"></i>
+                                </div>
+                            }
                         </div>
                         <div class="ml-3">
                             <p class="text-sm font-medium text-gray-900">@post.CreatedBy.FullName</p>
@@ -216,7 +225,16 @@
                                 <div class="bg-gray-50 rounded-lg p-4">
                                     <div class="flex items-center mb-2">
                                         <div class="flex-shrink-0">
-                                            <img class="h-8 w-8 rounded-full" src="/images/avatar.jpg" alt="@reply.CreatedBy.FullName">
+                                            @if (!string.IsNullOrEmpty(reply.CreatedBy.ProfilePictureUrl))
+                                            {
+                                                <img class="h-8 w-8 rounded-full object-cover" src="@reply.CreatedBy.ProfilePictureUrl" alt="@reply.CreatedBy.FullName">
+                                            }
+                                            else
+                                            {
+                                                <div class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
+                                                    <i class="bi bi-person text-gray-600"></i>
+                                                </div>
+                                            }
                                         </div>
                                         <div class="ml-3">
                                             <p class="text-sm font-medium text-gray-900">@reply.CreatedBy.FullName</p>

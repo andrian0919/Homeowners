@@ -63,9 +63,6 @@ namespace HomeownersSubdivision.Migrations
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
-                    b.Property<string>("Value")
-                        .HasColumnType("longtext");
-
                     b.Property<int>("VisibleToRoles")
                         .HasColumnType("int");
 
@@ -1344,6 +1341,10 @@ namespace HomeownersSubdivision.Migrations
 
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("longtext");
+
+                    b.Property<string>("ProfilePictureUrl")
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
 
                     b.Property<int>("Role")
                         .HasColumnType("int");

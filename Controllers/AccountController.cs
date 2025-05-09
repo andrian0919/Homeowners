@@ -11,6 +11,8 @@ using System.Linq;
 using System;
 using MySqlConnector;
 using System.Data.Common;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
 namespace HomeownersSubdivision.Controllers
 {
@@ -18,11 +20,13 @@ namespace HomeownersSubdivision.Controllers
     {
         private readonly IUserService _userService;
         private readonly ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public AccountController(IUserService userService, ApplicationDbContext context)
+        public AccountController(IUserService userService, ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
         {
             _userService = userService;
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         // GET: /Account/Login
@@ -66,6 +70,12 @@ namespace HomeownersSubdivision.Controllers
             HttpContext.Session.SetString("UserName", user.Username);
             HttpContext.Session.SetString("UserRole", user.Role.ToString());
             HttpContext.Session.SetString("FullName", $"{user.FirstName} {user.LastName}");
+            
+            // Store profile picture URL if available
+            if (!string.IsNullOrEmpty(user.ProfilePictureUrl))
+            {
+                HttpContext.Session.SetString("ProfilePictureUrl", user.ProfilePictureUrl);
+            }
 
             if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
             {
@@ -185,6 +195,7 @@ namespace HomeownersSubdivision.Controllers
                     FirstName = user.FirstName,
                     LastName = user.LastName,
                     PhoneNumber = user.PhoneNumber,
+                    ProfilePictureUrl = user.ProfilePictureUrl,
                     Address = user.Homeowner.Address,
                     LotNumber = user.Homeowner.LotNumber,
                     BlockNumber = user.Homeowner.BlockNumber,
@@ -366,6 +377,59 @@ namespace HomeownersSubdivision.Controllers
                 TempData["HomeownerId"] = user.HomeownerId;
                 TempData["HomeownerActualId"] = user.Homeowner.Id;
 
+                // Process profile picture if uploaded
+                string? profilePictureUrl = model.ProfilePictureUrl;
+                if (model.ProfilePicture != null && model.ProfilePicture.Length > 0)
+                {
+                    // Validate file size (max 2MB)
+                    if (model.ProfilePicture.Length > 2 * 1024 * 1024)
+                    {
+                        ModelState.AddModelError("ProfilePicture", "File size must not exceed 2MB.");
+                        return View("HomeownerProfile", model);
+                    }
+
+                    // Validate file type
+                    string[] allowedExtensions = { ".jpg", ".jpeg", ".png", ".gif" };
+                    string fileExtension = Path.GetExtension(model.ProfilePicture.FileName).ToLower();
+                    if (!allowedExtensions.Contains(fileExtension))
+                    {
+                        ModelState.AddModelError("ProfilePicture", "Only image files (jpg, jpeg, png, gif) are allowed.");
+                        return View("HomeownerProfile", model);
+                    }
+
+                    // Generate a unique filename
+                    string uniqueFileName = $"profile_{user.Id}_{DateTime.Now.Ticks}{fileExtension}";
+                    string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images", "profiles");
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                    // Save the file
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await model.ProfilePicture.CopyToAsync(fileStream);
+                    }
+
+                    // Delete old profile picture if exists
+                    if (!string.IsNullOrEmpty(user.ProfilePictureUrl))
+                    {
+                        string oldFilePath = Path.Combine(_webHostEnvironment.WebRootPath, user.ProfilePictureUrl.TrimStart('/'));
+                        if (System.IO.File.Exists(oldFilePath))
+                        {
+                            try
+                            {
+                                System.IO.File.Delete(oldFilePath);
+                            }
+                            catch (Exception ex)
+                            {
+                                // Log the error but continue
+                                Console.WriteLine($"Error deleting old profile picture: {ex.Message}");
+                            }
+                        }
+                    }
+
+                    // Update the profile picture URL
+                    profilePictureUrl = $"/images/profiles/{uniqueFileName}";
+                }
+
                 // Validate username uniqueness only if it changed
                 if (user.Username != model.Username)
                 {
@@ -416,7 +480,8 @@ namespace HomeownersSubdivision.Controllers
                                         Email = @Email,
                                         FirstName = @FirstName,
                                         LastName = @LastName,
-                                        PhoneNumber = @PhoneNumber
+                                        PhoneNumber = @PhoneNumber,
+                                        ProfilePictureUrl = @ProfilePictureUrl
                                     WHERE Id = @Id";
                                 
                                 command.Parameters.Add(new MySqlConnector.MySqlParameter("@Username", model.Username));
@@ -424,6 +489,7 @@ namespace HomeownersSubdivision.Controllers
                                 command.Parameters.Add(new MySqlConnector.MySqlParameter("@FirstName", model.FirstName));
                                 command.Parameters.Add(new MySqlConnector.MySqlParameter("@LastName", model.LastName));
                                 command.Parameters.Add(new MySqlConnector.MySqlParameter("@PhoneNumber", model.PhoneNumber ?? (object)DBNull.Value));
+                                command.Parameters.Add(new MySqlConnector.MySqlParameter("@ProfilePictureUrl", profilePictureUrl ?? (object)DBNull.Value));
                                 command.Parameters.Add(new MySqlConnector.MySqlParameter("@Id", model.Id));
                                 
                                 var userRowsAffected = await command.ExecuteNonQueryAsync();
@@ -511,6 +577,16 @@ namespace HomeownersSubdivision.Controllers
                     HttpContext.Session.SetString("UserName", updatedUser.Username);
                     HttpContext.Session.SetString("FullName", $"{updatedUser.FirstName} {updatedUser.LastName}");
                     HttpContext.Session.SetString("UserRole", updatedUser.Role.ToString());
+                    
+                    // Update profile picture URL in session
+                    if (!string.IsNullOrEmpty(updatedUser.ProfilePictureUrl))
+                    {
+                        HttpContext.Session.SetString("ProfilePictureUrl", updatedUser.ProfilePictureUrl);
+                    }
+                    else
+                    {
+                        HttpContext.Session.Remove("ProfilePictureUrl");
+                    }
 
                     // Add debug info to success message
                     TempData["SuccessMessage"] = "Your profile has been updated successfully.";

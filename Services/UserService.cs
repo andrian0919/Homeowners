@@ -14,7 +14,7 @@ namespace HomeownersSubdivision.Services
         Task<User?> GetUserByEmailAsync(string email);
         Task<bool> CreateUserAsync(User user, string password);
         Task UpdateUserAsync(User user);
-        Task<bool> ChangePasswordAsync(int userId, string currentPassword, string newPassword);
+        Task<bool> ChangePasswordAsync(int userId, string? currentPassword, string newPassword);
         Task<bool> AuthenticateAsync(string username, string password);
         Task<bool> DeleteUserAsync(int id);
         Task<IEnumerable<User>> GetUsersByRoleAsync(UserRole role);
@@ -73,7 +73,7 @@ namespace HomeownersSubdivision.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<bool> ChangePasswordAsync(int userId, string currentPassword, string newPassword)
+        public async Task<bool> ChangePasswordAsync(int userId, string? currentPassword, string newPassword)
         {
             var user = await _context.Users.FindAsync(userId);
             if (user == null)
@@ -81,10 +81,14 @@ namespace HomeownersSubdivision.Services
                 return false;
             }
 
-            // Verify current password
-            if (user.Password != HashPassword(currentPassword))
+            // If currentPassword is null, it's an admin operation and we skip verification
+            if (currentPassword != null)
             {
-                return false;
+                // Verify current password
+                if (user.Password != HashPassword(currentPassword))
+                {
+                    return false;
+                }
             }
 
             // Update to new password

@@ -35,7 +35,7 @@
         
         <div class="p-6">
             <div class="mb-8">
-                <h4 class="mb-4 pb-2 border-b border-gray-200 text-lg font-semibold flex items-center text-blue-700">
+                <h4 class="mb-4 pb-2 border-b border-gray-200 text-lg font-semibold flex items-center text-indigo-600">
                     <i class="fas fa-building mr-2"></i> Facility Information
                 </h4>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
@@ -55,7 +55,7 @@
             </div>
             
             <div class="mb-8">
-                <h4 class="mb-4 pb-2 border-b border-gray-200 text-lg font-semibold flex items-center text-blue-700">
+                <h4 class="mb-4 pb-2 border-b border-gray-200 text-lg font-semibold flex items-center text-indigo-600">
                     <i class="fas fa-info-circle mr-2"></i> Reservation Information
                 </h4>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
@@ -151,6 +151,20 @@
                     <i class="fas fa-arrow-left mr-2"></i> Back to List
                 </a>
                 <div class="flex gap-2">
+                    @if (Model.Reservation.Status == ReservationStatus.Pending && (User.IsInRole("Administrator") || User.IsInRole("Staff")))
+                    {
+                        <form asp-action="Approve" asp-route-id="@Model.Reservation.Id" method="post" class="inline">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="inline-flex items-center px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-md transition duration-200">
+                                <i class="fas fa-check mr-2"></i> Approve
+                            </button>
+                        </form>
+                        
+                        <button type="button" onclick="showRejectModal()" class="inline-flex items-center px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-md transition duration-200">
+                            <i class="fas fa-times mr-2"></i> Reject
+                        </button>
+                    }
+                    
                     @if ((Model.Reservation.Status == ReservationStatus.Pending || Model.Reservation.Status == ReservationStatus.Approved) && 
                             (User.IsInRole("Administrator") || User.IsInRole("Staff") || 
                             (Model.User.Username == User.Identity?.Name && Model.Reservation.ReservationDate > DateTime.Today)))
@@ -167,3 +181,42 @@
         </div>
     </div>
 </div> 
+
+<!-- Rejection Modal -->
+<div id="rejectModal" class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-lg overflow-hidden shadow-xl max-w-md w-full">
+        <div class="bg-red-600 px-4 py-3">
+            <h3 class="text-white font-semibold">Reject Reservation</h3>
+        </div>
+        <form asp-action="Reject" asp-route-id="@Model.Reservation.Id" method="post">
+            @Html.AntiForgeryToken()
+            <div class="p-6">
+                <p class="mb-4">Are you sure you want to reject this reservation? Please provide a reason for rejection:</p>
+                <div class="mb-4">
+                    <label for="rejectionReason" class="block text-sm font-medium text-gray-700 mb-1">Rejection Reason</label>
+                    <textarea name="rejectionReason" id="rejectionReason" rows="3" class="w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500" required></textarea>
+                </div>
+            </div>
+            <div class="bg-gray-50 px-4 py-3 flex justify-end space-x-3">
+                <button type="button" onclick="hideRejectModal()" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-md transition duration-200">
+                    Cancel
+                </button>
+                <button type="submit" class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-md transition duration-200">
+                    Reject Reservation
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function showRejectModal() {
+            document.getElementById('rejectModal').classList.remove('hidden');
+        }
+        
+        function hideRejectModal() {
+            document.getElementById('rejectModal').classList.add('hidden');
+        }
+    </script>
+} 

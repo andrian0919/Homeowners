@@ -88,6 +88,50 @@ namespace HomeownersSubdivision.Controllers
             return Json(new { count });
             }
 
+        // GET: Notifications/CheckNewAnnouncements
+        public async Task<IActionResult> CheckNewAnnouncements()
+        {
+            var currentUser = _userService.GetCurrentUser(HttpContext);
+            if (currentUser == null)
+            {
+                return Json(new { hasNewAnnouncement = false });
+            }
+
+            // Get the latest unread announcement notification
+            var latestAnnouncement = await _context.Notifications
+                .Where(n => n.UserId == currentUser.Id && 
+                      n.Status == NotificationStatus.Unread && 
+                      n.Type == NotificationType.Announcement)
+                .OrderByDescending(n => n.CreatedAt)
+                .FirstOrDefaultAsync();
+
+            if (latestAnnouncement == null)
+            {
+                return Json(new { hasNewAnnouncement = false });
+            }
+
+            // If there's a session variable tracking the last seen announcement, check if this is newer
+            var lastSeenAnnouncementId = HttpContext.Session.GetInt32("LastSeenAnnouncementId") ?? 0;
+            
+            // If this announcement has already been seen in this session, don't show it again
+            if (lastSeenAnnouncementId >= latestAnnouncement.Id)
+            {
+                return Json(new { hasNewAnnouncement = false });
+            }
+            
+            // Store this announcement ID as the last seen one
+            HttpContext.Session.SetInt32("LastSeenAnnouncementId", latestAnnouncement.Id);
+            
+            // Return the announcement details
+            return Json(new
+            {
+                hasNewAnnouncement = true,
+                announcementId = latestAnnouncement.RelatedItemId ?? 0,
+                title = latestAnnouncement.Title,
+                message = latestAnnouncement.Message
+            });
+        }
+
         // POST: Notifications/MarkAsRead
         [HttpPost]
         public async Task<IActionResult> MarkAsRead(int id)

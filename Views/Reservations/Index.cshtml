@@ -5,13 +5,34 @@
 
 @await Html.PartialAsync("_LuxuryBackground")
 
+<style>
+    .main-heading {
+        display: flex;
+        align-items: center;
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(to right, #1a1a2e, #3366FF);
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        color: white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .main-heading i {
+        font-size: 1.75rem;
+        margin-right: 0.75rem;
+        color: #6889F7;
+    }
+</style>
 
 <div class="container mx-auto px-4 py-8 luxury-page-container">
-    <div class="flex flex-col md:flex-row justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold text-gray-800 mb-4 md:mb-0">
-            <i class="fas fa-calendar-check text-blue-600"></i> Facility Reservations
-        </h1>
-        <a asp-action="Create" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg shadow-md transition duration-300 flex items-center">
+    <div class="main-heading">
+        <i class="fas fa-calendar-check"></i> My Reservations
+    </div>
+    
+    <div class="flex justify-end mb-6">
+        <a asp-action="Create" class="btn-luxury hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 flex items-center">
             <i class="fas fa-calendar-plus mr-2"></i> New Reservation
         </a>
     </div>
@@ -51,7 +72,7 @@
     {
         <div class="bg-white rounded-lg shadow-md mb-8 overflow-hidden border border-gray-200">
             <div class="bg-gray-50 px-6 py-4 border-b border-gray-200">
-                <h2 class="text-xl font-semibold text-gray-800">
+                <h2 class="text-xl font-semibold text-indigo-600">
                     <i class="fas fa-calendar-alt text-blue-600 mr-2"></i>Your Reservations
                 </h2>
             </div>
@@ -196,8 +217,8 @@
     @if (Model.AvailableFacilities.Any())
     {
         <div class="mt-8">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4">
-                <i class="fas fa-building text-purple-600 mr-2"></i><span class="text-purple-600">Available Facilities</span>
+            <h2 class="text-2xl font-bold mb-4">
+                <i class="fas fa-building text-indigo-600 mr-2"></i><span class="text-indigo-600">Available Facilities</span>
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 @foreach (var facility in Model.AvailableFacilities)
